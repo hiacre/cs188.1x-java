@@ -5,27 +5,27 @@
 package util;
 
 
-public class PointStandard implements Point {
+public class PositionStandard implements Position {
 
     private final int x;
     private final int y;
     
-    private PointStandard(final int x, final int y) {
+    private PositionStandard(final int x, final int y) {
         this.x = x;
         this.y = y;
     }
     
-    public static PointStandard newInstance(final int x, final int y) {
-        return new PointStandard(x, y);
+    public static PositionStandard newInstance(final int x, final int y) {
+        return new PositionStandard(x, y);
     }
     
     /**
      * Finds the nearest grid point to a position (discretizes)
      */
-    public static Point nearestPoint(final double x, final double y) {
+    public static Position nearestPoint(final double x, final double y) {
         final int newX = (int)(x+0.5);
         final int newY = (int)(y+0.5);
-        return new PointStandard(newX, newY);
+        return new PositionStandard(newX, newY);
     }
     
     @Override
@@ -39,7 +39,7 @@ public class PointStandard implements Point {
     }
 
     @Override
-    public int manhattanDistance(final Point point) {
+    public int manhattanDistance(final Position point) {
         return Math.abs(getX()-point.getX()) + Math.abs(getY()-point.getY());
     }
     

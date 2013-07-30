@@ -4,6 +4,8 @@
  */
 package util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -50,8 +52,15 @@ public class Util {
         return sample(c, new Random().nextDouble());
     }
     
-    public static String chooseFromDistribution(final Counter c) {
+    public static String chooseFromDistribution(final Counter<String> c) {
         return sample(c);
     }
-    
+
+    public static <E> List<E> makeList(final int size, final E element) {
+        final List<E> list = new ArrayList<>();
+        for(int i=0; i<size; i++) {
+            list.add(element);
+        }
+        return list;
+    }
 }
