@@ -27,7 +27,6 @@ public class Game {
     private final ArrayList<Object> moveHistory;
     private final List<Integer> totalAgentTimes;
     private final List<Integer> totalAgentTimeWarnings;
-    private boolean agentTimeout;
     
     private Object OLD_STDOUT = null;
     private Object OLD_STDERR = null;
@@ -39,7 +38,7 @@ public class Game {
             final List agents,
             final Object display,
             final Object rules,
-            final Object startingIndex,
+            final Integer startingIndex,
             final Boolean muteAgents,
             final Boolean catchExceptions) {
      
@@ -54,7 +53,6 @@ public class Game {
         this.moveHistory = new ArrayList<>();
         this.totalAgentTimes = Util.makeList(agents.size(), 0);
         this.totalAgentTimeWarnings = Util.makeList(agents.size(), 0);
-        this.agentTimeout = false;
     }
 
     public double getProgress() {
@@ -104,7 +102,6 @@ public class Game {
                         agent.registerInitialState(state.copy(), new Timeout(rules.getMaxStartupTime(i)));
                     } catch(ExceptionTimeout ex) {
                         logger.log(Level.SEVERE, "Agent {0} ran out of time on startup", i);
-                        agentTimeout = true;
                         agentCrash(i, true);
                         return;
                     }
@@ -138,11 +135,10 @@ public class Game {
                         if(skip_action) {
                             throw new ExceptionTimeout();
                         }
-                        final Action action = agent.getAction(observation, new Timeout(rules.getMoveTimeout(agentIndex) - move_time));
+                        action = agent.getAction(observation, new Timeout(rules.getMoveTimeout(agentIndex) - move_time));
                     }
                     catch(ExceptionTimeout ex) {
                         logger.log(Level.SEVERE, "Agent {0} timed out on a single move", agentIndex);
-                        agentTimeout = true;
                         agentCrash(agentIndex, true);
                         return;
                     }
@@ -155,7 +151,6 @@ public class Game {
                         if(totalAgentTimeWarnings.get(agentIndex) > rules.getMaxTimeWarnings(agentIndex)) {
                             
                             logger.log(Level.SEVERE, "Agent " + agentIndex + " exceeded the maximum number of warnings: {0}", totalAgentTimeWarnings.get(agentIndex));
-                            agentTimeout = true;
                             agentCrash(agentIndex, true);
                             return;
                         }
@@ -164,7 +159,6 @@ public class Game {
                     totalAgentTimes.add(totalAgentTimes.get(agentIndex) + move_time);
                     if(totalAgentTimes.get(agentIndex) > rules.getMaxTotalTime(agentIndex)) {
                         logger.log(Level.SEVERE, "Agent " + agentIndex + " ran out of time (time: {0})", totalAgentTimes.get(agentIndex));
-                        agentTimeout = true;
                         agentCrash(agentIndex, true);
                         return;
                     }
