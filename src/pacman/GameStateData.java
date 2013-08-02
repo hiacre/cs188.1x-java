@@ -23,11 +23,11 @@ public class GameStateData {
     private final Object foodAdded;
     private final Object foodEaten;
     private List agentStates;
-    private Object capsules;
-    private Object food;
+    private List<Position> capsules;
+    private List<List<Boolean>> food;
     private Object layout;
     private List eaten;
-    private Object score;
+    private int score;
     
     private GameStateData() {
         this.foodEaten = null;
@@ -133,19 +133,19 @@ public class GameStateData {
         }
     }
     
-    private Object getFood() {
+    public List<List<Boolean>> getFood() {
         return food;
     }
 
-    private Object getCapsules() {
+    public List<Position> getCapsules() {
         return capsules;
     }
 
-    private Object getAgentStates() {
+    public List<AgentState> getAgentStates() {
         return agentStates;
     }
 
-    private Object getLayout() {
+    public Object getLayout() {
         return layout;
     }
 
@@ -153,7 +153,7 @@ public class GameStateData {
         return eaten;
     }
 
-    private Object getScore() {
+    public int getScore() {
         return score;
     }
 }
