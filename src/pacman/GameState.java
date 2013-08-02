@@ -30,10 +30,15 @@ public class GameState {
     private static Set<GameState> explored = new HashSet<>();
     final private GameStateData data;
     
+    
+    public GameState() {
+        data = new GameStateData();
+    }
+    
     /** Generates a new state by copying information from its predecessor. */
     public GameState(final GameState prevState) {
         if(prevState != null) { // Initial state
-            data = GameStateData(prevState.getData());
+            data = new GameStateData(prevState.getData());
         } else {
             data = new GameStateData();
         }
@@ -249,7 +254,7 @@ public class GameState {
     }
 
     /** Creates an initial game state from a layout array (see layout.py). */
-    public void initialize(layout, Integer numGhostAgents) {
+    public void initialize(final Layout layout, Integer numGhostAgents) {
         if(numGhostAgents == null) {
             numGhostAgents = 1000;
         }
@@ -257,7 +262,7 @@ public class GameState {
         data.initialize(layout, numGhostAgents);
     }
 
-    private GameStateData getData() {
+    public GameStateData getData() {
         return data;
     }
 

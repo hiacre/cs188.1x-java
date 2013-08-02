@@ -29,7 +29,7 @@ public class GameStateData {
     private List eaten;
     private int score;
     
-    private GameStateData() {
+    public GameStateData() {
         this.foodEaten = null;
         this.foodAdded = null;
         this.capsuleEaten = null;
@@ -39,13 +39,17 @@ public class GameStateData {
         this.scoreChange = 0;
     }
     
-    private GameStateData(final GameStateData prevState) {
+    public GameStateData(final GameStateData prevState) {
         this.food = prevState.getFood().copy();
         this.capsules = prevState.getCapsules().copy();
         this.agentStates = prevState.getAgentStates().copy();
         this.layout = prevState.getLayout().copy();
         this.eaten = prevState.getEaten();
         this.score = prevState.getScore();
+    }
+
+    GameStateData() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public GameStateData deepCopy() {

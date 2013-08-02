@@ -32,12 +32,12 @@ public class Game {
     private Object OLD_STDERR = null;
     
     private final Logger logger = Logger.getLogger(this.getClass().getPackage().getName());
-    private Object state;
+    private GameState state;
 
-    private Game(
+    public Game(
             final List agents,
             final Object display,
-            final Object rules,
+            final ClassicGameRules rules,
             final Integer startingIndex,
             final Boolean muteAgents,
             final Boolean catchExceptions) {
@@ -198,4 +198,18 @@ public class Game {
             agentIndex = ( agentIndex + 1 ) % numAgents;
         }
         display.finish();
+    }
+    
+    public void setState(final GameState state) {
+        this.state = state;
+    }
+
+    public void setGameOver(final boolean isGameOver) {
+        this.gameOver = isGameOver;
+    }
+
+    public GameState getState() {
+        return state;
+    }
 }
+
