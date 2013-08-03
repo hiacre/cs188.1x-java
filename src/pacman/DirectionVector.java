@@ -10,23 +10,23 @@ package pacman;
  */
 public class DirectionVector {
     
-    private double x;
-    private double y;
+    private int x;
+    private int y;
     
-    private DirectionVector(final double x, final double y) {
+    private DirectionVector(final int x, final int y) {
         this.x = x;
         this.y = y;
     }
     
-    public static DirectionVector newInstance(final double x, final double y) {
+    public static DirectionVector newInstance(final int x, final int y) {
         return new DirectionVector(x, y);
     }
     
-    public double getX() {
+    public int getX() {
         return x;
     }
     
-    public double getY() {
+    public int getY() {
         return y;
     }
 }

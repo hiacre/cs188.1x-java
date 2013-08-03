@@ -20,5 +20,8 @@ public interface Grid {
     public List<Position> asList();
     public int packBits();
     public Grid reconstituteGrid(int bitRep);
+    public boolean get(int x, int y);
+    public int getWidth();
+    public int getHeight();
     
 }

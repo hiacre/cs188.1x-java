@@ -5,10 +5,12 @@
 package pacman;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import util.Position;
 import util.PositionStandard;
 
@@ -18,21 +20,21 @@ import util.PositionStandard;
  */
 public class Actions {
     // Directions
-    private static Map<Direction, Position> _directions;
+    private static Map<Direction, DirectionVector> _directions;
     
     static {
-        final Map<Direction, Position> mapDirectionRelativePos = new HashMap<>();
-        mapDirectionRelativePos.put(Direction.North, PositionStandard.newInstance(0,1));
-        mapDirectionRelativePos.put(Direction.South, PositionStandard.newInstance(0,-1));
-        mapDirectionRelativePos.put(Direction.East, PositionStandard.newInstance(1,0));
-        mapDirectionRelativePos.put(Direction.West, PositionStandard.newInstance(-1,0));
-        mapDirectionRelativePos.put(Direction.Stop, PositionStandard.newInstance(0,0));
+        final Map<Direction, DirectionVector> mapDirectionRelativePos = new HashMap<>();
+        mapDirectionRelativePos.put(Direction.North, DirectionVector.newInstance(0,1));
+        mapDirectionRelativePos.put(Direction.South, DirectionVector.newInstance(0,-1));
+        mapDirectionRelativePos.put(Direction.East, DirectionVector.newInstance(1,0));
+        mapDirectionRelativePos.put(Direction.West, DirectionVector.newInstance(-1,0));
+        mapDirectionRelativePos.put(Direction.Stop, DirectionVector.newInstance(0,0));
         _directions = Collections.unmodifiableMap(mapDirectionRelativePos);
     }
 
 //    _directionsAsList = _directions.items();
 //
-//    TOLERANCE = .001;
+    private static double TOLERANCE = .001;
 //
 //    def reverseDirection(action):
 //        if action == Directions.NORTH:
@@ -61,47 +63,66 @@ public class Actions {
 
     
 
-    public static Object getPossibleActions(final Configuration config, final Object walls) {
-        final List<Object> possible = new ArrayList<>();
+    public static List<Direction> getPossibleActions(final Configuration config, final Grid walls) {
+        final List<Direction> possible = new ArrayList<>();
         final Position pos = config.getPosition();
-        
+       
+        final int x = pos.getX();
+        final int y = pos.getY();
+       
         // in the original Python, some rounding occurs here,
         // so it's possible that Position should be able to store floating point values.
-        final int x_int = pos.getX();
-        final int y_int = pos.getY();
+        // or this might have been put in to deal with a Python deficiency.
+        final int x_int = x;
+        final int y_int = y;
 
         //# In between grid points, all agents must continue straight
-        if (abs(x - x_int) + abs(y - y_int)  > Actions.TOLERANCE):
-            return [config.getDirection()]
-
-        for dir, vec in Actions._directionsAsList:
-            dx, dy = vec
-            next_y = y_int + dy
-            next_x = x_int + dx
-            if not walls[next_x][next_y]: possible.append(dir)
+        if(Math.abs(x - x_int) + Math.abs(y - y_int) > TOLERANCE) {
+            return Arrays.asList(config.getDirection());
+        }
+        for(Entry<Direction, DirectionVector> dirVec : _directions.entrySet()) {
+            final Direction dir = dirVec.getKey();
+            final DirectionVector vec = dirVec.getValue();
+            final int next_y = y_int + vec.getY();
+            final int next_x = x_int + vec.getX();
+            if(!walls.get(next_x, next_y)) {
+                possible.add(dir);
+            }
+        }
 
         return possible;
     }
 
-    getPossibleActions = staticmethod(getPossibleActions)
+    public static Object getLegalNeighbors(final Position position, final Grid walls) {
+        final int x_int = position.getX();
+        final int y_int = position.getY();
+        final List neighbors = new ArrayList();
+        for(Entry<Direction, DirectionVector> dirVec : _directions.entrySet()) {
+            final Direction dir = dirVec.getKey();
+            final DirectionVector vec = dirVec.getValue();
+            final int dx = vec.getX();
+            final int dy = vec.getY();
+            final int next_x = x_int + dx;
+            if(next_x < 0 || next_x == walls.getWidth()) {
+                continue;
+            }
+            final int next_y = y_int + dy;
+            if(next_y < 0 || next_y == walls.getHeight()) {
+                continue;
+            }
+            if(!walls.get(next_x, next_y)) {
+                neighbors.add(PositionStandard.newInstance(next_x, next_y));
+            }
+        }
+        return neighbors;
+    }
 
-    def getLegalNeighbors(position, walls):
-        x,y = position
-        x_int, y_int = int(x + 0.5), int(y + 0.5)
-        neighbors = []
-        for dir, vec in Actions._directionsAsList:
-            dx, dy = vec
-            next_x = x_int + dx
-            if next_x < 0 or next_x == walls.width: continue
-            next_y = y_int + dy
-            if next_y < 0 or next_y == walls.height: continue
-            if not walls[next_x][next_y]: neighbors.append((next_x, next_y))
-        return neighbors
-    getLegalNeighbors = staticmethod(getLegalNeighbors)
-
-    def getSuccessor(position, action):
-        dx, dy = Actions.directionToVector(action)
-        x, y = position
-        return (x + dx, y + dy)
-    getSuccessor = staticmethod(getSuccessor)    
+    public static Position getSuccessor(final Position position, final Direction action) {
+        final DirectionVector posVec = action.toVector(null);
+        final int dx = posVec.getX();
+        final int dy = posVec.getY();
+        final int x = position.getX();
+        final int y = position.getY();
+        return PositionStandard.newInstance(x + dx, y + dy);
+    }
 }
