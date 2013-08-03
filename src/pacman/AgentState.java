@@ -15,5 +15,5 @@ public interface AgentState {
     public AgentState copy();
     public Position getPosition();
     public Direction getDirection();
-    
+    public Configuration getConfiguration();
 }

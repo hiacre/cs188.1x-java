@@ -126,7 +126,7 @@ public class GameState {
         state.pos gives the current position
         state.direction gives the travel vector
     */
-    public Object getPacmanState() {
+    public AgentState getPacmanState() {
         return data.getAgentStates().get(0).copy();
     }
     

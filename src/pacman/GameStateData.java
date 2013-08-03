@@ -25,7 +25,7 @@ public class GameStateData {
     private List agentStates;
     private List<Position> capsules;
     private List<List<Boolean>> food;
-    private Object layout;
+    private Layout layout;
     private List eaten;
     private int score;
     
@@ -149,7 +149,7 @@ public class GameStateData {
         return agentStates;
     }
 
-    public Object getLayout() {
+    public Layout getLayout() {
         return layout;
     }
 
