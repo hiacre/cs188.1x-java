@@ -21,6 +21,7 @@ public interface Grid {
     public int packBits();
     public Grid reconstituteGrid(int bitRep);
     public boolean get(int x, int y);
+    public boolean set(int x, int y, boolean bool);
     public int getWidth();
     public int getHeight();
     

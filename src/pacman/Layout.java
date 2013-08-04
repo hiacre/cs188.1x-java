@@ -4,17 +4,21 @@
  */
 package pacman;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.Position;
 import util.PositionStandard;
+import util.Util;
 
 /**
  * A Layout manages the static information about the game board.
@@ -28,16 +32,18 @@ public class Layout {
     private final int width;
     private final int height;
     private final Grid walls;
-    private List<List<Map<Direction,Set<Position>>>> visibility;
-    private List agentPositions;
+    private GridVisibility visibility;
+    private List<Pair<Integer, Position>> agentPositions;
+    private Grid food;
+    private Grid capsules;
 
     private Layout(final List<String> layoutText) {
         this.width = layoutText.get(0).length();
         this.height= layoutText.size();
         this.walls = GridStandard.newInstance(width, height, false);
-        final Grid food = GridStandard.newInstance(width, height, false);
-        final List capsules = new ArrayList();
-        final List<Position> agentPositions = new ArrayList<>();
+        food = GridStandard.newInstance(width, height, false);
+        capsules = GridStandard.newInstance(width, height, false);
+        agentPositions = new ArrayList<>();
         numGhosts = 0;
         processLayoutText(layoutText);
         this.layoutText = layoutText;
@@ -58,13 +64,8 @@ public class Layout {
     public void initializeVisibilityMatrix() {
         
         if(!VISIBILITY_MATRIX_CACHE.keySet().contains(concatStringList(layoutText, ""))) {
-            final Map<Direction, Set<Object>> mapDirectionSet = new HashMap<>();
-            mapDirectionSet.put(Direction.North, new HashSet());
-            mapDirectionSet.put(Direction.South, new HashSet());
-            mapDirectionSet.put(Direction.East, new HashSet());
-            mapDirectionSet.put(Direction.West, new HashSet());
-            mapDirectionSet.put(Direction.Stop, new HashSet());
-            final Grid vis = GridStandard.newInstance(width, height, mapDirectionSet);
+            
+            final GridVisibility vis = GridVisibility.newInstance(width, height);
             final List<DirectionVector> vecs = Arrays.asList(
                     DirectionVector.newInstance(-1, 0),
                     DirectionVector.newInstance( 1, 0),
@@ -93,7 +94,7 @@ public class Layout {
                     }
                 }
             }
-            self.visibility = vis;
+            visibility = vis;
             VISIBILITY_MATRIX_CACHE[reduce(str.__add__, self.layoutText)] = vis;
         }
         else {
@@ -151,7 +152,7 @@ public class Layout {
     public boolean isVisibleFrom(final Position ghostPos, final Position pacPos, final Direction pacDirection) {
         final int row = pacPos.getX();
         final int col = pacPos.getY();
-        return visibility.get(row).get(col).get(pacDirection).contains(ghostPos);
+        return visibility.get(row, col, pacDirection).contains(ghostPos);
     }
 
     @Override
@@ -175,7 +176,7 @@ public class Layout {
          P - Pacman
         Other characters are ignored.
      */
-    public void processLayoutText(final List<String> layoutText) {
+    public final void processLayoutText(final List<String> layoutText) {
         final int maxY = height - 1;
         for(int y=0; y<height; y++) {
             for(int x=0; x<width; x++) {
@@ -183,7 +184,14 @@ public class Layout {
                 processLayoutChar(x, y, layoutChar);
             }
         }
-        Collections.sort(agentPositions);
+        Collections.sort(
+                agentPositions,
+                new Comparator<Pair<Integer, Position>>() {
+                    @Override
+                    public int compare(Pair<Integer, Position> o1, Pair<Integer, Position> o2) {
+                        return o1.getFirst().compareTo(o2.getFirst());
+                    }
+                });
         agentPositions = agentPositions.subList(1, agentPositions.size());
     }
 
@@ -214,26 +222,45 @@ public class Layout {
     public Grid getWalls() {
         return walls;
     }
-}
-
-def getLayout(name, back = 2):
-    if name.endswith('.lay'):
-        layout = tryToLoad('layouts/' + name)
-        if layout == None: layout = tryToLoad(name)
-    else:
-        layout = tryToLoad('layouts/' + name + '.lay')
-        if layout == None: layout = tryToLoad(name + '.lay')
-    if layout == None and back >= 0:
-        curdir = os.path.abspath('.')
-        os.chdir('..')
-        layout = getLayout(name, back -1)
-        os.chdir(curdir)
-    return layout
-
-def tryToLoad(fullname):
-    if(not os.path.exists(fullname)): return None
-    f = open(fullname)
-    try: return Layout([line.strip() for line in f])
-    finally: f.close()
-
+    
+    
+    public static Layout getLayout(final String name, Integer back) {
+        if(back == null) {
+            back = 2;
+        }
+        Layout layout;
+        if(name.endsWith(".lay")) {
+            layout = tryToLoad("layouts/" + name);
+            if(layout == null) {
+                layout = tryToLoad(name);
+            }
+        } else {
+            layout = tryToLoad("layouts/" + name + ".lay");
+            if(layout == null) {
+                layout = tryToLoad(name + ".lay");
+            }
+        }
+        if(layout == null && back >= 0) {
+            final String curdir = System.getProperty("user.dir");
+            Util.setCurrentDirectory("..");
+            layout = getLayout(name, back -1);
+            Util.setCurrentDirectory(curdir);
+        }
+        return layout;
+    }
+    
+    
+    private static Layout tryToLoad(final String fullname) {
+        final File file = new File(fullname);
+        if(!file.exists()) {
+            return null;
+        }
+        try {
+            final List<String> layout = Util.readSmallTextFile(fullname);
+            return new Layout(layout);
+        } catch (IOException ex) {
+            Logger.getLogger(Layout.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

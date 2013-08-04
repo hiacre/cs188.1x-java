@@ -4,6 +4,13 @@
  */
 package util;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,5 +69,34 @@ public class Util {
             list.add(element);
         }
         return list;
+    }
+    
+    
+    public static boolean setCurrentDirectory(String directory_name)
+    {
+        boolean result = false;  // Boolean indicating whether directory was set
+        final File directory;    // Desired current working directory
+
+        directory = new File(directory_name).getAbsoluteFile();
+        if (directory.exists())
+        {
+            result = (System.setProperty("user.dir", directory.getAbsolutePath()) != null);
+        }
+
+        return result;
+    }
+    
+    public static List<String> readSmallTextFile(String aFileName) throws IOException {
+        final InputStream is = new FileInputStream(aFileName);
+        final List<String> result;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("ASCII")))) {
+            result = new ArrayList<>();
+            String line = br.readLine();
+            while(line != null) {
+                line = br.readLine();
+                result.add(line.trim());
+            }
+        }
+        return result;
     }
 }
