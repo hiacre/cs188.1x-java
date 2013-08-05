@@ -7,7 +7,6 @@ package pacman;
 import java.util.ArrayList;
 import java.util.List;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import util.Position;
 
 /**
  *
@@ -15,45 +14,41 @@ import util.Position;
  */
 public class GameStateData {
     
-    private final int scoreChange;
+    private int scoreChange;
     private final boolean lose;
     private final boolean win;
-    private final Object agentMoved;
+    private Integer agentMoved;
     private final Object capsuleEaten;
     private final Object foodAdded;
     private final Object foodEaten;
     private List agentStates;
-    private List<Position> capsules;
-    private List<List<Boolean>> food;
+    private Grid capsules;
+    private Grid food;
     private Layout layout;
     private List eaten;
     private int score;
     
     public GameStateData() {
-        this.foodEaten = null;
-        this.foodAdded = null;
-        this.capsuleEaten = null;
-        this.agentMoved = null;
-        this.lose = false;
-        this.win = false;
-        this.scoreChange = 0;
+        foodEaten = null;
+        foodAdded = null;
+        capsuleEaten = null;
+        agentMoved = null;
+        lose = false;
+        win = false;
+        scoreChange = 0;
     }
     
     public GameStateData(final GameStateData prevState) {
-        this.food = prevState.getFood().copy();
-        this.capsules = prevState.getCapsules().copy();
-        this.agentStates = prevState.getAgentStates().copy();
-        this.layout = prevState.getLayout().copy();
-        this.eaten = prevState.getEaten();
-        this.score = prevState.getScore();
-    }
-
-    GameStateData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        food = prevState.getFood().copy();
+        capsules = prevState.getCapsules().copy();
+        agentStates = prevState.getAgentStates().copy();
+        layout = prevState.getLayout().copy();
+        eaten = prevState.getEaten();
+        score = prevState.getScore();
     }
     
     public GameStateData deepCopy() {
-        return GameStateData.newInstance();
+        throw new NotImplementedException();
     }
     
     public List<AgentState> copyAgentStates(final List<AgentState> agentStates) {
@@ -113,23 +108,23 @@ public class GameStateData {
     /**
      * Creates an initial game state from a layout array (see layout.py).
      */
-    public void initialize(final Object layout, final Object numGhostAgents) {
+    public void initialize(final Layout layout, final Object numGhostAgents) {
         this.food = layout.getFood().copy();
-        this.capsules = layout.getCapsules().copy();
+        capsules = layout.getCapsules().copy();
         this.layout = layout;
         this.score = 0;
-        this.scoreChange = 0;
+        scoreChange = 0;
 
         agentStates = new ArrayList<>();
         int numGhosts = 0;
-        for(AgentPosition pos : layout.getAgentPositions()) {
+        for(AgentTypeAndPosition pos : layout.getAgentPositions()) {
             if(pos.isPacman()) {
                 if(numGhosts == numGhostAgents) {
                     continue;  // Max ghosts reached already
                 }
                 numGhosts++;
             }
-            agentStates.add( new AgentState( Configuration( pos, Direction.Stop), pos.isPacman()) );
+            agentStates.add( new AgentStateSimple( new ConfigurationStandard(pos.getPosition(), Direction.Stop), pos.isPacman()) );
         }
         eaten = new ArrayList<>();
         for(Object o : agentStates) {
@@ -137,11 +132,11 @@ public class GameStateData {
         }
     }
     
-    public List<List<Boolean>> getFood() {
+    public Grid getFood() {
         return food;
     }
 
-    public List<Position> getCapsules() {
+    public Grid getCapsules() {
         return capsules;
     }
 
@@ -159,5 +154,33 @@ public class GameStateData {
 
     public int getScore() {
         return score;
+    }
+    
+    public int getScoreChange() {
+        return scoreChange;
+    }
+
+    public void setScoreChange(final int scoreChange) {
+        this.scoreChange = scoreChange;
+    }
+    
+    public void setAgentMoved(final int agentIndex) {
+        this.agentMoved = agentIndex;
+    }
+
+    public void setscore(final int score) {
+        this.score = score;
+    }
+
+    public void setEaten(final List<Boolean> makeList) {
+        this.eaten = makeList;
+    }
+
+    public boolean isLose() {
+        return this.lose;
+    }
+
+    public boolean isWin() {
+        return this.win;
     }
 }

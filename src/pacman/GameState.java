@@ -7,6 +7,7 @@ package pacman;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import util.Position;
 import util.Util;
@@ -28,7 +29,8 @@ import util.Util;
 public class GameState {
     
     private static Set<GameState> explored = new HashSet<>();
-    final private GameStateData data;
+    private GameStateData data;
+    private final static int TIME_PENALTY = 1;
     
     
     public GameState() {
@@ -63,7 +65,7 @@ public class GameState {
         explored.add(this);
         
         if(isWin() || isLose()) {
-            return new ArrayList<Object>();
+            return new ArrayList<>();
         }
         
         if(agentIndex == 0) {
@@ -74,7 +76,7 @@ public class GameState {
     }
     
     /** Returns the successor state after the specified agent takes the action. */
-    public void generateSuccessor(final int agentIndex, final Action action) {
+    public GameState generateSuccessor(final int agentIndex, final Direction action) {
         // Check that successors exist
         if(isWin() || isLose()) {
             throw new RuntimeException("Can't generate a successor of a terminal state.");
@@ -96,7 +98,7 @@ public class GameState {
         // Time passes
         if(agentIndex == 0) {
             // Penalty for waiting around
-            state.getData().setScoreChange(state.getData().getScoreChange() - TIME_PENALTY);
+            state.getData().setScoreChange(state.getData().getScoreChange() - getTimePenalty());
         } else {
             GhostRules.decrementTimer( state.getData().getAgentStates().get(agentIndex));
         }
@@ -116,7 +118,7 @@ public class GameState {
     }
 
     /** Generates the successor state after the specified pacman move */
-    public Object generatePacmanSuccessor(final Action action) {
+    public GameState generatePacmanSuccessor(final Direction action) {
         return generateSuccessor(0, action);
     }
     
@@ -176,7 +178,7 @@ public class GameState {
     }
 
     /** Returns a list of positions (x,y) of the remaining capsules. */
-    public List<Position> getCapsules() {
+    public Grid getCapsules() {
         return data.getCapsules();
     }
 
@@ -193,7 +195,7 @@ public class GameState {
         currentFood = state.getFood()
         if currentFood[x][y] == True: ...
      */
-    public Object getFood(self) {
+    public Grid getFood() {
         return data.getFood();
     }
 
@@ -212,11 +214,11 @@ public class GameState {
     }
 
     public boolean hasFood(final int x, final int y) {
-        return data.getFood().get(x).get(y);
+        return data.getFood().get(x, y);
     }
 
     public boolean hasWall(final int x, final int y) {
-        return data.getLayout().getWalls.get(x).get(y);
+        return data.getLayout().getWalls().get(x,y);
     }
 
     public boolean isLose() {
@@ -239,13 +241,24 @@ public class GameState {
         return state;
     }
 
-    public boolean equals(Object other) {
-        return data == other.data;
-    }
-
     @Override
     public int hashCode() {
         return data.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GameState other = (GameState) obj;
+        if (!Objects.equals(this.data, other.data)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -266,4 +279,12 @@ public class GameState {
         return data;
     }
 
+    
+    private int getTimePenalty() {
+        return TIME_PENALTY;
+    }
+
+    private void setData(final GameStateData data) {
+        this.data = data;
+    }
 }

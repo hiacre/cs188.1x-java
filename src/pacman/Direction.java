@@ -31,4 +31,15 @@ public enum Direction {
         
         return DirectionVector.newInstance(this.x * speed, this.y * speed);
     }
+
+    public Direction getReverse() {
+        switch(this) {
+            case North: return Direction.South;
+            case South: return Direction.North;
+            case East: return Direction.West;
+            case West: return Direction.East;
+            case Stop: return Direction.Stop;
+            default: throw new RuntimeException("Unhandled direction");
+        }
+    }
 }

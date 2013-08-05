@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,14 +25,14 @@ import util.Util;
  */
 public class Layout {
 
-    private final Map<String, Object> VISIBILITY_MATRIX_CACHE = new HashMap<>();
+    private final Map<String, GridVisibility> VISIBILITY_MATRIX_CACHE = new HashMap<>();
     private final List<String> layoutText;
     private int numGhosts;
     private final int width;
     private final int height;
     private final Grid walls;
     private GridVisibility visibility;
-    private List<Pair<Integer, Position>> agentPositions;
+    private List<AgentTypeAndPosition> agentPositions;
     private Grid food;
     private Grid capsules;
 
@@ -84,21 +83,23 @@ public class Layout {
                             final Direction direction = dirs.get(i);
                             final int dx = vec.getX();
                             final int dy = vec.getY();
-                            final int nextx = x + dx;
-                            final int nexty = y + dy;
-                            while((nextx + nexty) != int(nextx) + int(nexty) || !walls[int(nextx)][int(nexty)]) {
-                                vis[x][y][direction].add((nextx, nexty));
-                                nextx, nexty = x + dx, y + dy;
+                            int nextx = x + dx;
+                            int nexty = y + dy;
+                            // while((nextx + nexty) != int(nextx) + int(nexty) || !walls.get(x,y)
+                            while(!walls.get(x,y)) {
+                                vis.get(x,y,direction).add(PositionStandard.newInstance(nextx, nexty));
+                                nextx = x + dx;
+                                nexty = y + dy;
                             }
                         }
                     }
                 }
             }
             visibility = vis;
-            VISIBILITY_MATRIX_CACHE[reduce(str.__add__, self.layoutText)] = vis;
+            VISIBILITY_MATRIX_CACHE.put(concatStringList(layoutText, ""), vis);
         }
         else {
-            self.visibility = VISIBILITY_MATRIX_CACHE[reduce(str.__add__, self.layoutText)];
+            visibility = VISIBILITY_MATRIX_CACHE.get(concatStringList(layoutText, ""));
         }
     }
 
@@ -184,14 +185,7 @@ public class Layout {
                 processLayoutChar(x, y, layoutChar);
             }
         }
-        Collections.sort(
-                agentPositions,
-                new Comparator<Pair<Integer, Position>>() {
-                    @Override
-                    public int compare(Pair<Integer, Position> o1, Pair<Integer, Position> o2) {
-                        return o1.getFirst().compareTo(o2.getFirst());
-                    }
-                });
+        Collections.sort(agentPositions);
         agentPositions = agentPositions.subList(1, agentPositions.size());
     }
 
@@ -201,16 +195,16 @@ public class Layout {
             case '%': walls.set(x,y, true); break;
             case '.': food.set(x,y, true); break;
             case 'o': capsules.set(x,y, true); break;
-            case 'P': agentPositions.add(new Pair<Integer, Position>(0, PositionStandard.newInstance(x, y))); break;
+            case 'P': agentPositions.add(new AgentTypeAndPosition(PositionStandard.newInstance(x, y), 0)); break;
             case 'G':
-                agentPositions.add(new Pair<Integer, Position>(1, PositionStandard.newInstance(x, y)));
+                agentPositions.add(new AgentTypeAndPosition(PositionStandard.newInstance(x, y), 1));
                 numGhosts++;
                 break;
             case '1':
             case '2':
             case '3':
             case '4':
-                agentPositions.add(new Pair<Integer, Position>(new Integer(layoutChar), PositionStandard.newInstance(x, y)));
+                agentPositions.add(new AgentTypeAndPosition(PositionStandard.newInstance(x, y), new Integer(layoutChar)));
                 numGhosts++;
                 break;
             default:
@@ -262,5 +256,17 @@ public class Layout {
             Logger.getLogger(Layout.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public Grid getFood() {
+        return food;
+    }
+
+    public Grid getCapsules() {
+        return capsules;
+    }
+    
+    public List<AgentTypeAndPosition> getAgentPositions() {
+        return agentPositions;
     }
 }

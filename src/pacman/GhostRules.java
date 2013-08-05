@@ -4,43 +4,49 @@
  */
 package pacman;
 
+import java.util.List;
+
 /**
- *
+ * These functions dictate how ghosts interact with their environment.
  * @author archie
  */
 public class GhostRules {
-class GhostRules:
-    """
-    These functions dictate how ghosts interact with their environment.
-    """
-    GHOST_SPEED=1.0
-    def getLegalActions( state, ghostIndex ):
-        """
-        Ghosts cannot stop, and cannot turn around unless they
-        reach a dead end, but can turn 90 degrees at intersections.
-        """
-        conf = state.getGhostState( ghostIndex ).configuration
-        possibleActions = Actions.getPossibleActions( conf, state.data.layout.walls )
-        reverse = Actions.reverseDirection( conf.direction )
-        if Directions.STOP in possibleActions:
-            possibleActions.remove( Directions.STOP )
-        if reverse in possibleActions and len( possibleActions ) > 1:
-            possibleActions.remove( reverse )
-        return possibleActions
-    getLegalActions = staticmethod( getLegalActions )
 
-    def applyAction( state, action, ghostIndex):
+    private static final double GHOST_SPEED = 1.0;
+    
+    /** Ghosts cannot stop, and cannot turn around unless they
+        reach a dead end, but can turn 90 degrees at intersections. */
+    private static List<Direction> getLegalActions(final GameState state, final int ghostIndex) {
+        final Configuration conf = state.getGhostState(ghostIndex).getConfiguration();
+        final List<Direction> possibleActions = Actions.getPossibleActions(conf, state.getData().getLayout().getWalls());
+        final Direction reverse = conf.getDirection().getReverse();
+        if(possibleActions.contains(Direction.Stop)) {
+            possibleActions.remove(Direction.Stop);
+        }
+        if(possibleActions.contains(reverse) && possibleActions.size() > 1) {
+            possibleActions.remove(reverse);
+        }
+        return possibleActions;
+    }
 
-        legal = GhostRules.getLegalActions( state, ghostIndex )
-        if action not in legal:
-            raise Exception("Illegal ghost action " + str(action))
+    public static void applyAction(final GameState state, final Direction action, final int ghostIndex) {
+        final List<Direction> legal = GhostRules.getLegalActions(state, ghostIndex);
+        if(!legal.contains(action)) {
+            throw new RuntimeException("Illegal ghost action " + action.toString());
+        }
 
-        ghostState = state.data.agentStates[ghostIndex]
-        speed = GhostRules.GHOST_SPEED
-        if ghostState.scaredTimer > 0: speed /= 2.0
-        vector = Actions.directionToVector( action, speed )
-        ghostState.configuration = ghostState.configuration.generateSuccessor( vector )
-    applyAction = staticmethod( applyAction )
+        final AgentState ghostState = state.getData().getAgentStates().get(ghostIndex);
+        double speed = getGhostSpeed();
+        if(ghostState.getScaredTimer() > 0) {
+            speed /= 2.0;
+        }
+        final DirectionVector vector = action.toVector(speed);
+        ghostState.configuration = ghostState.configuration.generateSuccessor( vector );
+    }
+    
+    public static double getGhostSpeed() {
+        return GHOST_SPEED;
+    }
 
     def decrementTimer( ghostState):
         timer = ghostState.scaredTimer

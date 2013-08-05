@@ -24,7 +24,7 @@ public class PacmanRules {
     }
     
     /** Edits the state to reflect the results of the action. */
-    public static void applyAction(final GameState state, final Object action) {
+    public static void applyAction(final GameState state, final Direction action) {
         final Collection legal = PacmanRules.getLegalActions( state );
         if(!legal.contains(action)) {
             throw new RuntimeException("Illegal action " + action.toString());
@@ -33,7 +33,7 @@ public class PacmanRules {
         final Object pacmanState = state.getData().getAgentStates().get(0);
 
         // Update Configuration
-        final Object vector = Actions.directionToVector( action, PACMAN_SPEED );
+        final DirectionVector vector = action.toVector(PACMAN_SPEED);
         pacmanState.setConfiguration(pacmanState.getConfiguration().generateSuccessor( vector ));
 
         // Eat
