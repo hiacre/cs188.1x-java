@@ -11,10 +11,10 @@ import util.Position;
  * @author archie
  */
 public class AgentStateSimple implements AgentState {
-    private final ConfigurationStandard configuration;
+    private final Configuration configuration;
     private final boolean isPacman;
 
-    public AgentStateSimple(ConfigurationStandard configuration, boolean isPacman) {
+    public AgentStateSimple(Configuration configuration, boolean isPacman) {
         this.configuration = configuration;
         this.isPacman = isPacman;
     }

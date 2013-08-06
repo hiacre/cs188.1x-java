@@ -35,25 +35,26 @@ public class GhostRules {
             throw new RuntimeException("Illegal ghost action " + action.toString());
         }
 
-        final AgentState ghostState = state.getData().getAgentStates().get(ghostIndex);
+        final GhostState ghostState = (GhostState)state.getData().getAgentStates().get(ghostIndex);
         double speed = getGhostSpeed();
         if(ghostState.getScaredTimer() > 0) {
             speed /= 2.0;
         }
         final DirectionVector vector = action.toVector(speed);
-        ghostState.configuration = ghostState.configuration.generateSuccessor( vector );
+        ghostState.setConfiguration(ghostState.getConfiguration().generateSuccessor( vector ));
     }
     
     public static double getGhostSpeed() {
         return GHOST_SPEED;
     }
 
-    def decrementTimer( ghostState):
-        timer = ghostState.scaredTimer
-        if timer == 1:
-            ghostState.configuration.pos = nearestPoint( ghostState.configuration.pos )
-        ghostState.scaredTimer = max( 0, timer - 1 )
-    decrementTimer = staticmethod( decrementTimer )
+    private static void decrementTimer(final GhostState ghostState) {
+        final int timer = ghostState.getScaredTimer();
+        if(timer == 1) {
+            ghostState.configuration.pos = nearestPoint( ghostState.configuration.pos );
+        }
+        ghostState.setScaredTimer(Math.max(0, timer - 1);
+    }
 
     def checkDeath( state, agentIndex):
         pacmanPosition = state.getPacmanPosition()
