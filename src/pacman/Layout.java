@@ -51,18 +51,10 @@ public class Layout {
     public int getNumGhosts() {
         return numGhosts;
     }
-    
-    private String concatStringList(final List<String> strings, final String sep) {
-        final StringBuilder sb = new StringBuilder();
-        for(String s : strings) {
-            sb.append(s).append(sep);
-        }
-        return sb.toString();
-    }
 
     public void initializeVisibilityMatrix() {
         
-        if(!VISIBILITY_MATRIX_CACHE.keySet().contains(concatStringList(layoutText, ""))) {
+        if(!VISIBILITY_MATRIX_CACHE.keySet().contains(Util.concatStringList(layoutText, ""))) {
             
             final GridVisibility vis = GridVisibility.newInstance(width, height);
             final List<DirectionVector> vecs = Arrays.asList(
@@ -96,10 +88,10 @@ public class Layout {
                 }
             }
             visibility = vis;
-            VISIBILITY_MATRIX_CACHE.put(concatStringList(layoutText, ""), vis);
+            VISIBILITY_MATRIX_CACHE.put(Util.concatStringList(layoutText, ""), vis);
         }
         else {
-            visibility = VISIBILITY_MATRIX_CACHE.get(concatStringList(layoutText, ""));
+            visibility = VISIBILITY_MATRIX_CACHE.get(Util.concatStringList(layoutText, ""));
         }
     }
 
@@ -158,7 +150,7 @@ public class Layout {
 
     @Override
     public String toString() {
-        return concatStringList(layoutText, "\n");
+        return Util.concatStringList(layoutText, "\n");
     }
 
     public Layout deepCopy() {
@@ -217,8 +209,10 @@ public class Layout {
         return walls;
     }
     
-    
-    public static Layout getLayout(final String name, Integer back) {
+    public static Layout getLayout(final String name) {
+        return Layout.getLayout(name, null);
+    }
+    private static Layout getLayout(final String name, Integer back) {
         if(back == null) {
             back = 2;
         }

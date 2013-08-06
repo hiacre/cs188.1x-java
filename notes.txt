@@ -1,10 +1,14 @@
 
-References to isPacman.
 
-An AgentState is told whether it is Pacman when it is first created.
+Something is weird and screwy about positions and vectors.  It's not clear which
+positions are grid-based (entirely integers), and which are... sub-grid-based (floats).
 
-An agentPosition is simply a tuple of either (int, position) or (boolean, position).
-When int == 0, boolean is true, then the agentPosition is Pacman.
-When int == 1, the agent is a ghost.  There can be multiple 1s.
-Also, int == 2,3,4 are ghosts as well, it seems.
-  I think these various numbering options are for sortability.
+Evidence
+
+getPossibleActions
+==================
+Gets a configuration's x and y.
+It feels the need to round x and y to the nearest integers.
+If these floats and integers are outside a certain tolerance, then configuration's direction is returned.
+   The direction is whatever was given to configuration.
+

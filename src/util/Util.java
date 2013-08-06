@@ -99,4 +99,12 @@ public class Util {
         }
         return result;
     }
+
+    public static String concatStringList(final List<String> strings, final String sep) {
+        final StringBuilder sb = new StringBuilder();
+        for (String s : strings) {
+            sb.append(s).append(sep);
+        }
+        return sb.toString();
+    }
 }

@@ -1,0 +1,7 @@
+USAGE:      python pacman.py <options>
+EXAMPLES:   (1) python pacman.py
+                - starts an interactive game
+            (2) python pacman.py --layout smallClassic --zoom 2
+            OR  python pacman.py -l smallClassic -z 2
+                - starts an interactive game on a smaller board, zoomed in
+

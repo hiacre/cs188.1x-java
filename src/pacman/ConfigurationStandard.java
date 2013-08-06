@@ -22,12 +22,12 @@ public class ConfigurationStandard implements Configuration {
     
     @Override
     public Position getPosition() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return position;
     }
 
     @Override
     public Direction getDirection() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return direction;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ConfigurationStandard implements Configuration {
     }
 
     @Override
-    public Configuration generateSuccessor() {
+    public Configuration generateSuccessor(DirectionVector vector) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
