@@ -100,7 +100,7 @@ public class GameState {
             // Penalty for waiting around
             state.getData().setScoreChange(state.getData().getScoreChange() - getTimePenalty());
         } else {
-            GhostRules.decrementTimer( state.getData().getAgentStates().get(agentIndex));
+            GhostRules.decrementTimer((GhostState)state.getData().getAgentStates().get(agentIndex));
         }
 
         // Resolve multi-agent effects

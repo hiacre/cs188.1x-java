@@ -85,7 +85,7 @@ public class ClassicGameRules {
         }
     }
 
-    public Object getMaxTotalTime(final int agentIndex) {
+    public int getMaxTotalTime(final int agentIndex) {
         return timeout;
     }
     
@@ -94,15 +94,15 @@ public class ClassicGameRules {
         return timeout;
     }
 
-    public Object getMoveWarningTime(final int agentIndex) {
+    public int getMoveWarningTime(final int agentIndex) {
         return timeout;
     }
 
-    public Object getMoveTimeout(final int agentIndex) {
+    public int getMoveTimeout(final int agentIndex) {
         return timeout;
     }
 
-    public Object getMaxTimeWarnings(final int agentIndex) {
+    public int getMaxTimeWarnings(final int agentIndex) {
         return 0;
     }
 }

@@ -15,7 +15,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class GameStateData {
     
     private int scoreChange;
-    private final boolean lose;
+    private boolean lose;
     private final boolean win;
     private Integer agentMoved;
     private final Object capsuleEaten;
@@ -148,7 +148,7 @@ public class GameStateData {
         return layout;
     }
 
-    private List getEaten() {
+    public List getEaten() {
         return eaten;
     }
 
@@ -182,5 +182,13 @@ public class GameStateData {
 
     public boolean isWin() {
         return this.win;
+    }
+
+    public void scoreAdd(final int scoreChange) {
+        this.score += scoreChange;
+    }
+
+    public void setIsLose(boolean isLose) {
+        this.lose = isLose;
     }
 }

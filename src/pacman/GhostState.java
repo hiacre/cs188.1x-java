@@ -18,4 +18,8 @@ public class GhostState extends AgentStateSimple {
     public int getScaredTimer() {
         return scaredTimer;
     }
+
+    void setScaredTimer(int scaredTimer) {
+        this.scaredTimer = scaredTimer;
+    }
 }

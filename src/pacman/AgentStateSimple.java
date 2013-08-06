@@ -11,11 +11,13 @@ import util.Position;
  * @author archie
  */
 public class AgentStateSimple implements AgentState {
-    private final Configuration configuration;
+    private Configuration configuration;
     private final boolean isPacman;
+    private final Configuration startConfiguration;
 
-    public AgentStateSimple(Configuration configuration, boolean isPacman) {
-        this.configuration = configuration;
+    public AgentStateSimple(Configuration startConfiguration, boolean isPacman) {
+        this.startConfiguration = startConfiguration;
+        this.configuration = startConfiguration;
         this.isPacman = isPacman;
     }
 
@@ -39,4 +41,11 @@ public class AgentStateSimple implements AgentState {
         return configuration;
     }
     
+    public void setConfiguration(final Configuration configuration) {
+        this.configuration = configuration;
+    }
+    
+    public Configuration getStart() {
+        return startConfiguration;
+    }
 }

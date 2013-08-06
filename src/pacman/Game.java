@@ -4,6 +4,8 @@
  */
 package pacman;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,9 +19,9 @@ import util.Util;
  */
 public class Game {
     private boolean agentCrashed;
-    private final List agents;
+    private final List<Agent> agents;
     private final Object display;
-    private final Object rules;
+    private final ClassicGameRules rules;
     private final int startingIndex;
     private boolean gameOver;
     private final boolean muteAgents;
@@ -64,18 +66,16 @@ public class Game {
     }
     
     /** Helper method for handling agent crashes */
-    private void agentCrash(final Object agentIndex, final boolean quiet) {
+    private void agentCrash(final int agentIndex) {
         
-        if(!quiet) {
-            traceback.print_exc();
-        }
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        new RuntimeException().printStackTrace(pw);
+        logger.log(Level.SEVERE, sw.toString());
+        
         gameOver = true;
         agentCrashed = true;
         rules.agentCrash(this, agentIndex);
-    }
-    
-    private void agentCrash(final Object agentIndex) {
-        agentCrash(agentIndex, false);
     }
 
 
@@ -83,31 +83,28 @@ public class Game {
     public void run() {
 
         display.initialize(state.getData());
-        final int numMoves = 0;
+        int numMoves = 0;
 
         // inform learning agents of the game start
         for(int i=0; i<agents.size(); i++) {
-            agent = agents.get(i);
+            final Object agent = agents.get(i);
             if(agent == null) {
                 // this is a null agent, meaning it failed to load
                 // the other team wins
                 logger.log(Level.SEVERE, "Agent {0} failed to load", i);
-                agentCrash(i, true);
+                agentCrash(i);
                 return;
             }
             if(catchExceptions) {
                 try {
-                    
-                    try {
-                        agent.registerInitialState(state.copy(), new Timeout(rules.getMaxStartupTime(i)));
-                    } catch(ExceptionTimeout ex) {
-                        logger.log(Level.SEVERE, "Agent {0} ran out of time on startup", i);
-                        agentCrash(i, true);
-                        return;
-                    }
+                    agent.registerInitialState(state.copy(), new Timeout(rules.getMaxStartupTime(i)));
+                } catch(ExceptionTimeout ex) {
+                    logger.log(Level.SEVERE, "Agent {0} ran out of time on startup", i);
+                    agentCrash(i);
+                    return;
                 }
                 catch(Exception ex) {
-                    agentCrash(i, false);
+                    agentCrash(i);
                     return;
                 }
             } else {
@@ -120,14 +117,14 @@ public class Game {
 
         while(!gameOver) {
             // Fetch the next agent
-            final Object agent = agents.get(agentIndex);
-            final int move_time = 0;
+            final Agent agent = agents.get(agentIndex);
+            int move_time = 0;
             final boolean skip_action = false;
             // Generate an observation of the state
-            final Object observation = state.copy();
+            final GameState observation = state.copy();
 
             // Solicit an action
-            Object action = null;
+            final Direction action;
             if(catchExceptions) {
                 try {
                     Object start_time = time.time();
@@ -139,7 +136,7 @@ public class Game {
                     }
                     catch(ExceptionTimeout ex) {
                         logger.log(Level.SEVERE, "Agent {0} timed out on a single move", agentIndex);
-                        agentCrash(agentIndex, true);
+                        agentCrash(agentIndex);
                         return;
                     }
                     
@@ -151,7 +148,7 @@ public class Game {
                         if(totalAgentTimeWarnings.get(agentIndex) > rules.getMaxTimeWarnings(agentIndex)) {
                             
                             logger.log(Level.SEVERE, "Agent " + agentIndex + " exceeded the maximum number of warnings: {0}", totalAgentTimeWarnings.get(agentIndex));
-                            agentCrash(agentIndex, true);
+                            agentCrash(agentIndex);
                             return;
                         }
                     }
@@ -159,7 +156,7 @@ public class Game {
                     totalAgentTimes.add(totalAgentTimes.get(agentIndex) + move_time);
                     if(totalAgentTimes.get(agentIndex) > rules.getMaxTotalTime(agentIndex)) {
                         logger.log(Level.SEVERE, "Agent " + agentIndex + " ran out of time (time: {0})", totalAgentTimes.get(agentIndex));
-                        agentCrash(agentIndex, true);
+                        agentCrash(agentIndex);
                         return;
                     }
                 }
@@ -172,7 +169,7 @@ public class Game {
             }
 
             // Execute the action
-            moveHistory.add( new AgentAction(agentIndex, action) );
+            moveHistory.add(new AgentAction(agentIndex, action) );
             if(catchExceptions) {
                 try {
                     state = state.generateSuccessor( agentIndex, action );

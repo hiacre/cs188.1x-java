@@ -5,6 +5,7 @@
 package pacman;
 
 import java.util.List;
+import util.Position;
 
 /**
  * These functions dictate how ghosts interact with their environment.
@@ -13,10 +14,11 @@ import java.util.List;
 public class GhostRules {
 
     private static final double GHOST_SPEED = 1.0;
+    private static final double COLLISION_TOLERANCE = 0.7;
     
     /** Ghosts cannot stop, and cannot turn around unless they
         reach a dead end, but can turn 90 degrees at intersections. */
-    private static List<Direction> getLegalActions(final GameState state, final int ghostIndex) {
+    public static List<Direction> getLegalActions(final GameState state, final int ghostIndex) {
         final Configuration conf = state.getGhostState(ghostIndex).getConfiguration();
         final List<Direction> possibleActions = Actions.getPossibleActions(conf, state.getData().getLayout().getWalls());
         final Direction reverse = conf.getDirection().getReverse();
@@ -44,51 +46,64 @@ public class GhostRules {
         ghostState.setConfiguration(ghostState.getConfiguration().generateSuccessor( vector ));
     }
     
-    public static double getGhostSpeed() {
+    private static double getGhostSpeed() {
         return GHOST_SPEED;
     }
 
-    private static void decrementTimer(final GhostState ghostState) {
+    public static void decrementTimer(final GhostState ghostState) {
         final int timer = ghostState.getScaredTimer();
-        if(timer == 1) {
-            ghostState.configuration.pos = nearestPoint( ghostState.configuration.pos );
-        }
-        ghostState.setScaredTimer(Math.max(0, timer - 1);
+//        if(timer == 1) {
+//            ghostState.getConfiguration().setPosition(PositionStandard.nearestPoint(ghostState.getConfiguration().getPosition()));
+//        }
+        ghostState.setScaredTimer(Math.max(0, timer - 1));
     }
 
-    def checkDeath( state, agentIndex):
-        pacmanPosition = state.getPacmanPosition()
-        if agentIndex == 0: # Pacman just moved; Anyone can kill him
-            for index in range( 1, len( state.data.agentStates ) ):
-                ghostState = state.data.agentStates[index]
-                ghostPosition = ghostState.configuration.getPosition()
-                if GhostRules.canKill( pacmanPosition, ghostPosition ):
-                    GhostRules.collide( state, ghostState, index )
-        else:
-            ghostState = state.data.agentStates[agentIndex]
-            ghostPosition = ghostState.configuration.getPosition()
-            if GhostRules.canKill( pacmanPosition, ghostPosition ):
-                GhostRules.collide( state, ghostState, agentIndex )
-    checkDeath = staticmethod( checkDeath )
+    public static void checkDeath(final GameState state, final int agentIndex) {
+        final Position pacmanPosition = state.getPacmanPosition();
+        if(agentIndex == 0) { // Pacman just moved; Anyone can kill him
+            for(int index = 1; index < state.getData().getAgentStates().size(); index++) {
+                final GhostState ghostState = (GhostState)state.getData().getAgentStates().get(index);
+                final Position ghostPosition = ghostState.getConfiguration().getPosition();
+                if(GhostRules.canKill(pacmanPosition, ghostPosition)) {
+                    GhostRules.collide(state, ghostState, index);
+                }
+            }
+        } else {
+            final GhostState ghostState = (GhostState)state.getData().getAgentStates().get(agentIndex);
+            final Position ghostPosition = ghostState.getConfiguration().getPosition();
+            if(GhostRules.canKill(pacmanPosition, ghostPosition)) {
+                GhostRules.collide(state, ghostState, agentIndex);
+            }
+        }
+    }
 
-    def collide( state, ghostState, agentIndex):
-        if ghostState.scaredTimer > 0:
-            state.data.scoreChange += 200
-            GhostRules.placeGhost(state, ghostState)
-            ghostState.scaredTimer = 0
-            # Added for first-person
-            state.data._eaten[agentIndex] = True
-        else:
-            if not state.data._win:
-                state.data.scoreChange -= 500
-                state.data._lose = True
-    collide = staticmethod( collide )
+    private static void collide(final GameState state, final GhostState ghostState, final int agentIndex) {
+        if(ghostState.getScaredTimer() > 0) {
+            state.getData().setScoreChange(state.getData().getScoreChange() + 200);
+            GhostRules.placeGhost(ghostState);
+            ghostState.setScaredTimer(0);
+            // Added for first-person
+            // TODO perhaps remove getEaten and introduce setEaten?
+            state.getData().getEaten().set(agentIndex, true);
+        } else {
+            if(!state.getData().isWin()) {
+                state.getData().scoreAdd(-500);
+                // TODO do we really need to set this here?  Can't GameSetData tell?
+                state.getData().setIsLose(true);
+            }
+        }
+    }
 
-    def canKill( pacmanPosition, ghostPosition ):
-        return manhattanDistance( ghostPosition, pacmanPosition ) <= COLLISION_TOLERANCE
-    canKill = staticmethod( canKill )
+    private static boolean canKill(final Position pacmanPosition, final Position ghostPosition) {
+        return ghostPosition.manhattanDistance(pacmanPosition) <= getCollisionTolerance();
+    }
 
-    def placeGhost(state, ghostState):
-        ghostState.configuration = ghostState.start
-    placeGhost = staticmethod( placeGhost )
+    /** How close ghosts must be to Pacman to kill */
+    private static double getCollisionTolerance() {
+        return COLLISION_TOLERANCE;
+    }
+    
+    private static void placeGhost(final GhostState ghostState) {
+        ghostState.setConfiguration(ghostState.getStart());
+    }
 }

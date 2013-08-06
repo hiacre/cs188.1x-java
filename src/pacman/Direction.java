@@ -24,11 +24,11 @@ public enum Direction {
         this.y = y;
     }
     
-    public DirectionVector toVector(Integer speed) {
-        if(speed == null) {
-            speed = 1;
-        }
-        
+    public DirectionVector toVector() {
+        return toVector(1);
+    }
+    
+    public DirectionVector toVector(final double speed) {
         return DirectionVector.newInstance(this.x * speed, this.y * speed);
     }
 

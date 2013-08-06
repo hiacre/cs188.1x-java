@@ -14,6 +14,7 @@ import util.Position;
  */
 public class PacmanRules {
     
+    public static int SCARED_TIME = 40;
     private final static int PACMAN_SPEED = 1;
 
     /** Returns a list of possible actions. */
@@ -71,5 +72,10 @@ public class PacmanRules {
                 state.getData().getAgentStates().get(i).setScaredTimer(SCARED_TIME);
             }
         }
+    }
+        
+    /** Number of moves for which ghosts are scared */
+    public static int getScaredTime() {
+        return SCARED_TIME;
     }
 }

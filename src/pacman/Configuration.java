@@ -20,6 +20,6 @@ public interface Configuration {
     public Position getPosition();
     public Direction getDirection();
     public boolean isInteger();
-    public Configuration generateSuccessor();
+    public Configuration generateSuccessor(final DirectionVector vector);
     
 }
