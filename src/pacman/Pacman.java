@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import pacman.OptionParser.Args;
 import pacman.OptionParser.Options;
 import pacman.OptionParser.ParsedArgs;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.Util;
 
 /**
@@ -63,7 +64,7 @@ public class Pacman {
     }
 
     /** Processes the command used to run pacman from the command line. */
-    private void readCommand(final String[] argv) {
+    private Map<String, Object> readCommand(final String[] argv) {
         List<String> usageStr = new ArrayList<>();
         try {
             usageStr = Util.readSmallTextFile("usage.txt");
@@ -146,117 +147,162 @@ public class Pacman {
 
         // Choose a ghost agent
         Object ghostType = loadAgent(options.get("ghost"), noKeyboard);
-        args['ghosts'] = [ghostType( i+1 ) for i in range( options.numGhosts )];
+        List<Object> ghostTypes = new ArrayList<>();
+        for(int i=0; i<options.get("numGhosts"); i++) {
+            ghostTypes.add(ghostType(i+1));
+        }
+        args.put("ghosts", ghostTypes);
 
         // Choose a display format
-        if options.quietGraphics:
-            import textDisplay
-            args['display'] = textDisplay.NullGraphics()
-        elif options.textGraphics:
-            import textDisplay
-            textDisplay.SLEEP_TIME = options.frameTime
-            args['display'] = textDisplay.PacmanGraphics()
-        else:
-            import graphicsDisplay
-            args['display'] = graphicsDisplay.PacmanGraphics(options.zoom, frameTime = options.frameTime)
-        args['numGames'] = options.numGames
-        args['record'] = options.record
-        args['catchExceptions'] = options.catchExceptions
-        args['timeout'] = options.timeout
+        if(options.contains("quietGraphics")) {
+            //import textDisplay
+            args.put("display", textDisplay.NullGraphics());
+        } else if(options.contains("textGraphics") {
+            // import textDisplay
+            textDisplay.setSleepTime(options.get("frameTime"));
+            args.set("display", textDisplay.PacmanGraphics());
+        } else {
+            // import graphicsDisplay
+            args.set("display", graphicsDisplay.PacmanGraphics(options.get("zoom"), frameTime = options.get("frameTime")));
+        }
+        args.put("numGames", options.get("numGames"));
+        args.put("record", options.get("record"));
+        args.put("catchExceptions", options.get("catchExceptions"));
+        args.put("timeout", options.get("timeout"));
 
-        # Special case: recorded games don't use the runGames method or args structure
-        if options.gameToReplay != None:
-            print 'Replaying recorded game %s.' % options.gameToReplay
-            import cPickle
-            f = open(options.gameToReplay)
-            try: recorded = cPickle.load(f)
-            finally: f.close()
-            recorded['display'] = args['display']
-            replayGame(**recorded)
-            sys.exit(0)
+        // Special case: recorded games don't use the runGames method or args structure
+        if(options.get("gameToReplay") != null) {
+            System.out.println("Replaying recorded game" + options.get("gameToReplay"));
+            //import cPickle
+//            f = open(options.gameToReplay)
+//            try: recorded = cPickle.load(f)
+//            finally: f.close()
+//            recorded['display'] = args['display']
+//            replayGame(**recorded)
+//            sys.exit(0)
+            throw new NotImplementedException();
+        }
 
-        return args
+        return args;
+    }
 
-def loadAgent(pacman, nographics):
-    # Looks through all pythonPath Directories for the right module,
-    pythonPathStr = os.path.expandvars("$PYTHONPATH")
-    if pythonPathStr.find(';') == -1:
-        pythonPathDirs = pythonPathStr.split(':')
-    else:
-        pythonPathDirs = pythonPathStr.split(';')
-    pythonPathDirs.append('.')
+    private Object loadAgent(final AgentDirectory agentName, final Object nographics) {
+        // Looks through all pythonPath Directories for the right module,
+//        pythonPathStr = os.path.expandvars("$PYTHONPATH")
+//        if pythonPathStr.find(';') == -1:
+//            pythonPathDirs = pythonPathStr.split(':')
+//        else:
+//            pythonPathDirs = pythonPathStr.split(';')
+//        pythonPathDirs.append('.')
 
-    for moduleDir in pythonPathDirs:
-        if not os.path.isdir(moduleDir): continue
-        moduleNames = [f for f in os.listdir(moduleDir) if f.endswith('gents.py')]
-        for modulename in moduleNames:
-            try:
-                module = __import__(modulename[:-3])
-            except ImportError:
-                continue
-            if pacman in dir(module):
-                if nographics and modulename == 'keyboardAgents.py':
-                    raise Exception('Using the keyboard requires graphics (not text display)')
-                return getattr(module, pacman)
-    raise Exception('The agent ' + pacman + ' is not specified in any *Agents.py.')
+//        for moduleDir in pythonPathDirs:
+//            if not os.path.isdir(moduleDir): continue
+//            moduleNames = [f for f in os.listdir(moduleDir) if f.endswith('gents.py')]
+//            for modulename in moduleNames:
+//                try:
+//                    module = __import__(modulename[:-3])
+//                except ImportError:
+//                    continue
+//                if agentName in dir(module):
+//                    if nographics and modulename == 'keyboardAgents.py':
+//                        raise Exception('Using the keyboard requires graphics (not text display)')
+//                    return getattr(module, agentName)
+//        raise Exception('The agent ' + agentName + ' is not specified in any *Agents.py.')
+        
+        // Python code establishes the Python paths, and the current working directory.
+        // Loops over the paths, finding the directories
+        // Finds the files (aka modules) in each directory ending with "gents.py"
+        // For each of these modules, imports the module, and looks for an object
+        // in the module called 'agentName'.  
+        // If agentName is found in the module 'keyboardAgents.py' and 'nographics' is specified,
+        // then raise an error (Using the keyboard requires graphics, not text display).
+        // Return a reference to the located agentName, which is a class.
+        // Example, RandomGhost, which extends GhostAgent, which extends Agent.
+        
+        
+        switch(agentName) {
+            default:
+                throw new RuntimeException("Unhandled agent name");
+        }
+    }
 
-def replayGame( layout, actions, display ):
-    import pacmanAgents, ghostAgents
-    rules = ClassicGameRules()
-    agents = [pacmanAgents.GreedyAgent()] + [ghostAgents.RandomGhost(i+1) for i in range(layout.getNumGhosts())]
-    game = rules.newGame( layout, agents[0], agents[1:], display )
-    state = game.state
-    display.initialize(state.data)
+//    private void replayGame(final Layout layout, final Object actions, final Object display) {
+//        final ClassicGameRules rules = new ClassicGameRules();
+//        final List<Agent> agents = new ArrayList();
+//        agents.add(new GreedyAgent());
+//        for(int i=0; i<layout.getNumGhosts(); i++) {
+//            agents.add(new RandomGhost(i+1));
+//        }
+//        final Game game = rules.newGame(layout, agents.get(0), agents.subList(1, agents.size()), display);
+//        GameState state = game.getState();
+//        display.initialize(state.getData());
+//
+//        for(Action action : actions) {
+//            // Execute the action
+//            state = state.generateSuccessor( *action );
+//            # Change the display
+//            display.update( state.data )
+//            # Allow for game specific conditions (winning, losing, etc.)
+//            rules.process(state, game)
+//
+//        display.finish()
 
-    for action in actions:
-            # Execute the action
-        state = state.generateSuccessor( *action )
-        # Change the display
-        display.update( state.data )
-        # Allow for game specific conditions (winning, losing, etc.)
-        rules.process(state, game)
+    private void runGames(
+            final Layout layout,
+            final Object pacman,
+            final Object ghosts,
+            final Object display,
+            final Object numGames,
+            final Object record,
+            Integer numTraining,
+            Boolean catchExceptions,
+            Integer timeout) {
+        if(numTraining == null) {
+            numTraining = 0;
+        }
+        if(catchExceptions == null) {
+            catchExceptions = false;
+        }
+        if(timeout == null) {
+            timeout = 30;
+        }
+        final Object mainDisplay = display;
 
-    display.finish()
+        final ClassicGameRules rules = new ClassicGameRules(timeout);
+        final List games = new ArrayList();
 
-def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0, catchExceptions=False, timeout=30 ):
-    import __main__
-    __main__.__dict__['_display'] = display
+        for i in range( numGames ):
+            beQuiet = i < numTraining
+            if beQuiet:
+                    # Suppress output and graphics
+                import textDisplay
+                gameDisplay = textDisplay.NullGraphics()
+                rules.quiet = True
+            else:
+                gameDisplay = display
+                rules.quiet = False
+            game = rules.newGame( layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions)
+            game.run()
+            if not beQuiet: games.append(game)
 
-    rules = ClassicGameRules(timeout)
-    games = []
+            if record:
+                import time, cPickle
+                fname = ('recorded-game-%d' % (i + 1)) +  '-'.join([str(t) for t in time.localtime()[1:6]])
+                f = file(fname, 'w')
+                components = {'layout': layout, 'actions': game.moveHistory}
+                cPickle.dump(components, f)
+                f.close()
 
-    for i in range( numGames ):
-        beQuiet = i < numTraining
-        if beQuiet:
-                # Suppress output and graphics
-            import textDisplay
-            gameDisplay = textDisplay.NullGraphics()
-            rules.quiet = True
-        else:
-            gameDisplay = display
-            rules.quiet = False
-        game = rules.newGame( layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions)
-        game.run()
-        if not beQuiet: games.append(game)
+        if (numGames-numTraining) > 0:
+            scores = [game.state.getScore() for game in games]
+            wins = [game.state.isWin() for game in games]
+            winRate = wins.count(True)/ float(len(wins))
+            print 'Average Score:', sum(scores) / float(len(scores))
+            print 'Scores:       ', ', '.join([str(score) for score in scores])
+            print 'Win Rate:      %d/%d (%.2f)' % (wins.count(True), len(wins), winRate)
+            print 'Record:       ', ', '.join([ ['Loss', 'Win'][int(w)] for w in wins])
 
-        if record:
-            import time, cPickle
-            fname = ('recorded-game-%d' % (i + 1)) +  '-'.join([str(t) for t in time.localtime()[1:6]])
-            f = file(fname, 'w')
-            components = {'layout': layout, 'actions': game.moveHistory}
-            cPickle.dump(components, f)
-            f.close()
-
-    if (numGames-numTraining) > 0:
-        scores = [game.state.getScore() for game in games]
-        wins = [game.state.isWin() for game in games]
-        winRate = wins.count(True)/ float(len(wins))
-        print 'Average Score:', sum(scores) / float(len(scores))
-        print 'Scores:       ', ', '.join([str(score) for score in scores])
-        print 'Win Rate:      %d/%d (%.2f)' % (wins.count(True), len(wins), winRate)
-        print 'Record:       ', ', '.join([ ['Loss', 'Win'][int(w)] for w in wins])
-
-    return games
+        return games
 
 if __name__ == '__main__':
     args = readCommand( sys.argv[1:] ) # Get game components based on input

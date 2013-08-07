@@ -21,16 +21,16 @@ public class ClassicGameRules {
     private boolean quiet;
     
     private final Logger logger = Logger.getLogger(getClass().getPackage().getName());
-    
-    public ClassicGameRules(final Integer timeout) {
-        if(timeout == null) {
-            this.timeout = 30;
-        } else {
-            this.timeout = timeout;
-        }
+
+    public ClassicGameRules() {
+        this.timeout = 30;
     }
     
-    public Object newGame(
+    public ClassicGameRules(final int timeout) {
+        this.timeout = timeout;
+    }
+    
+    public Game newGame(
             final Layout layout,
             final Agent pacmanAgent,
             final List<Agent> ghostAgents,
@@ -47,6 +47,14 @@ public class ClassicGameRules {
         initialState = initState.deepCopy();
         this.quiet = (quiet == null ? false : quiet);
         return game;
+    }
+    
+    public Game newGame(
+            final Layout layout,
+            final Agent pacmanAgent,
+            final List<Agent> ghostAgents,
+            final Object display) {
+        return newGame(layout, pacmanAgent, ghostAgents, display, false, false);
     }
 
     /** Checks to see whether it is time to end the game. */
