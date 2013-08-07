@@ -1,3 +1,27 @@
+Progress:
+
+autograder
+eightpuzzle
+DONE game
+ghostAgents
+grading
+graphicsDisplay
+graphicsUtils
+keyboardAgents
+DONE layout
+ONGOING pacman
+pacmanAgents
+projectParams
+search
+searchAgents
+searchTestClasses
+test_search
+test_searchAgents
+testClasses
+testParser
+textDisplay
+util
+
 
 
 Something is weird and screwy about positions and vectors.  It's not clear which

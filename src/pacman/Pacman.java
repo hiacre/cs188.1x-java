@@ -135,19 +135,20 @@ public class Pacman {
                 agentOpts.put("numTraining", options.get("numTraining"));
             }
         }
-        pacman = pacmanType(**agentOpts) # Instantiate Pacman with agentArgs
-        args['pacman'] = pacman
+        Object pacman = pacmanType(agentOpts); // Instantiate Pacman with agentArgs
+        args.put("pacman", pacman);
 
-        # Don't display training games
-        if 'numTrain' in agentOpts:
-            options.numQuiet = int(agentOpts['numTrain'])
-            options.numIgnore = int(agentOpts['numTrain'])
+        // Don't display training games
+        if(agentOpts.containsKey("numTrain")) {
+            options.put("numQuiet", int(agentOpts.get("numTrain")));
+            options.put("numIgnore", int(agentOpts.get("numTrain")));
+        }
 
-        # Choose a ghost agent
-        ghostType = loadAgent(options.ghost, noKeyboard)
-        args['ghosts'] = [ghostType( i+1 ) for i in range( options.numGhosts )]
+        // Choose a ghost agent
+        Object ghostType = loadAgent(options.get("ghost"), noKeyboard);
+        args['ghosts'] = [ghostType( i+1 ) for i in range( options.numGhosts )];
 
-        # Choose a display format
+        // Choose a display format
         if options.quietGraphics:
             import textDisplay
             args['display'] = textDisplay.NullGraphics()
