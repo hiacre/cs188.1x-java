@@ -24,5 +24,7 @@ public interface Grid {
     public boolean set(int x, int y, boolean bool);
     public int getWidth();
     public int getHeight();
+    public boolean isCapsule(Position position);
+    public void removeCapsule(Position position);
     
 }

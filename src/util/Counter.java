@@ -58,4 +58,6 @@ public interface Counter<K extends Comparable> {
     /** Creates a new counter that is the union of all labels from each counter,
      * and values are counts of second subtracted from counts of first. */
     public Counter<K> subtract(Counter<K> counter);
+
+    public boolean isEmpty();
 }

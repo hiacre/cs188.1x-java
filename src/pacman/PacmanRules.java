@@ -6,6 +6,7 @@ package pacman;
 
 import java.util.Collection;
 import util.Position;
+import util.PositionStandard;
 
 /**
  * These functions govern how pacman interacts with his environment under
@@ -31,7 +32,7 @@ public class PacmanRules {
             throw new RuntimeException("Illegal action " + action.toString());
         }
 
-        final Object pacmanState = state.getData().getAgentStates().get(0);
+        final AgentState pacmanState = state.getData().getAgentStates().get(0);
 
         // Update Configuration
         final DirectionVector vector = action.toVector(PACMAN_SPEED);
@@ -39,7 +40,7 @@ public class PacmanRules {
 
         // Eat
         final Position next = pacmanState.getConfiguration().getPosition();
-        final Position nearest = nearestPoint( next );
+        final Position nearest = PositionStandard.nearestPoint( next.getX(), next.getY() );
         if(next.manhattanDistance(nearest) <= 0.5) {
             // Remove food
             consume(nearest, state);
@@ -51,10 +52,10 @@ public class PacmanRules {
         final int y = position.getY();
         
         // Eat food
-        if(state.getData().getFood().get(x).get(y)) {
+        if(state.getData().getFood().get(x,y)) {
             state.getData().setScoreChange(state.getData().getScoreChange() + 10);
             state.getData().setFood(state.getData().getFood().copy());
-            state.getData().getFood().get(x).set(y, false);
+            state.getData().getFood().set(x,y,false);
             state.getData().setFoodEaten(position);
             // TODO: cache numFood?
             final int numFood = state.getNumFood();
@@ -64,12 +65,12 @@ public class PacmanRules {
             }
         }
         // Eat capsule
-        if(state.getCapsules().contains(capsules)) {
-            state.getData().getCapsules().remove( position );
+        if(state.getCapsules().isCapsule(position)) {
+            state.getData().getCapsules().removeCapsule( position );
             state.getData().setCapsuleEaten(position);
             // Reset all ghosts' scared timers
             for(int i=1; i<state.getData().getAgentStates().size(); i++) {
-                state.getData().getAgentStates().get(i).setScaredTimer(SCARED_TIME);
+                ((GhostState)state.getData().getAgentStates().get(i)).setScaredTimer(SCARED_TIME);
             }
         }
     }

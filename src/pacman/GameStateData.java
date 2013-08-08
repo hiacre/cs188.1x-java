@@ -7,6 +7,7 @@ package pacman;
 import java.util.ArrayList;
 import java.util.List;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import util.Position;
 
 /**
  *
@@ -16,11 +17,11 @@ public class GameStateData {
     
     private int scoreChange;
     private boolean lose;
-    private final boolean win;
+    private boolean win;
     private Integer agentMoved;
-    private final Object capsuleEaten;
+    private Object capsuleEaten;
     private final Object foodAdded;
-    private final Object foodEaten;
+    private Object foodEaten;
     private List agentStates;
     private Grid capsules;
     private Grid food;
@@ -190,5 +191,25 @@ public class GameStateData {
 
     public void setIsLose(boolean isLose) {
         this.lose = isLose;
+    }
+
+    void setFood(final Grid food) {
+        this.food = food;
+    }
+
+    void setFoodEaten(Position position) {
+        this.foodEaten = position;
+    }
+
+    boolean getLose() {
+        return this.lose;
+    }
+
+    void setWin(boolean isWIn) {
+        this.win = isWin;
+    }
+
+    void setCapsuleEaten(Position position) {
+        this.capsuleEaten = position;
     }
 }
