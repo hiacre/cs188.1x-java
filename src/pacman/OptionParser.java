@@ -27,15 +27,20 @@ class OptionParser {
             final String optionLong,
             final String dest,
             final String type,
-            final String help,
+            String help,
             final String metavar,
-            final String aDefault,
+            final Object aDefault,
             final String action) {
         this.optionShort = optionShort;
         this.optionLong = optionLong;
+        help = getDefault(help, aDefault);
+    }
+    
+    private String getDefault(final String str, final Object defaultValue) {
+        return str + " [Default: " + defaultValue.toString() + "]";
     }
 
-    ParsedArgs parse_args(String[] argv) {
+    ParsedArgs parse_args(final List<String> argv) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

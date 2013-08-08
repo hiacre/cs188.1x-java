@@ -6,6 +6,7 @@ package pacman;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -31,23 +32,26 @@ public class Pacman {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        args = readCommand( sys.argv[1:] ); // Get game components based on input
-        runGames( **args );
-
-        // import cProfile
-        cProfile.run("runGames( **args )")
-        pass
+        
+        final List<String> argList = Arrays.asList(args);
+        final Map<String, Object> mapArgs = readCommand(argList.subList(1, argList.size()) ); // Get game components based on input
+        runGames(
+                (Layout)mapArgs.get("layout"),
+                (Agent)mapArgs.get("pacman"),
+                (List<Agent>)mapArgs.get("ghosts"),
+                (Object)mapArgs.get("display"),
+                (int)mapArgs.get("numGames"),
+                (boolean)mapArgs.get("record"),
+                (int)mapArgs.get("numTraining"),
+                (boolean)mapArgs.get("catchExceptions"),
+                (int)mapArgs.get("timeout"));
     }
     
-/*
- * FRAMEWORK TO START A GAME
- */
+    /*
+     * FRAMEWORK TO START A GAME
+    */
 
-    private String getDefault(final String str) {
-        return str + " [Default: %default]";
-    }
-
-    private Map<String, String> parseAgentArgs(final String str) {
+    private static Map<String, String> parseAgentArgs(final String str) {
         if(str == null) {
             return new HashMap();
         }
@@ -70,12 +74,13 @@ public class Pacman {
     }
 
     /** Processes the command used to run pacman from the command line. */
-    private Map<String, Object> readCommand(final String[] argv) {
+    private static Map<String, Object> readCommand(final List<String> argv) {
         List<String> usageStr = new ArrayList<>();
         try {
             usageStr = Util.readSmallTextFile("usage.txt");
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, "Failed to open usage.txt file", ex);
+            final Logger logger2 = Logger.getLogger("pacman");
+            logger2.log(Level.SEVERE, "Failed to open usage.txt file", ex);
         }
         //        from optparse import OptionParser
         final OptionParser parser = new OptionParser(Util.concatStringList(usageStr, "\n"));
@@ -134,9 +139,9 @@ public class Pacman {
         // Choose a Pacman agent
         final boolean noKeyboard =
                 options.get("gameToReplay") == null && (options.contains("textGraphics") || options.contains("quietGraphics"));
-        final Object pacmanType = loadAgent(options.get("pacman"), noKeyboard);
+        final Object pacmanType = loadAgent(AgentDirectory.valueOf(options.get("pacman")), noKeyboard);
         final Map agentOpts = parseAgentArgs(options.get("agentArgs"));
-        if(options.get("numTraining") > 0) {
+        if(Integer.parseInt(options.get("numTraining")) > 0) {
             args.put("numTraining", options.get("numTraining"));
             if(!agentOpts.containsKey("numTraining")) {
                 agentOpts.put("numTraining", options.get("numTraining"));
@@ -147,14 +152,14 @@ public class Pacman {
 
         // Don't display training games
         if(agentOpts.containsKey("numTrain")) {
-            options.put("numQuiet", int(agentOpts.get("numTrain")));
-            options.put("numIgnore", int(agentOpts.get("numTrain")));
+            options.put("numQuiet", (int)agentOpts.get("numTrain"));
+            options.put("numIgnore", (int)agentOpts.get("numTrain"));
         }
 
         // Choose a ghost agent
         Object ghostType = loadAgent(options.get("ghost"), noKeyboard);
         List<Object> ghostTypes = new ArrayList<>();
-        for(int i=0; i<options.get("numGhosts"); i++) {
+        for(int i=0; i<Integer.parseInt(options.get("numGhosts")); i++) {
             ghostTypes.add(ghostType(i+1));
         }
         args.put("ghosts", ghostTypes);
@@ -163,7 +168,7 @@ public class Pacman {
         if(options.contains("quietGraphics")) {
             //import textDisplay
             args.put("display", textDisplay.NullGraphics());
-        } else if(options.contains("textGraphics") {
+        } else if(options.contains("textGraphics")) {
             // import textDisplay
             textDisplay.setSleepTime(options.get("frameTime"));
             args.set("display", textDisplay.PacmanGraphics());
@@ -192,7 +197,7 @@ public class Pacman {
         return args;
     }
 
-    private Object loadAgent(final AgentDirectory agentName, final Object nographics) {
+    private static Object loadAgent(final AgentDirectory agentName, final Object nographics) {
         // Looks through all pythonPath Directories for the right module,
 //        pythonPathStr = os.path.expandvars("$PYTHONPATH")
 //        if pythonPathStr.find(';') == -1:
@@ -225,11 +230,7 @@ public class Pacman {
         // Return a reference to the located agentName, which is a class.
         // Example, RandomGhost, which extends GhostAgent, which extends Agent.
         
-        
-        switch(agentName) {
-            default:
-                throw new RuntimeException("Unhandled agent name");
-        }
+        return agentName.getAgentType();
     }
 
 //    private void replayGame(final Layout layout, final Object actions, final Object display) {
@@ -253,7 +254,7 @@ public class Pacman {
 //
 //        display.finish()
 
-    private List<Game> runGames(
+    private static List<Game> runGames(
             final Layout layout,
             final Agent pacman,
             final List<Agent> ghosts,

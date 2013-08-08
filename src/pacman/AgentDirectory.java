@@ -28,5 +28,5 @@ public enum AgentDirectory {
     ClosestDotSearchAgent,
     ApproximateSearchAgent
     ;
-    
+
 }
