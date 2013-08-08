@@ -252,7 +252,7 @@ public class Pacman {
             final Object pacman,
             final Object ghosts,
             final Object display,
-            final Object numGames,
+            final int numGames,
             final Object record,
             Integer numTraining,
             Boolean catchExceptions,
@@ -271,16 +271,18 @@ public class Pacman {
         final ClassicGameRules rules = new ClassicGameRules(timeout);
         final List games = new ArrayList();
 
-        for i in range( numGames ):
-            beQuiet = i < numTraining
-            if beQuiet:
-                    # Suppress output and graphics
-                import textDisplay
-                gameDisplay = textDisplay.NullGraphics()
-                rules.quiet = True
-            else:
-                gameDisplay = display
-                rules.quiet = False
+        for(int i=0; i<numGames; i++) {
+            final boolean beQuiet = i < numTraining;
+            final Object gameDisplay;
+            if(beQuiet) {
+                // Suppress output and graphics
+                //import textDisplay
+                gameDisplay = textDisplay.NullGraphics();
+                rules.setQuiet(true);
+            } else {
+                gameDisplay = display;
+                rules.setQuiet(false);
+            }
             game = rules.newGame( layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions)
             game.run()
             if not beQuiet: games.append(game)

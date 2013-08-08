@@ -113,4 +113,8 @@ public class ClassicGameRules {
     public int getMaxTimeWarnings(final int agentIndex) {
         return 0;
     }
+
+    void setQuiet(final boolean isQuiet) {
+        this.quiet = isQuiet;
+    }
 }
