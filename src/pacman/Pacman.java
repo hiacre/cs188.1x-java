@@ -6,6 +6,7 @@ package pacman;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,12 @@ public class Pacman {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        args = readCommand( sys.argv[1:] ); // Get game components based on input
+        runGames( **args );
+
+        // import cProfile
+        cProfile.run("runGames( **args )")
+        pass
     }
     
 /*
@@ -247,13 +253,13 @@ public class Pacman {
 //
 //        display.finish()
 
-    private void runGames(
+    private List<Game> runGames(
             final Layout layout,
-            final Object pacman,
-            final Object ghosts,
+            final Agent pacman,
+            final List<Agent> ghosts,
             final Object display,
             final int numGames,
-            final Object record,
+            final boolean record,
             Integer numTraining,
             Boolean catchExceptions,
             Integer timeout) {
@@ -266,10 +272,13 @@ public class Pacman {
         if(timeout == null) {
             timeout = 30;
         }
+        
+        // TODO mainDisplay is intended to be an application global variable.
+        // search the project for other instances of mainDisplay.
         final Object mainDisplay = display;
 
         final ClassicGameRules rules = new ClassicGameRules(timeout);
-        final List games = new ArrayList();
+        final List<Game> games = new ArrayList();
 
         for(int i=0; i<numGames; i++) {
             final boolean beQuiet = i < numTraining;
@@ -283,35 +292,57 @@ public class Pacman {
                 gameDisplay = display;
                 rules.setQuiet(false);
             }
-            game = rules.newGame( layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions)
-            game.run()
-            if not beQuiet: games.append(game)
+            final Game game = rules.newGame(layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions);
+            game.run();
+            if(!beQuiet) {
+                games.add(game);
+            }
 
-            if record:
-                import time, cPickle
-                fname = ('recorded-game-%d' % (i + 1)) +  '-'.join([str(t) for t in time.localtime()[1:6]])
-                f = file(fname, 'w')
-                components = {'layout': layout, 'actions': game.moveHistory}
-                cPickle.dump(components, f)
-                f.close()
+            if(record) {
+                //import time, cPickle;
+                final StringBuilder fname = new StringBuilder();
+                fname.append("record-game-").append(i+1);
+                // TODO now add on month-day-hour-minute-seconds
+                throw new NotImplementedException();
+                //fname = ('recorded-game-%d' % (i + 1)) +  '-'.join([str(t) for t in time.localtime()[1:6]]);
+//                f = file(fname, 'w');
+//                components = {'layout': layout, 'actions': game.moveHistory};
+//                cPickle.dump(components, f);
+//                f.close();
+            }
+        }
 
-        if (numGames-numTraining) > 0:
-            scores = [game.state.getScore() for game in games]
-            wins = [game.state.isWin() for game in games]
-            winRate = wins.count(True)/ float(len(wins))
-            print 'Average Score:', sum(scores) / float(len(scores))
-            print 'Scores:       ', ', '.join([str(score) for score in scores])
-            print 'Win Rate:      %d/%d (%.2f)' % (wins.count(True), len(wins), winRate)
-            print 'Record:       ', ', '.join([ ['Loss', 'Win'][int(w)] for w in wins])
+        if(numGames-numTraining > 0) {
+            final List<Integer> scores = new ArrayList<>();
+            final List<Boolean> wins = new ArrayList<>();
+            for(Game g : games) {
+                scores.add(g.getState().getScore());
+                wins.add(g.getState().isWin());
+            }
+            final double winRate = Collections.frequency(wins, true) / wins.size();
+            System.out.println("Average Score: " + sum(scores) / scores.size());
+            System.out.println("Scores:        " + Util.concatStringList(scores, ", "));
+            final StringBuilder msgWinRate = new StringBuilder();
+            msgWinRate.append("Win Rate:      ").append(Collections.frequency(wins, true));
+            msgWinRate.append("/").append(wins.size()).append(winRate);
+            System.out.println(msgWinRate);
+            final StringBuilder msgRecord = new StringBuilder();
+            msgRecord.append("Record:       ");
+            for(Boolean w : wins) {
+                msgRecord.append(w ? "Win " : "Loss ");
+            }
+            System.out.println(msgRecord.toString());
+        }
 
-        return games
-
-if __name__ == '__main__':
-    args = readCommand( sys.argv[1:] ) # Get game components based on input
-    runGames( **args )
-
-    # import cProfile
-    # cProfile.run("runGames( **args )")
-    pass
+        return games;
+    }
+        
+    private static int sum(final Iterable<Integer> iterable) {
+        int sum = 0;
+        for(int i : iterable) {
+            sum += i;
+        }
+        return sum;
+    }
 
 }

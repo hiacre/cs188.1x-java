@@ -100,10 +100,10 @@ public class Util {
         return result;
     }
 
-    public static String concatStringList(final List<String> strings, final String sep) {
+    public static String concatStringList(final List<? extends Object> strings, final String sep) {
         final StringBuilder sb = new StringBuilder();
-        for (String s : strings) {
-            sb.append(s).append(sep);
+        for (Object s : strings) {
+            sb.append(s.toString()).append(sep);
         }
         return sb.toString();
     }
