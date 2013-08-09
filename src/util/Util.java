@@ -164,4 +164,5 @@ def travelDistance(position, corners):
         totalCost += manhattanDistance(position, corner)
         position = corner
     return totalCost
+    
 }

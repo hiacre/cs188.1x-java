@@ -209,7 +209,7 @@ public class GameState {
         walls = state.getWalls()
         if walls[x][y] == True: ...
      */
-    public Object getWalls() {
+    public Grid getWalls() {
         return data.getLayout().getWalls();
     }
 
