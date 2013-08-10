@@ -19,20 +19,23 @@ import util.Util;
     You must select a suitable state space and successor function
  * @author archie
  */
-public class CornersProblem implements SearchProblem {
+public class CornersProblem implements SearchProblem<GameStateCornersProblem, GameStateSuccessorCornersProblem> {
     
     private final Logger logger = Logger.getLogger(getClass().getPackage().getName());
     private GameStateCornersProblem startState;
     private int _expanded;
+    private final List<? extends Position> corners;
+    private final Position startingPosition;
+    private final Grid walls;
 
     /** Stores the walls, pacman's starting position and corners. */
     public CornersProblem(final GameStateCornersProblem startingGameState) {
 
-        final Grid walls = startingGameState.getWalls();
-        final Position startingPosition = startingGameState.getPacmanPosition();
+        walls = startingGameState.getWalls();
+        startingPosition = startingGameState.getPacmanPosition();
         final int top = walls.getHeight() - 2;
         final int right = walls.getWidth() - 2;
-        final List<? extends Position> corners = Arrays.asList(
+        corners = Arrays.asList(
                 PositionStandard.newInstance(1,1),
                 PositionStandard.newInstance(1,top),
                 PositionStandard.newInstance(right, 1),
@@ -62,6 +65,7 @@ public class CornersProblem implements SearchProblem {
     }
 
     /** Returns whether this search state is a goal state of the problem */
+    @Override
     public boolean isGoalState(final GameStateCornersProblem gameState) {
         return gameState.getCornersState().equals(Arrays.asList(true, true, true, true));
     }
@@ -103,7 +107,7 @@ public class CornersProblem implements SearchProblem {
                     cornersState.add(
                             state.getCornersState().get(i)
                             ||
-                            (nextx == corners.get(i).getX() && nexty == corners.get(i).getY()));
+                            (nextx == this.corners.get(i).getX() && nexty == this.corners.get(i).getY()));
                 }
                 //successors.append((((nextx,nexty),cornersState),action,self.getCostOfActions([action])))
                 successors.add(
@@ -113,7 +117,7 @@ public class CornersProblem implements SearchProblem {
                                 PositionStandard.newInstance(nextx, nexty),
                                 cornersState),
                             action,
-                            getCostOfAction(action)));
+                            getCostOfActions(Arrays.asList(action))));
             }
         }
 
@@ -124,6 +128,7 @@ public class CornersProblem implements SearchProblem {
 
     /** Returns the cost of a particular sequence of actions.  If those actions
         include an illegal move, return maximum cost.  This is implemented for you. */
+    @Override
     public int getCostOfActions(final List<Direction> actions) {
         if(actions == null) {
             return Util.getMaximumCost();

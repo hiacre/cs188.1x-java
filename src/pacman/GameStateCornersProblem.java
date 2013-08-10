@@ -11,7 +11,7 @@ import util.Position;
  *
  * @author archie
  */
-public interface GameStateCornersProblem {
+public interface GameStateCornersProblem extends IGameState {
 
     public Grid getWalls();
     

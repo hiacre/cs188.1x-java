@@ -8,8 +8,9 @@ package pacman;
  *
  * @author archie
  */
-public interface Agent {
+public interface GameStateSuccessor1 {
     
-    public Direction getAction(GameState1 state);
+    public Direction getAction();
+    public GameState1 getState();
     
 }

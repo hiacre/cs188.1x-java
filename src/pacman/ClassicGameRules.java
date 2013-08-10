@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class ClassicGameRules {
     
     private final int timeout;
-    private GameState initialState;
+    private GameState1 initialState;
     private boolean quiet;
     
     private final Logger logger = Logger.getLogger(getClass().getPackage().getName());
@@ -40,7 +40,7 @@ public class ClassicGameRules {
         List agents = new ArrayList();
         agents.add(pacmanAgent);
         agents.addAll(ghostAgents.subList(0, layout.getNumGhosts()));
-        final GameState initState = new GameState();
+        final GameState1 initState = new GameState1();
         initState.initialize( layout, ghostAgents.size() );
         final Game game = new Game(agents, display, this, 0, false, catchExceptions == null ? false : catchExceptions);
         game.setState(initState);
@@ -58,7 +58,7 @@ public class ClassicGameRules {
     }
 
     /** Checks to see whether it is time to end the game. */
-    public void process(final GameState state, final Game game) {
+    public void process(final GameState1 state, final Game game) {
         if(state.isWin()) {
             win(state, game);
         }
@@ -67,14 +67,14 @@ public class ClassicGameRules {
         }
     }
 
-    public void win(final GameState state, final Game game) {
+    public void win(final GameState1 state, final Game game) {
         if(!quiet) {
             logger.log(Level.INFO, "Pacman emerges victorious! Score: {0}", state.getData().getScore());
         }
         game.setGameOver(true);
     }
 
-    public void lose(final GameState state, final Game game) {
+    public void lose(final GameState1 state, final Game game) {
         if(!quiet) {
             logger.log(Level.INFO, "Pacman died! Score: {0}", state.getData().getScore());
             game.setGameOver(true);

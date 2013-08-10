@@ -4,71 +4,105 @@
  */
 package pacman;
 
+import util.Position;
+
 /**
  *
  * @author archie
  */
 public class GameState2 {
-class GameState:
+    private final Position position;
+    private boolean tl;
+    private boolean tr;
+    private boolean bl;
+    private boolean br;
+    private final Position size;
     
-    def __init__(self, position, size, visitedTopLeft, visitedTopRight, visitedBottomLeft, visitedBottomRight):
-        self.position = position
-        self.tl = visitedTopLeft
-        self.tr = visitedTopRight
-        self.bl = visitedBottomLeft
-        self.br = visitedBottomRight
-        self.size = size
-        right = size[0]
-        top = size[1]
-        if position == (1,1):
-            self.bl = True
-        if position == (right, 1):
-            self.br = True
-        if position == (1, top):
-            self.tl = True
-        if position == (right, top):
-            self.tr = True
+    public GameState2(
+            final Position position,
+            final Position size,
+            final boolean visitedTopLeft,
+            final boolean visitedTopRight,
+            final boolean visitedBottomLeft,
+            final boolean visitedBottomRight) {
+        this.position = position;
+        this.tl = visitedTopLeft;
+        this.tr = visitedTopRight;
+        this.bl = visitedBottomLeft;
+        this.br = visitedBottomRight;
+        this.size = size;
+        final int right = size.getX();
+        final int top = size.getY();
+        if(position.getX() == 1 && position.getY() == 1) {
+            this.bl = true;
+        }
+        if(position.getX() == right && position.getY() == 1) {
+            this.br = true;
+        }
+        if(position.getX() == 1 && position.getY() == top) {
+            this.tl = true;
+        }
+        if(position.getX() == right && position.getY() == top) {
+            this.tr = true;
+        }
+    }
         
-    @staticmethod
-    def fromGameState(gameState):
-        gs = gameState
-        return GameState(
+
+    public static GameState2 fromGameState(final GameState2 gameState) {
+        final GameState2 gs = gameState;
+        return new GameState2(
                  gs.getPosition(),
                  gs.getSize(),
                  gs.getVisitedTopLeft(),
                  gs.getVisitedTopRight(),
                  gs.getVisitedBottomLeft(),
-                 gs.getVisitedBottomRight())
+                 gs.getVisitedBottomRight());
+    }
 
-    def getSize(self):
-        return self.size
-    def getPosition(self):
-        return self.position
-    def getVisitedTopLeft(self):
-        return self.tl
-    def getVisitedTopRight(self):
-        return self.tr
-    def getVisitedBottomLeft(self):
-        return self.bl
-    def getVisitedBottomRight(self):
-        return self.br
-    def copy(self, gameState):
-        return (GameState(
-                          gameState.getPosition(),
-                          gameState.getSize(),
-                          gameState.getVisitedTopLeft(),
-                          gameState.getVisitedBottomLeft(),
-                          gameState.getVisitedBottomRight()))
-    def __str__(self):
-        val = 'GameState Pos: ' + str(self.position) + ' Visited: '
-        if self.tl:
-            val += 'TL '
-        if self.tr:
-            val += 'TR '
-        if self.bl:
-            val += 'BL '
-        if self.br:
-            val += 'BR '
-            
-        return val
+    public Position getSize() {
+        return size;
+    }
+    public Position getPosition() {
+        return position;
+    }
+    public boolean getVisitedTopLeft() {
+        return this.tl;
+    }
+    public boolean getVisitedTopRight() {
+        return this.tr;
+    }
+    public boolean getVisitedBottomLeft() {
+        return this.bl;
+    }
+    public boolean getVisitedBottomRight() {
+        return this.br;
+    }
+    public GameState2 copy(final GameState2 gameState) {
+        return new GameState2(
+                        gameState.getPosition(),
+                        gameState.getSize(),
+                        gameState.getVisitedTopLeft(),
+                        gameState.getVisitedTopRight(),
+                        gameState.getVisitedBottomLeft(),
+                        gameState.getVisitedBottomRight());
+    }
+    
+    @Override
+    public String toString() {
+        final StringBuilder val = new StringBuilder();
+        val.append("GameState Pos: ").append(this.position).append(" Visited: ");
+        if(this.tl) {
+            val.append("TL ");
+        }
+        if(this.tr) {
+            val.append("TR ");
+        }
+        if(this.bl) {
+            val.append("BL ");
+        }
+        if(this.br) {
+            val.append("BR ");
+        }
+        return val.toString();
+    }
 }

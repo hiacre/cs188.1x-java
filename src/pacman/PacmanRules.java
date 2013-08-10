@@ -19,14 +19,14 @@ public class PacmanRules {
     private final static int PACMAN_SPEED = 1;
 
     /** Returns a list of possible actions. */
-    public static Collection getLegalActions(final GameState state) {
+    public static Collection<Direction> getLegalActions(final GameState1 state) {
         return Actions.getPossibleActions(
                 state.getPacmanState().getConfiguration(),
                 state.getData().getLayout().getWalls());
     }
     
     /** Edits the state to reflect the results of the action. */
-    public static void applyAction(final GameState state, final Direction action) {
+    public static void applyAction(final GameState1 state, final Direction action) {
         final Collection legal = PacmanRules.getLegalActions( state );
         if(!legal.contains(action)) {
             throw new RuntimeException("Illegal action " + action.toString());
@@ -47,7 +47,7 @@ public class PacmanRules {
         }
     }
 
-    public static void consume(final Position position, final GameState state) {
+    public static void consume(final Position position, final GameState1 state) {
         final int x = position.getX();
         final int y = position.getY();
         

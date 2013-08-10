@@ -13,7 +13,7 @@ import util.CounterStandard;
  */
 public class RandomGhost extends GhostAgent {
     
-    public Object getDistribution(final GameState state) {
+    public Object getDistribution(final GameState1 state) {
         Counter<String> dist = CounterStandard.newInstance();
         for a in state.getLegalActions( self.index ): dist[a] = 1.0
         dist.normalize()

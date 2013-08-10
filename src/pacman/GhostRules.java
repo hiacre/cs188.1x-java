@@ -18,7 +18,7 @@ public class GhostRules {
     
     /** Ghosts cannot stop, and cannot turn around unless they
         reach a dead end, but can turn 90 degrees at intersections. */
-    public static List<Direction> getLegalActions(final GameState state, final int ghostIndex) {
+    public static List<Direction> getLegalActions(final GameState1 state, final int ghostIndex) {
         final Configuration conf = state.getGhostState(ghostIndex).getConfiguration();
         final List<Direction> possibleActions = Actions.getPossibleActions(conf, state.getData().getLayout().getWalls());
         final Direction reverse = conf.getDirection().getReverse();
@@ -31,7 +31,7 @@ public class GhostRules {
         return possibleActions;
     }
 
-    public static void applyAction(final GameState state, final Direction action, final int ghostIndex) {
+    public static void applyAction(final GameState1 state, final Direction action, final int ghostIndex) {
         final List<Direction> legal = GhostRules.getLegalActions(state, ghostIndex);
         if(!legal.contains(action)) {
             throw new RuntimeException("Illegal ghost action " + action.toString());
@@ -58,7 +58,7 @@ public class GhostRules {
         ghostState.setScaredTimer(Math.max(0, timer - 1));
     }
 
-    public static void checkDeath(final GameState state, final int agentIndex) {
+    public static void checkDeath(final GameState1 state, final int agentIndex) {
         final Position pacmanPosition = state.getPacmanPosition();
         if(agentIndex == 0) { // Pacman just moved; Anyone can kill him
             for(int index = 1; index < state.getData().getAgentStates().size(); index++) {
@@ -77,7 +77,7 @@ public class GhostRules {
         }
     }
 
-    private static void collide(final GameState state, final GhostState ghostState, final int agentIndex) {
+    private static void collide(final GameState1 state, final GhostState ghostState, final int agentIndex) {
         if(ghostState.getScaredTimer() > 0) {
             state.getData().setScoreChange(state.getData().getScoreChange() + 200);
             GhostRules.placeGhost(ghostState);

@@ -8,8 +8,7 @@ package pacman;
  *
  * @author archie
  */
-public interface Agent {
+public interface Evaluator {
     
-    public Direction getAction(GameState1 state);
-    
+    public int eval(GameState1 gameState);
 }

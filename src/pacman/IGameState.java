@@ -8,8 +8,6 @@ package pacman;
  *
  * @author archie
  */
-public interface Agent {
-    
-    public Direction getAction(GameState1 state);
+public interface IGameState {
     
 }

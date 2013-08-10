@@ -20,7 +20,7 @@ public abstract class GhostAgent implements Agent {
     }
 
     @Override
-    public Direction getAction(final GameState state) {
+    public Direction getAction(final GameState1 state) {
         final Counter<String> dist = getDistribution(state);
         if(dist.isEmpty()) {
             return Direction.Stop;

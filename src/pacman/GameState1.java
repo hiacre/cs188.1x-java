@@ -5,6 +5,7 @@
 package pacman;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -26,19 +27,19 @@ import util.Util;
     Note that in classic Pacman, Pacman is always agent 0.
  * @author archie
  */
-public class GameState {
+public class GameState1 {
     
-    private static Set<GameState> explored = new HashSet<>();
+    private static Set<GameState1> explored = new HashSet<>();
     private GameStateData data;
     private final static int TIME_PENALTY = 1;
     
     
-    public GameState() {
+    public GameState1() {
         data = new GameStateData();
     }
     
     /** Generates a new state by copying information from its predecessor. */
-    public GameState(final GameState prevState) {
+    public GameState1(final GameState1 prevState) {
         if(prevState != null) { // Initial state
             data = new GameStateData(prevState.getData());
         } else {
@@ -47,8 +48,8 @@ public class GameState {
     }
     
     
-    public static Set<GameState> getAndResetExplored() {
-        final Set<GameState> temp = new HashSet<>();
+    public static Set<GameState1> getAndResetExplored() {
+        final Set<GameState1> temp = new HashSet<>();
         temp.addAll(explored);
         explored.clear();
         return temp;
@@ -56,7 +57,7 @@ public class GameState {
     
     
     /** Returns the legal actions for the agent specified. */
-    public Object getLegalActions(Integer agentIndex) {
+    public Collection<Direction> getLegalActions(Integer agentIndex) {
         
         if(agentIndex == null) {
             agentIndex = 0;
@@ -76,14 +77,14 @@ public class GameState {
     }
     
     /** Returns the successor state after the specified agent takes the action. */
-    public GameState generateSuccessor(final int agentIndex, final Direction action) {
+    public GameState1 generateSuccessor(final int agentIndex, final Direction action) {
         // Check that successors exist
         if(isWin() || isLose()) {
             throw new RuntimeException("Can't generate a successor of a terminal state.");
         }
 
         // Copy current state
-        final GameState state = new GameState(this);
+        final GameState1 state = new GameState1(this);
 
         // Let agent's logic deal with its action's effects on the board
         if(agentIndex == 0) {
@@ -113,12 +114,12 @@ public class GameState {
     }
     
 
-    public Object getLegalPacmanActions() {
+    public Collection<Direction> getLegalPacmanActions() {
         return getLegalActions(0);
     }
 
     /** Generates the successor state after the specified pacman move */
-    public GameState generatePacmanSuccessor(final Direction action) {
+    public GameState1 generatePacmanSuccessor(final Direction action) {
         return generateSuccessor(0, action);
     }
     
@@ -235,8 +236,8 @@ public class GameState {
     */
 
 
-    public GameState deepCopy() {
-        final GameState state = new GameState();
+    public GameState1 deepCopy() {
+        final GameState1 state = new GameState1();
         state.setData(data.deepCopy());
         return state;
     }
@@ -254,7 +255,7 @@ public class GameState {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final GameState other = (GameState) obj;
+        final GameState1 other = (GameState1) obj;
         if (!Objects.equals(this.data, other.data)) {
             return false;
         }

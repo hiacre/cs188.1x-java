@@ -34,7 +34,7 @@ public class Game {
     private Object OLD_STDERR = null;
     
     private final Logger logger = Logger.getLogger(this.getClass().getPackage().getName());
-    private GameState state;
+    private GameState1 state;
 
     public Game(
             final List agents,
@@ -121,7 +121,7 @@ public class Game {
             int move_time = 0;
             final boolean skip_action = false;
             // Generate an observation of the state
-            final GameState observation = state.copy();
+            final GameState1 observation = state.copy();
 
             // Solicit an action
             final Direction action;
@@ -197,7 +197,7 @@ public class Game {
         display.finish();
     }
     
-    public void setState(final GameState state) {
+    public void setState(final GameState1 state) {
         this.state = state;
     }
 
@@ -205,7 +205,7 @@ public class Game {
         this.gameOver = isGameOver;
     }
 
-    public GameState getState() {
+    public GameState1 getState() {
         return state;
     }
 }

@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -24,6 +25,23 @@ public class Util {
 
     public static int getMaximumCost() {
         return 999999;
+    }
+
+    public static <E> E randomChoice(Collection<E> collection) {
+        final int randomIndex = new Random().nextInt(collection.size());
+        int i = 0;
+        for(E o : collection) {
+            if(i == randomIndex) {
+                return o;
+            }
+            i++;
+        }
+        return null;
+    }
+    
+    public static <E> E randomChoice(List<E> list) {
+        final int randomIndex = new Random().nextInt(list.size());
+        return list.get(randomIndex);
     }
 
     private Util() {
