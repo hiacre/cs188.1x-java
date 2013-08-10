@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import util.Position;
 import util.PositionStandard;
+import util.Util;
 
 /**
  * A search problem associated with finding the a path that collects all of the
@@ -77,7 +78,7 @@ public class FoodSearchProblem {
     }
 
     /** Returns the cost of a particular sequence of actions.  If those actions
-        include an illegal move, return 999999 */
+        include an illegal move, return maximum cost */
     private int getCostOfActions(final List<Direction> actions) {
         
         final Position pos = getStartState().getPacmanPosition();
@@ -92,7 +93,7 @@ public class FoodSearchProblem {
             x = (int) Math.floor(x + dx);
             y = (int) Math.floor(y + dy);
             if(walls.get(x,y)) {
-                return 999999;
+                return Util.getMaximumCost();
             }
             cost += 1;
         }

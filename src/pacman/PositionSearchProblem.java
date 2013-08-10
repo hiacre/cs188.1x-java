@@ -87,16 +87,16 @@ public class PositionSearchProblem {
     def getCostOfActions(self, actions):
         """
         Returns the cost of a particular sequence of actions.  If those actions
-        include an illegal move, return 999999
+        include an illegal move, return maximum cost
         """
-        if actions == None: return 999999
+        if actions == None: return Util.getMaximumCost()
         x,y= self.getStartState()
         cost = 0
         for action in actions:
             # Check figure out the next state and see whether its' legal
             dx, dy = Actions.directionToVector(action)
             x, y = int(x + dx), int(y + dy)
-            if self.walls[x][y]: return 999999
+            if self.walls[x][y]: return Util.getMaximumCost()
             cost += self.costFn((x,y))
         return cost    
 }

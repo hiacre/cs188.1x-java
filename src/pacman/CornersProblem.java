@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Position;
 import util.PositionStandard;
+import util.Util;
 
 /**
  * This search problem finds paths through all four corners of a layout.
@@ -76,9 +77,10 @@ public class CornersProblem implements SearchProblem {
          required to get there, and 'stepCost' is the incremental
          cost of expanding to that successor
      */
-    public List getSuccessors(final GameStateCornersProblem state) {
+    @Override
+    public List<GameStateSuccessorCornersProblem> getSuccessors(final GameStateCornersProblem state) {
 
-        final List successors = new ArrayList<>();
+        final List<GameStateSuccessorCornersProblem> successors = new ArrayList<>();
         for(Direction action : Arrays.asList(Direction.North, Direction.South, Direction.East, Direction.West)) {
             // Add a successor state to the successor list if the action is legal
             // Here's a code snippet for figuring out whether a new position hits a wall:
@@ -121,10 +123,10 @@ public class CornersProblem implements SearchProblem {
      
 
     /** Returns the cost of a particular sequence of actions.  If those actions
-        include an illegal move, return 999999.  This is implemented for you. */
+        include an illegal move, return maximum cost.  This is implemented for you. */
     public int getCostOfActions(final List<Direction> actions) {
         if(actions == null) {
-            return 999999;
+            return Util.getMaximumCost();
         }
         int x = startingPosition.getX();
         int y = startingPosition.getY();
@@ -135,7 +137,7 @@ public class CornersProblem implements SearchProblem {
             x = (int) Math.floor(x + dx);
             y = (int) Math.floor(y + dy);
             if(walls.get(x,y)) {
-                return 999999;
+                return Util.getMaximumCost();
             }
         }
         return actions.size();

@@ -22,6 +22,10 @@ import java.util.Random;
  */
 public class Util {
 
+    public static int getMaximumCost() {
+        return 999999;
+    }
+
     private Util() {
         throw new RuntimeException("This is a utility class and should not be instantiated.");
     }

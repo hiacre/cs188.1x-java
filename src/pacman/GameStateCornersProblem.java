@@ -14,7 +14,7 @@ import util.Position;
 public interface GameStateCornersProblem {
 
     public Grid getWalls();
-
+    
     public Position getPacmanPosition();
 
     public boolean hasFood(Position corner);

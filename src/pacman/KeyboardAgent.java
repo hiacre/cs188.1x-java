@@ -4,27 +4,33 @@
  */
 package pacman;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
+ * An agent controlled by the keyboard.
  * @author archie
  */
-public class KeyboardAgent {
-class KeyboardAgent(Agent):
-    """
-    An agent controlled by the keyboard.
-    """
-    # NOTE: Arrow keys also work.
-    WEST_KEY  = 'a'
-    EAST_KEY  = 'd'
-    NORTH_KEY = 'w'
-    SOUTH_KEY = 's'
-    STOP_KEY = 'q'
+public class KeyboardAgent extends Agent {
 
-    def __init__( self, index = 0 ):
+    // NOTE: Arrow keys also work.
+    private final static char WEST_KEY  = 'a';
+    private final static char EAST_KEY  = 'd';
+    private final static char NORTH_KEY = 'w';
+    private final static char SOUTH_KEY = 's';
+    private final static char STOP_KEY = 'q';
+    private final Direction lastMove;
+    private final int index;
 
-        self.lastMove = Directions.STOP
-        self.index = index
-        self.keys = []
+    public KeyboardAgent() {
+        KeyboardAgent(0);
+    }
+    public KeyboardAgent(final int index) {
+
+        lastMove = Direction.Stop;
+        this.index = index;
+        List keys = new ArrayList<>();
+    }
 
     def getAction( self, state):
         from graphicsUtils import keys_waiting
