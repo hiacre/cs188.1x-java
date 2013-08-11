@@ -13,9 +13,15 @@ import util.CounterStandard;
  */
 public class RandomGhost extends GhostAgent {
     
+    public RandomGhost(final int index) {
+        super(index);
+    }
+    
     public Object getDistribution(final GameState1 state) {
-        Counter<String> dist = CounterStandard.newInstance();
-        for a in state.getLegalActions( self.index ): dist[a] = 1.0
-        dist.normalize()
-        return dist
+        final Counter<Direction> dist = CounterStandard.newInstance();
+        for(Direction a : state.getLegalActions(this.getIndex())) {
+            dist.put(a, 1);
+        }
+        return dist.getNormalized();
+    }
 }

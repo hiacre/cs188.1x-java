@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import pacman.PositionSearchProblem;
 
 /**
  *
@@ -58,13 +59,13 @@ public class Util {
      * Return the key associated with the value that caused the total to exceed
      * the limit.
      */
-    public static String sample(final Counter<String> c, final double choice) {
+    public static <E extends Comparable> E sample(final Counter<E> c, final double choice) {
         
-        final Map<String, Float> dist = c.getNormalized();
+        final Counter<E> dist = c.getNormalized();
         
         float total = 0;
-        String lastKey = null;
-        for(String key : c.getSortedKeys()) {
+        E lastKey = null;
+        for(E key : c.getSortedKeys()) {
             total += dist.get(key);
             lastKey = key;
             if(total > choice) {
@@ -77,11 +78,11 @@ public class Util {
     /**
      * Gets a sample from a Counter, based upon a randomly chosen limit.
      */
-    public static String sample(final Counter<String> c) {
+    public static <E extends Comparable> E sample(final Counter<E> c) {
         return sample(c, new Random().nextDouble());
     }
     
-    public static String chooseFromDistribution(final Counter<String> c) {
+    public static <E extends Comparable> E chooseFromDistribution(final Counter<E> c) {
         return sample(c);
     }
 
@@ -130,61 +131,20 @@ public class Util {
         return sb.toString();
     }
     
-def manhattanHeuristic(position, problem, info={}):
-    "The Manhattan distance heuristic for a PositionSearchProblem"
-    xy1 = position
-    xy2 = problem.goal
-    return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+    /** The Manhattan distance heuristic for a PositionSearchProblem */
+    public int manhattanHeuristic(final Position position, final PositionSearchProblem problem, Map info) {
+        final Position xy1 = position;
+        // Problem is PositionSearchProblem
+        final Position xy2 = problem.getGoal();
+        return Math.abs(xy1.getX() - xy2.getX()) + Math.abs(xy1.getY() - xy2.getY());
+    }
 
-def euclideanHeuristic(position, problem, info={}):
-    "The Euclidean distance heuristic for a PositionSearchProblem"
-    xy1 = position
-    xy2 = problem.goal
-    return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
-    
-def cornersHeuristic(state, problem):
-    """
-    A heuristic for the CornersProblem that you defined.
-
-      state:   The current search state
-               (a data structure you chose in your search problem)
-
-      problem: The CornersProblem instance for this layout.
-
-    This function should always return a number that is a lower bound
-    on the shortest path from the state to a goal of the problem; i.e.
-    it should be admissible (as well as consistent).
-    """
-    corners = problem.corners # These are the corner coordinates
-    walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
-
-    "*** YOUR CODE HERE ***"
-    #return 0 # Default to trivial solution
-    position = state[0]
-    cornersVisitFlags = state[1]
-    
-    if cornersVisitFlags == (True, True, True, True):
-        return 0
-    
-    cornersUnvisited = map(lambda x: x[0],
-        filter(lambda x: not x[1],
-               zip(corners, cornersVisitFlags)))
-    
-    perms = itertools.permutations(cornersUnvisited)
-    
-    minCost = 10**100
-    for perm in perms:
-        cost = travelDistance(position, perm)
-        if cost < minCost:
-            minCost = cost
-    
-    return minCost
-
-def travelDistance(position, corners):
-    totalCost = 0
-    for corner in corners:
-        totalCost += manhattanDistance(position, corner)
-        position = corner
-    return totalCost
-    
+    /** The Euclidean distance heuristic for a PositionSearchProblem */
+    public double euclideanHeuristic(final Position position, final PositionSearchProblem problem, Map info) {
+        final Position xy1 = position;
+        final Position xy2 = problem.getGoal();
+        return  Math.sqrt(
+                    Math.pow(xy1.getX() - xy2.getX(), 2) +
+                    Math.pow(xy1.getY() - xy2.getY(), 2));
+    }    
 }

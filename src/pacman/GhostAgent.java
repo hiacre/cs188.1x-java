@@ -21,7 +21,7 @@ public abstract class GhostAgent implements Agent {
 
     @Override
     public Direction getAction(final GameState1 state) {
-        final Counter<String> dist = getDistribution(state);
+        final Counter<Direction> dist = getDistribution(state);
         if(dist.isEmpty()) {
             return Direction.Stop;
         } else {
@@ -30,7 +30,7 @@ public abstract class GhostAgent implements Agent {
     }
 
     /** Returns a Counter encoding a distribution over actions from the provided state. */
-    public Counter<String> getDistribution(final Object state) {
+    public Counter<Direction> getDistribution(final Object state) {
         throw new UnsupportedOperationException();
     }
     

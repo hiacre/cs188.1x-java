@@ -15,16 +15,16 @@ import java.util.Set;
 public interface Counter<K extends Comparable> {
     
     /** Gets the counter for the given key */
-    public int get(K key);
+    public double get(K key);
     
     /** Puts the counter label with the given count */
-    public int put(K key, int count);
+    public double put(K key, double count);
     
     /** Increments a single key by the given amount */
-    public int increment(final K key, final int count);
+    public double increment(final K key, final double count);
     
     /** Increments all elements of keys by the same amount */
-    public void incrementAll(final List<K> keys, final int count);
+    public void incrementAll(final List<K> keys, final double count);
     
     /** Returns the key with the highest counter */
     public K getArgMax();
@@ -38,18 +38,18 @@ public interface Counter<K extends Comparable> {
     public List<K> getSortedKeys();
     
     /** Gets the sum of counts for all keys. */
-    public int getTotalCount();
+    public double getTotalCount();
     
     /** Returns a map containing the same keys, but with values changed
      * such that the total count is 1.  The ratio of counts for all keys
      * will remain the same.  Note that normalizing an empty Counter will
      * result in an IllegalStateException.
      */
-    public Map<K, Float> getNormalized() throws IllegalStateException;
+    public Counter<K> getNormalized() throws IllegalStateException;
     
     /** Returns the dot product of the two counters by treating each counter
      * as a vector.  Each unique label is a vector element. */
-    public int dotProduct(final Counter<K> counter);
+    public double dotProduct(final Counter<K> counter);
     
     /** Creates a new counter that is the union of labels from each counter,
      * and values are the added counts. */

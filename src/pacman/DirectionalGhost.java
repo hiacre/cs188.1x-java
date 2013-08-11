@@ -1,7 +1,6 @@
 package pacman;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import util.Counter;
@@ -19,6 +18,7 @@ import util.PositionStandard;
  * @author archie
  */
 public class DirectionalGhost extends GhostAgent {
+    
     private final double prob_attack;
     private final double prob_scaredFlee;
     
@@ -77,13 +77,13 @@ public class DirectionalGhost extends GhostAgent {
         }
 
         // Construct distribution
-        final Counter dist = CounterStandard.newInstance();
+        final Counter<Direction> dist = CounterStandard.newInstance();
         for(Direction a : bestActions) {
-            //dist[a] = bestProb / len(bestActions);
-            dist.add
+            dist.put(a, bestProb / bestActions.size());
         }
-        for a in legalActions: dist[a] += ( 1-bestProb ) / len(legalActions);
-        dist.normalize();
-        return dist;
+        for(Direction a : legalActions) {
+            dist.increment(a, ( 1-bestProb ) / legalActions.size());
+        }
+        return dist.getNormalized();
     }
 }

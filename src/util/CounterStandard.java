@@ -20,8 +20,8 @@ import java.util.Set;
  */
 public class CounterStandard<K extends Comparable> implements Counter<K> {
     
-    final Map<K, Integer> map;
-    private final static int defaultValue = 0;
+    final Map<K, Double> map;
+    private final static double defaultValue = 0;
 
     private CounterStandard() {
         this.map = new HashMap<>();
@@ -31,12 +31,12 @@ public class CounterStandard<K extends Comparable> implements Counter<K> {
         return new CounterStandard();
     }
     
-    public static int getDefaultValue() {
+    public static double getDefaultValue() {
         return defaultValue;
     }
     
     @Override
-    public int get(K key) {
+    public double get(K key) {
         if(map.containsKey(key)) {
             return map.get(key);
         }
@@ -44,8 +44,8 @@ public class CounterStandard<K extends Comparable> implements Counter<K> {
     }
 
     @Override
-    public int put(K key, int value) {
-        final Integer previousValue = map.put(key, value);
+    public double put(K key, double value) {
+        final Double previousValue = map.put(key, value);
         if(previousValue == null) {
             return defaultValue;
         } else {
@@ -54,7 +54,7 @@ public class CounterStandard<K extends Comparable> implements Counter<K> {
     }
 
     @Override
-    public void incrementAll(List<K> keys, int count) {
+    public void incrementAll(List<K> keys, double count) {
         for(K key : keys) {
             map.put(key, map.get(key) + count);
         }
@@ -62,8 +62,8 @@ public class CounterStandard<K extends Comparable> implements Counter<K> {
 
     @Override
     public K getArgMax() {
-        Entry<K, Integer> maxEntry = null;
-        for(Entry<K, Integer> entry : map.entrySet()) {
+        Entry<K, Double> maxEntry = null;
+        for(Entry<K, Double> entry : map.entrySet()) {
             if(maxEntry == null) {
                 maxEntry = entry;
             } else if(entry.getValue() > maxEntry.getValue()) {
@@ -90,27 +90,27 @@ public class CounterStandard<K extends Comparable> implements Counter<K> {
     }
 
     @Override
-    public int getTotalCount() {
-        int total = 0;
-        for(int i : map.values()) {
+    public double getTotalCount() {
+        double total = 0;
+        for(double i : map.values()) {
             total += i;
         }
         return total;
     }
 
     @Override
-    public Map<K, Float> getNormalized() throws IllegalStateException {
-        int totalCount = getTotalCount();
+    public Map<K, Double> getNormalized() throws IllegalStateException {
+        double totalCount = getTotalCount();
         
-        final Map<K, Float> result = new HashMap<>();
-        for(Entry<K, Integer> entry : map.entrySet()) {
-            result.put(entry.getKey(), Float.valueOf(entry.getValue()) / totalCount);
+        final Map<K, Double> result = new HashMap<>();
+        for(Entry<K, Double> entry : map.entrySet()) {
+            result.put(entry.getKey(), Double.valueOf(entry.getValue()) / totalCount);
         }
         return result;
     }
 
     @Override
-    public int dotProduct(final Counter<K> counter) {
+    public double dotProduct(final Counter<K> counter) {
         final Set<K> keyset1 = map.keySet();
         final Set<K> keyset2 = counter.keySet();
         final int keySetSize1 = keyset1.size();
@@ -155,8 +155,8 @@ public class CounterStandard<K extends Comparable> implements Counter<K> {
     }
 
     @Override
-    public int increment(K key, int count) {
-        final int value = get(key) + count;
+    public double increment(K key, double count) {
+        final double value = get(key) + count;
         map.put(key, value);
         return value;
     }
@@ -164,6 +164,11 @@ public class CounterStandard<K extends Comparable> implements Counter<K> {
     @Override
     public Set<K> keySet() {
         return map.keySet();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.keySet().isEmpty();
     }
     
 }
