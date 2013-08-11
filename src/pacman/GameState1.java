@@ -57,7 +57,7 @@ public class GameState1 {
     
     
     /** Returns the legal actions for the agent specified. */
-    public Collection<Direction> getLegalActions(Integer agentIndex) {
+    public List<Direction> getLegalActions(Integer agentIndex) {
         
         if(agentIndex == null) {
             agentIndex = 0;

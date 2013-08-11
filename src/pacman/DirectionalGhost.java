@@ -3,6 +3,9 @@ package pacman;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import util.Counter;
+import util.CounterStandard;
 import util.Position;
 import util.PositionStandard;
 
@@ -28,7 +31,7 @@ public class DirectionalGhost extends GhostAgent {
     private Object getDistribution(final GameState1 state) {
         // Read variables from state
         final GhostState ghostState = state.getGhostState(getIndex());
-        final Collection<Direction> legalActions = state.getLegalActions(getIndex());
+        final List<Direction> legalActions = state.getLegalActions(getIndex());
         final Position pos = state.getGhostPosition(getIndex());
         final boolean isScared = ghostState.getScaredTimer() > 0;
 
@@ -37,12 +40,12 @@ public class DirectionalGhost extends GhostAgent {
             speed = 0.5;
         }
 
-        final Collection<DirectionVector> actionVectors = new ArrayList<>();
+        final List<DirectionVector> actionVectors = new ArrayList<>();
         for(Direction a : legalActions) {
             actionVectors.add(a.toVector(speed));
         }
         
-        final Collection<Position> newPositions = new ArrayList<>();
+        final List<Position> newPositions = new ArrayList<>();
         for(DirectionVector a : actionVectors) {
             newPositions.add(
                     PositionStandard.newInstance(
@@ -52,7 +55,7 @@ public class DirectionalGhost extends GhostAgent {
         final Position pacmanPosition = state.getPacmanPosition();
 
         // Select best actions given the state
-        final Collection distancesToPacman = new ArrayList<>();
+        final List<Integer> distancesToPacman = new ArrayList<>();
         for(Position pos2 : newPositions) {
             distancesToPacman.add(pos2.manhattanDistance(pacmanPosition));
         }
@@ -62,14 +65,23 @@ public class DirectionalGhost extends GhostAgent {
             bestScore = Collections.max( distancesToPacman );
             bestProb = this.prob_scaredFlee;
         } else {
-            bestScore = min( distancesToPacman );
+            bestScore = Collections.min( distancesToPacman );
             bestProb = this.prob_attack;
         }
-        bestActions = [action for action, distance in zip( legalActions, distancesToPacman ) if distance == bestScore];
+        // wherever the distance is the bestScore, pick the associated action in legalActions
+        final List<Direction> bestActions = new ArrayList<>();
+        for(int i=0; i<legalActions.size(); i++) {
+            if(distancesToPacman.get(i) == bestScore) {
+                bestActions.add(legalActions.get(i));
+            }
+        }
 
         // Construct distribution
-        dist = util.Counter();
-        for a in bestActions: dist[a] = bestProb / len(bestActions);
+        final Counter dist = CounterStandard.newInstance();
+        for(Direction a : bestActions) {
+            //dist[a] = bestProb / len(bestActions);
+            dist.add
+        }
         for a in legalActions: dist[a] += ( 1-bestProb ) / len(legalActions);
         dist.normalize();
         return dist;

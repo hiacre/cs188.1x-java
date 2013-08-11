@@ -5,6 +5,7 @@
 package pacman;
 
 import java.util.Collection;
+import java.util.List;
 import util.Position;
 import util.PositionStandard;
 
@@ -19,7 +20,7 @@ public class PacmanRules {
     private final static int PACMAN_SPEED = 1;
 
     /** Returns a list of possible actions. */
-    public static Collection<Direction> getLegalActions(final GameState1 state) {
+    public static List<Direction> getLegalActions(final GameState1 state) {
         return Actions.getPossibleActions(
                 state.getPacmanState().getConfiguration(),
                 state.getData().getLayout().getWalls());
