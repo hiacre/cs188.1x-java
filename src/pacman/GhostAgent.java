@@ -33,4 +33,8 @@ public abstract class GhostAgent implements Agent {
     public Counter<String> getDistribution(final Object state) {
         throw new UnsupportedOperationException();
     }
+    
+    public int getIndex() {
+        return index;
+    }
 }

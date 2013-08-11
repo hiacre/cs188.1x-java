@@ -4,23 +4,35 @@
  */
 package pacman;
 
+import java.util.Collection;
+
 /**
- *
+ * An agent that turns left at every opportunity
  * @author archie
  */
-public class LeftTurnAgent {
-class LeftTurnAgent(game.Agent):
-    "An agent that turns left at every opportunity"
+public class LeftTurnAgent implements Agent {
 
-    def getAction(self, state):
-        legal = state.getLegalPacmanActions()
-        current = state.getPacmanState().configuration.direction
-        if current == Directions.STOP: current = Directions.NORTH
-        left = Directions.LEFT[current]
-        if left in legal: return left
-        if current in legal: return current
-        if Directions.RIGHT[current] in legal: return Directions.RIGHT[current]
-        if Directions.LEFT[left] in legal: return Directions.LEFT[left]
-        return Directions.STOP
+    @Override
+    public Direction getAction(final GameState1 state) {
+        final Collection<Direction> legal = state.getLegalPacmanActions();
+        Direction current = state.getPacmanState().getConfiguration().getDirection();
+        if(Direction.Stop.equals(current)) {
+            current = Direction.North;
+        }
+        final Direction left = current.turnLeft();
+        if(legal.contains(left)) {
+            return left;
+        }
+        if(legal.contains(current)) {
+            return current;
+        }
+        if(legal.contains(current.turnRight())) {
+            return current.turnRight();
+        }
+        if(legal.contains(left.turnLeft())) {
+            return left.turnLeft();
+        }
+        return Direction.Stop;
+    }
 
 }

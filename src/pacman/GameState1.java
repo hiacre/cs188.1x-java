@@ -147,11 +147,11 @@ public class GameState1 {
         return ghostStates;
     }
 
-    public AgentState getGhostState(final int agentIndex) {
+    public GhostState getGhostState(final int agentIndex) {
         if(agentIndex == 0 || agentIndex >= getNumAgents()) {
             throw new RuntimeException("Invalid index passed to getGhostState");
         }
-        return data.getAgentStates().get(agentIndex);
+        return (GhostState)data.getAgentStates().get(agentIndex);
     }
 
     public Position getGhostPosition(final int agentIndex) {
