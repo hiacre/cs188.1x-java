@@ -4,6 +4,9 @@
  */
 package pacman;
 
+import util.Position;
+import util.PositionStandard;
+
 /**
  *     A search problem defines the state space, start state, goal test,
     successor function and cost function.  This search problem can be
@@ -15,22 +18,49 @@ package pacman;
  * @author archie
  */
 public class PositionSearchProblem {
+    
+    private final Grid walls;
+    private Object startState;
+    private final Position goal;
+    private final CostFunction costFn;
+    private final Boolean visualize;
 
-    def __init__(self, gameState, costFn = lambda x: 1, goal=(1,1), start=None, warn=True, visualize=True):
-        """
-        Stores the start and goal.
+    /** Stores the start and goal.
 
         gameState: A GameState object (pacman.py)
         costFn: A function from a search state (tuple) to a non-negative number
         goal: A position in the gameState
-        """
-        self.walls = gameState.getWalls()
-        self.startState = gameState.getPacmanPosition()
-        if start != None: self.startState = start
-        self.goal = goal
-        self.costFn = costFn
-        self.visualize = visualize
-        if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
+        */
+    public PositionSearchProblem(
+            final GameState1 gameState,
+            CostFunction costFn,
+            Position goal,
+            Object start,
+            Boolean warn,
+            Boolean visualize) {
+        
+        if(costFn == null) {
+            costFn = new CostFunctionAlwaysOne();
+        }
+        if(goal == null) {
+            goal = PositionStandard.newInstance(1,1);
+        }
+        if(warn == null) {
+            warn = true;
+        }
+        if(visualize == null) {
+            visualize = true;
+        }
+        
+        this.walls = gameState.getWalls();
+        this.startState = gameState.getPacmanPosition();
+        if(start != null) {
+            this.startState = start;
+        }
+        this.goal = goal;
+        this.costFn = costFn;
+        this.visualize = visualize;
+        if(warn && (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
             print 'Warning: this does not look like a regular search maze'
 
         # For display purposes
