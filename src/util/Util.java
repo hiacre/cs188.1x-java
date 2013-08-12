@@ -45,6 +45,10 @@ public class Util {
         return list.get(randomIndex);
     }
 
+    public static Collection<List<Position>> getPermutations(List<Position> cornersUnvisited) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private Util() {
         throw new RuntimeException("This is a utility class and should not be instantiated.");
     }
