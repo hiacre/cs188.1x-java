@@ -4,6 +4,12 @@
  */
 package pacman;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.Position;
 import util.PositionStandard;
 
@@ -24,6 +30,11 @@ public class PositionSearchProblem {
     private final Position goal;
     private final CostFunction costFn;
     private final Boolean visualize;
+    
+    private final Logger logger = Logger.getLogger(getClass().getPackage().getName());
+    private final Map _visited;
+    private final List _visitedList;
+    private final int _expanded;
 
     /** Stores the start and goal.
 
@@ -60,29 +71,36 @@ public class PositionSearchProblem {
         this.goal = goal;
         this.costFn = costFn;
         this.visualize = visualize;
-        if(warn && (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
-            print 'Warning: this does not look like a regular search maze'
+        if(warn && (gameState.getNumFood() != 1 || !gameState.hasFood(goal.getX(), goal.getY()))) {
+            logger.log(Level.WARNING, "Warning: this does not look like a regular search maze");
+            System.out.println("Warning: this does not look like a regular search maze");
+        }
 
-        # For display purposes
-        self._visited, self._visitedlist, self._expanded = {}, [], 0
+        // For display purposes
+        this._visited = new HashMap();
+        this._visitedList = new ArrayList();
+        this._expanded = 0;
+    }
 
-    def getStartState(self):
-        return self.startState
+    public Object getStartState() {
+        return this.startState;
+    }
 
-    def isGoalState(self, state):
-        isGoal = state == self.goal
+    public boolean isGoalState(public Object state) {
+        final boolean isGoal = (state == goal);
 
-        # For display purposes only
-        if isGoal and self.visualize:
-            self._visitedlist.append(state)
-            import __main__
+        // For display purposes only
+        if(isGoal && visualize) {
+            _visitedlist.add(state);
+            import __main__;
             // mainDisplay - search for _display in original Python
             // Search elsewhere in this project for mainDisplay
             if 'mainDisplay' in dir(__main__):
                 if 'drawExpandedCells' in dir(__main__.mainDisplay): #@UndefinedVariable
                     __main__.mainDisplay.drawExpandedCells(self._visitedlist) #@UndefinedVariable
 
-        return isGoal
+        return isGoal;
+    }
 
     def getSuccessors(self, state):
         """
