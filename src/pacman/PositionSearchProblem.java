@@ -5,6 +5,7 @@
 package pacman;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Position;
 import util.PositionStandard;
+import util.Util;
 
 /**
  *     A search problem defines the state space, start state, goal test,
@@ -26,7 +28,7 @@ import util.PositionStandard;
 public class PositionSearchProblem {
     
     private final Grid walls;
-    private Object startState;
+    private Position startState;
     private final Position goal;
     private final CostFunction costFn;
     private final Boolean visualize;
@@ -34,7 +36,7 @@ public class PositionSearchProblem {
     private final Logger logger = Logger.getLogger(getClass().getPackage().getName());
     private final Map _visited;
     private final List _visitedList;
-    private final int _expanded;
+    private int _expanded;
 
     /** Stores the start and goal.
 
@@ -46,7 +48,7 @@ public class PositionSearchProblem {
             final GameState1 gameState,
             CostFunction costFn,
             Position goal,
-            Object start,
+            Position start,
             Boolean warn,
             Boolean visualize) {
         
@@ -82,29 +84,28 @@ public class PositionSearchProblem {
         this._expanded = 0;
     }
 
-    public Object getStartState() {
+    public Position getStartState() {
         return this.startState;
     }
 
-    public boolean isGoalState(public Object state) {
+    public boolean isGoalState(final Object state) {
         final boolean isGoal = (state == goal);
 
         // For display purposes only
         if(isGoal && visualize) {
-            _visitedlist.add(state);
-            import __main__;
-            // mainDisplay - search for _display in original Python
+            _visitedList.add(state);
+            // import __main__;
+            // TODO mainDisplay - search for _display in original Python
             // Search elsewhere in this project for mainDisplay
-            if 'mainDisplay' in dir(__main__):
-                if 'drawExpandedCells' in dir(__main__.mainDisplay): #@UndefinedVariable
-                    __main__.mainDisplay.drawExpandedCells(self._visitedlist) #@UndefinedVariable
-
+            //if 'mainDisplay' in dir(__main__):
+            //    if 'drawExpandedCells' in dir(__main__.mainDisplay): #@UndefinedVariable
+            //        __main__.mainDisplay.drawExpandedCells(self._visitedlist) #@UndefinedVariable
+        }
         return isGoal;
     }
 
-    def getSuccessors(self, state):
-        """
-        Returns successor states, the actions they require, and a cost of 1.
+    /**
+     * Returns successor states, the actions they require, and a cost of 1.
 
          As noted in search.py:
              For a given state, this should return a list of triples,
@@ -112,39 +113,58 @@ public class PositionSearchProblem {
          successor to the current state, 'action' is the action
          required to get there, and 'stepCost' is the incremental
          cost of expanding to that successor
-        """
+     */
+    public List<GameStateSuccessorPositionSearchProblem> getSuccessors(final Position state) {
+        final List<GameStateSuccessorPositionSearchProblem> successors = new ArrayList();
+        for(Direction action : Arrays.asList(Direction.North, Direction.South, Direction.East, Direction.West)) {
+            final int x = state.getX();
+            final int y = state.getY();
+            final DirectionVector vector = action.toVector();
+            final double dx = vector.getX();
+            final double dy = vector.getY();
+            final int nextx = (int) Math.floor(x+dx);
+            final int nexty = (int) Math.floor(y+dy);
+            if(!this.walls.get(nextx,nexty)) {
+                final Position nextState = PositionStandard.newInstance(nextx, nexty);
+                final int cost = this.costFn.eval(nextState);
+                successors.add(
+                        new GameStateSuccessorPositionSearchProblem(nextState, action, cost));
+            }
+        }
 
-        successors = []
-        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-            x,y = state
-            dx, dy = Actions.directionToVector(action)
-            nextx, nexty = int(x + dx), int(y + dy)
-            if not self.walls[nextx][nexty]:
-                nextState = (nextx, nexty)
-                cost = self.costFn(nextState)
-                successors.append( ( nextState, action, cost) )
+        // Bookkeeping for display purposes
+        this._expanded += 1;
+        if(_visited.containsKey(state)) {
+            this._visited.put(state, true);
+            this._visitedList.add(state);
+        }
 
-        # Bookkeeping for display purposes
-        self._expanded += 1
-        if state not in self._visited:
-            self._visited[state] = True
-            self._visitedlist.append(state)
+        return successors;
+    }
 
-        return successors
+    /** Returns the cost of a particular sequence of actions.  If those actions
+        include an illegal move, return maximum cost */
+    public int getCostOfActions(final List<Direction> actions) {
 
-    def getCostOfActions(self, actions):
-        """
-        Returns the cost of a particular sequence of actions.  If those actions
-        include an illegal move, return maximum cost
-        """
-        if actions == None: return Util.getMaximumCost()
-        x,y= self.getStartState()
-        cost = 0
-        for action in actions:
-            # Check figure out the next state and see whether its' legal
-            dx, dy = Actions.directionToVector(action)
-            x, y = int(x + dx), int(y + dy)
-            if self.walls[x][y]: return Util.getMaximumCost()
-            cost += self.costFn((x,y))
-        return cost    
+        if(actions == null) {
+            return Util.getMaximumCost();
+        }
+        int x = this.getStartState().getX();
+        int y = this.getStartState().getY();
+        
+        int cost = 0;
+        for(Direction action : actions) {
+            // Check figure out the next state and see whether it's legal
+            final DirectionVector vector = action.toVector();
+            final double dx = vector.getX();
+            final double dy = vector.getY();
+            x = (int)Math.floor(x+dx);
+            y = (int)Math.floor(y+dy);
+            if(this.walls.get(x,y)) {
+                return Util.getMaximumCost();
+            }
+            cost += this.costFn.eval(PositionStandard.newInstance(x,y));
+        }
+        return cost;
+    }
 }
