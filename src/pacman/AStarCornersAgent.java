@@ -40,7 +40,7 @@ public class AStarCornersAgent extends SearchAgent {
     private Object cornersHeuristic(final Object problem) {
 
         final List<Position> corners = problem.getCorners();   // These are the corner coordinates
-        final Grid walls = problem.getWalls()  // These are the walls of the maze, as a Grid
+        final Grid walls = problem.getWalls();  // These are the walls of the maze, as a Grid
 
         /*** YOUR CODE HERE ***/
         //return 0;   // Default to trivial solution
