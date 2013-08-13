@@ -167,4 +167,8 @@ public class PositionSearchProblem {
         }
         return cost;
     }
+
+    public Position getGoal() {
+        return goal;
+    }
 }

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.Position;
 import util.PositionStandard;
 import util.Util;
@@ -24,7 +25,7 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
     private final Logger logger = Logger.getLogger(getClass().getPackage().getName());
     private GameStateCornersProblem startState;
     private int _expanded;
-    private final List<? extends Position> corners;
+    private final List<Position> corners;
     private final Position startingPosition;
     private final Grid walls;
 
@@ -35,11 +36,11 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
         startingPosition = startingGameState.getPacmanPosition();
         final int top = walls.getHeight() - 2;
         final int right = walls.getWidth() - 2;
-        corners = Arrays.asList(
-                PositionStandard.newInstance(1,1),
-                PositionStandard.newInstance(1,top),
-                PositionStandard.newInstance(right, 1),
-                PositionStandard.newInstance(right, top));
+        corners = new ArrayList<>();
+        corners.add(PositionStandard.newInstance(1,1));
+        corners.add(PositionStandard.newInstance(1,top));
+        corners.add(PositionStandard.newInstance(right, 1));
+        corners.add(PositionStandard.newInstance(right, top));
         for(Position corner : corners) {
             if(!startingGameState.hasFood(corner)) {
                 logger.log(Level.WARNING, "Warning: no food in corner {0}", corner.toString());
@@ -50,27 +51,24 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
          * Please add any code here which you would like to use
          * in initializing the problem
          */
-        final List cornersState = new ArrayList<>();
-        for(Position corner : corners) {
-            cornersState.add(startingPosition == corner);
-        }
-        startState = new GameStateCornersProblemStandard(walls, startingPosition, cornersState);
+        /*** YOUR CODE HERE ***/
     }
         
 
     /** Returns the start state (in your state space, not the full Pacman state space) */
     @Override
     public GameStateCornersProblem getStartState() {
-        return startState;
+        /*** YOUR CODE HERE ***/
+        throw new NotImplementedException();
     }
 
     /** Returns whether this search state is a goal state of the problem */
     @Override
     public boolean isGoalState(final GameStateCornersProblem gameState) {
-        return gameState.getCornersState().equals(Arrays.asList(true, true, true, true));
+        /*** YOUR CODE HERE ***/
+        throw new NotImplementedException();
     }
-        
-
+    
     /**
      * Returns successor states, the actions they require, and a cost of 1.
 
@@ -92,33 +90,7 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
             //   dx, dy = Actions.directionToVector(action)
             //   nextx, nexty = int(x + dx), int(y + dy)
             //   hitsWall = self.walls[nextx][nexty]
-            final Position pos = state.getPacmanPosition();
-            final int x = pos.getX();
-            final int y = pos.getY();
-            final DirectionVector v = action.toVector();
-            final double dx = v.getX();
-            final double dy = v.getY();
-            final int nextx = (int) Math.floor(x + dx);
-            final int nexty = (int) Math.floor(y + dy);
-            final boolean hitsWall = state.getWalls().get(nextx, nexty);
-            if(!hitsWall) {
-                final List cornersState = new ArrayList();
-                for(int i=0; i<4; i++) {
-                    cornersState.add(
-                            state.getCornersState().get(i)
-                            ||
-                            (nextx == this.corners.get(i).getX() && nexty == this.corners.get(i).getY()));
-                }
-                //successors.append((((nextx,nexty),cornersState),action,self.getCostOfActions([action])))
-                successors.add(
-                        new GameStateSuccessorCornersProblemStandard(
-                            new GameStateCornersProblemStandard(
-                                state.getWalls(),
-                                PositionStandard.newInstance(nextx, nexty),
-                                cornersState),
-                            action,
-                            getCostOfActions(Arrays.asList(action))));
-            }
+            /*** YOUR CODE HERE ***/
         }
 
         _expanded += 1;
@@ -146,5 +118,13 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
             }
         }
         return actions.size();
+    }
+
+    public List<Position> getCorners() {
+        return this.corners;
+    }
+
+    public Grid getWalls() {
+        return this.walls;
     }
 }

@@ -28,21 +28,11 @@ public class SearchAgent {
     private final Object searchType;
     private final Object heur;
 
-    public SearchAgent(final Object fn, final Object prob, final Object heuristic) {
+    public SearchAgent(final Object searchFunc, final Object problem, final Object heuristic) {
         
-        if(fn == null) {
-            fn = new DepthFirstSearch();
-        }
-        if(prob == null) {
-            prob = new PositionSearchProblem();
-        }
-        if(heuristic == null) {
-            heuristic = nullHeuristic;
-        }
-        
-        this.searchFunction = fn;
-        this.searchType = prob;
-        this.heur = heuristic;
+        this.searchFunction = (searchFunc == null ? new DepthFirstSearch() : searchFunc);
+        this.searchType = (problem == null ? new PositionSearchProblem() : problem);
+        this.heur = (heuristic == null ? nullHeuristic : heuristic);
         
         this.actionIndex = 0;
         

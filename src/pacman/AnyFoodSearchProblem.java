@@ -42,9 +42,7 @@ public class AnyFoodSearchProblem extends PositionSearchProblem {
         final int x = pos.getX();
         final int y = pos.getY();
 
-        /**
-         * YOUR CODE HERE
-         */
+        /*** YOUR CODE HERE ***/
         throw new NotImplementedException();
     }
 }

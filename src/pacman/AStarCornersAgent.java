@@ -18,6 +18,7 @@ import util.Util;
 public class AStarCornersAgent extends SearchAgent {
 
     public AStarCornersAgent() {
+        super();
         this.searchFunction = lambda prob: search.aStarSearch(prob, cornersHeuristic);
         this.searchType = CornersProblem;
     }
@@ -37,39 +38,13 @@ public class AStarCornersAgent extends SearchAgent {
      * @param problem
      * @return 
      */
-    private Object cornersHeuristic(final Object problem) {
+    private Object cornersHeuristic(final CornersProblem problem) {
 
         final List<Position> corners = problem.getCorners();   // These are the corner coordinates
         final Grid walls = problem.getWalls();  // These are the walls of the maze, as a Grid
 
         /*** YOUR CODE HERE ***/
-        //return 0;   // Default to trivial solution
-        final Position position = state.get(0);
-        final List<Boolean> cornersVisitFlags = state.get(1);
-
-        if(cornersVisitFlags.equals(Arrays.asList(true, true, true, true))) {
-            return 0;
-        }
-
-        final List<Position> cornersUnvisited = new ArrayList<>();
-        for(int i=0; i<corners.size(); i++) {
-            if(cornersVisitFlags.get(i)) {
-               continue; 
-            }
-            cornersUnvisited.add(corners.get(i));
-        }
-
-        final Collection<List<Position>> perms = Util.getPermutations(cornersUnvisited);
-
-        double minCost = Math.pow(10, 100);
-        for(List<Position> perm : perms) {
-            final int cost = travelDistance(position, perm);
-            if(cost < minCost) {
-                minCost = cost;
-            }
-        }
-
-        return minCost;
+        return 0;   // Default to trivial solution
     }
 
             
