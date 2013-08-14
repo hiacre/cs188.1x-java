@@ -35,32 +35,6 @@ public class Actions {
 //    _directionsAsList = _directions.items();
 //
     private static double TOLERANCE = .001;
-//
-//    def reverseDirection(action):
-//        if action == Directions.NORTH:
-//            return Directions.SOUTH
-//        if action == Directions.SOUTH:
-//            return Directions.NORTH
-//        if action == Directions.EAST:
-//            return Directions.WEST
-//        if action == Directions.WEST:
-//            return Directions.EAST
-//        return action
-//    reverseDirection = staticmethod(reverseDirection)
-//
-//    def vectorToDirection(vector):
-//        dx, dy = vector
-//        if dy > 0:
-//            return Directions.NORTH
-//        if dy < 0:
-//            return Directions.SOUTH
-//        if dx < 0:
-//            return Directions.WEST
-//        if dx > 0:
-//            return Directions.EAST
-//        return Directions.STOP
-//    vectorToDirection = staticmethod(vectorToDirection)
-
     
 
     public static List<Direction> getPossibleActions(final Configuration config, final Grid walls) {
@@ -93,7 +67,7 @@ public class Actions {
         return possible;
     }
 
-    public static Object getLegalNeighbors(final Position position, final Grid walls) {
+    public static List<Position> getLegalNeighbors(final Position position, final Grid walls) {
         final int x_int = position.getX();
         final int y_int = position.getY();
         final List neighbors = new ArrayList();

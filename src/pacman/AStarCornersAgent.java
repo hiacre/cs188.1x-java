@@ -4,12 +4,8 @@
  */
 package pacman;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import util.Position;
-import util.Util;
 
 /**
  * A SearchAgent for FoodSearchProblem using A* and your foodHeuristic

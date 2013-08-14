@@ -54,6 +54,7 @@ public enum Direction {
         mapReverse = Collections.unmodifiableMap(mapReverseTemp);
     }
     
+    
     private Direction(final int x, final int y) {
         this.x = x;
         this.y = y;

@@ -29,4 +29,20 @@ public class DirectionVector {
     public double getY() {
         return y;
     }
+    
+    public Direction toDirection() {
+        if(y > 0) {
+            return Direction.North;
+        }
+        if(y < 0) {
+            return Direction.South;
+        }
+        if(x < 0) {
+            return Direction.West;
+        }
+        if(x > 0) {
+            return Direction.East;
+        }
+        return Direction.Stop;
+    }
 }
