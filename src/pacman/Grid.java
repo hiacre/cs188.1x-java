@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.List;
@@ -18,10 +14,10 @@ public interface Grid {
     public Grid shallowCopy();
     public int getCount();
     public List<Position> asList();
-    public int packBits();
-    public Grid reconstituteGrid(int bitRep);
+    public List<Integer> packBits();
+    public Grid reconstituteGrid(List<Integer> bitRep);
     public boolean get(int x, int y);
-    public boolean set(int x, int y, boolean bool);
+    public void set(int x, int y, boolean bool);
     public int getWidth();
     public int getHeight();
     public boolean isCapsule(Position position);

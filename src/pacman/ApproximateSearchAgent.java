@@ -1,49 +1,60 @@
 package pacman;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import util.Position;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
 /**
- * ##################
-# Mini-contest 1 #
-##################
+ ******************
+ * Mini-contest 1 *
+ ******************
+ * Implement your contest entry here.  Change anything but the class name.
  * @author archie
  */
-public class ApproximateSearchAgent {
-class ApproximateSearchAgent(Agent):
-    "Implement your contest entry here.  Change anything but the class name."
+public class ApproximateSearchAgent implements Agent {
 
-    def registerInitialState(self, state):
-        "This method is called before any moves are made."
-        "*** YOUR CODE HERE ***"
+    public void registerInitialState(final Object state) {
+        /** This method is called before any moves are made. **/
+        /*** YOUR CODE HERE ***/
+    }
 
-    def getAction(self, state):
-        """
+    @Override
+    public Direction getAction(final GameState1 state) {
+        /*
         From game.py:
         The Agent will receive a GameState and must return an action from
-        Directions.{North, South, East, West, Stop}
-        """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        the Direction enum
+        */
+        /*** YOUR CODE HERE ***/
+        throw new NotImplementedException();
+    }
 
                 
-def mazeDistance(point1, point2, gameState):
-    """
-    Returns the maze distance between any two points, using the search functions
-    you have already built.  The gameState can be any game state -- Pacman's position
-    in that state is ignored.
+    /** Returns the maze distance between any two points, using the search functions
+        you have already built.  The gameState can be any game state -- Pacman's position
+        in that state is ignored.
 
-    Example usage: mazeDistance( (2,4), (5,6), gameState)
+        Example usage: mazeDistance( (2,4), (5,6), gameState)
 
-    This might be a useful helper function for your ApproximateSearchAgent.
-    """
-    x1, y1 = point1
-    x2, y2 = point2
-    walls = gameState.getWalls()
-    assert not walls[x1][y1], 'point1 is a wall: ' + point1
-    assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
-    prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
-    return len(search.bfs(prob))
+        This might be a useful helper function for your ApproximateSearchAgent.
+        */
+    public int mazeDistance(final Position point1, final Position point2, final GameState1 gameState) {
+        final int x1 = point1.getX();
+        final int y1 = point1.getY();
+        final int x2 = point2.getX();
+        final int y2 = point2.getY();
+        final Grid walls = gameState.getWalls();
+        if(walls.get(x1, y1)) {
+            throw new RuntimeException("point1 is a wall: " + point1.toString());
+        }
+        if(walls.get(x2, y2)) {
+            throw new RuntimeException("point2 is a wall: " + point2.toString());
+        }
+        final PositionSearchProblem prob = new PositionSearchProblem(gameState, null, point2, point1, false, false);
+        return search.bfs(prob).length();
+    }
 }

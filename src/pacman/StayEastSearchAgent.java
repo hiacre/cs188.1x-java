@@ -1,24 +1,25 @@
 package pacman;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+import util.Position;
 
 /**
- *
- * @author archie
- */
-public class StayEastSearchAgent {
-class StayEastSearchAgent(SearchAgent):
-    """
-    An agent for position search with a cost function that penalizes being in
+ * An agent for position search with a cost function that penalizes being in
     positions on the West side of the board.
 
     The cost function for stepping into a position (x,y) is 1/2^x.
-    """
-    def __init__(self):
-        self.searchFunction = search.uniformCostSearch
-        costFn = lambda pos: .5 ** pos[0]
-        self.searchType = lambda state: PositionSearchProblem(state, costFn)
+ * @author archie
+ */
+public class StayEastSearchAgent implements SearchAgent {
+
+    public StayEastSearchAgent() {
+        this.searchFunction = search.uniformCostSearch;
+        final CostFunction costFn = new CostFunction() {
+
+            @Override
+            public int eval(Position pos) {
+                return Math.pow(0.5, pos.getX());
+            }
+        };
+        this.searchType = lambda state: PositionSearchProblem(state, costFn);
+    }
 }

@@ -84,13 +84,13 @@ public class ConfigurationStandard implements Configuration {
         final int y = this.position.getY();
         final double dx = vector.getX();
         final double dy = vector.getY();
-        Direction direction = vector.toDirection();
-        if(Direction.Stop.equals(direction)) {
-            direction = this.direction;  // There is no stop direction
+        Direction dir = vector.toDirection();
+        if(Direction.Stop.equals(dir)) {
+            dir = this.direction;  // There is no stop direction
         }
         return new ConfigurationStandard(
                 PositionStandard.newInstance(x + dx, y+dy),
-                direction);
+                dir);
     }
     
 }
