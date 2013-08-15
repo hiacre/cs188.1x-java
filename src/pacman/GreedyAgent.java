@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.ArrayList;
@@ -13,7 +9,7 @@ import util.Util;
  *
  * @author archie
  */
-public class GreedyAgent implements Agent {
+public class GreedyAgent extends AgentAbstract {
     
     private final Evaluator evaluator;
     
@@ -21,6 +17,7 @@ public class GreedyAgent implements Agent {
         this(new ScoreEvaluation());
     }
     public GreedyAgent(final Evaluator evalFn) {
+        super(null);
 //        this.evaluationFunction = util.lookup(evalFn, globals());
 //        assert self.evaluationFunction != None;
         this.evaluator = evalFn;
@@ -72,10 +69,7 @@ public class GreedyAgent implements Agent {
         public Direction getAction();
     }
 
-    /**
-     *
-     * @author archie
-     */
+
     private static class GameState1ScoredStandard implements GameState1Scored {
 
         private final Direction action;

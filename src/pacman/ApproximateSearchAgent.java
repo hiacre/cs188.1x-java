@@ -3,11 +3,6 @@ package pacman;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.Position;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  ******************
  * Mini-contest 1 *
@@ -15,8 +10,12 @@ import util.Position;
  * Implement your contest entry here.  Change anything but the class name.
  * @author archie
  */
-public class ApproximateSearchAgent implements Agent {
+public class ApproximateSearchAgent extends AgentAbstract {
 
+    public ApproximateSearchAgent() {
+        super(null);
+    }
+            
     public void registerInitialState(final Object state) {
         /** This method is called before any moves are made. **/
         /*** YOUR CODE HERE ***/

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.List;
@@ -20,7 +16,7 @@ import java.util.List;
     Note: You should NOT change any code in SearchAgent
  * @author archie
  */
-public class SearchAgent {
+public class SearchAgent extends AgentAbstract {
     
     private final Object searchFunction;
     private int actionIndex;
@@ -29,7 +25,7 @@ public class SearchAgent {
     private final Object heur;
 
     public SearchAgent(final Object searchFunc, final Object problem, final Object heuristic) {
-        
+        super(null);
         this.searchFunction = (searchFunc == null ? new DepthFirstSearch() : searchFunc);
         this.searchType = (problem == null ? new PositionSearchProblem() : problem);
         this.heur = (heuristic == null ? nullHeuristic : heuristic);

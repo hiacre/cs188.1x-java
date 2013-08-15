@@ -98,7 +98,7 @@ public class ClassicGameRules {
     }
     
 
-    public Object getMaxStartupTime(final int agentIndex) {
+    public int getMaxStartupTime(final int agentIndex) {
         return timeout;
     }
 

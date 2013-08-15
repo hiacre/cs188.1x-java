@@ -97,7 +97,7 @@ public class Game {
             }
             if(catchExceptions) {
                 try {
-                    agent.registerInitialState(state.copy(), new Timeout(rules.getMaxStartupTime(i)));
+                    agent.registerInitialState(state.deepCopy(), new Timeout(rules.getMaxStartupTime(i)));
                 } catch(ExceptionTimeout ex) {
                     logger.log(Level.SEVERE, "Agent {0} ran out of time on startup", i);
                     agentCrash(i);
@@ -108,7 +108,7 @@ public class Game {
                     return;
                 }
             } else {
-                agent.registerInitialState(state.copy());
+                agent.registerInitialState(state.deepCopy());
             }
         }
 
@@ -121,7 +121,7 @@ public class Game {
             int move_time = 0;
             final boolean skip_action = false;
             // Generate an observation of the state
-            final GameState1 observation = state.copy();
+            final GameState1 observation = state.deepCopy();
 
             // Solicit an action
             final Direction action;
