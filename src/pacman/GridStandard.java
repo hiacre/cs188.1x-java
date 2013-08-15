@@ -1,15 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 import util.Position;
 import util.PositionStandard;
 import util.Util;
@@ -46,48 +41,77 @@ public class GridStandard implements Grid {
         }
     }
     
+    private GridStandard(final List<List<Boolean>> data, final boolean isDeepCopy) {
+        this.width = data.size();
+        this.height = data.get(0).size();
+        if(isDeepCopy) {
+            this.data = new ArrayList();
+            for(int x=0; x<width; x++) {
+                final List<Boolean> column = new ArrayList<>();
+                for(int y=0; y<height; y++) {
+                    column.add(data.get(x).get(y));
+                }
+                this.data.add(column);
+            }
+        } else {
+            this.data = data;
+        }
+    }
+    
+    public List<List<Boolean>> getData() {
+        return data;
+    }
+    
     public static Grid newInstance(final int width, final int height, final boolean initialValue) {
         return new GridStandard(width, height, initialValue, null);
     }
-        
-    public static GridStandard newInstance(
-            final int width,
-            final int height,
-            final Map<Direction, Set<Object>> mapDirectionSet) {
-        return new GridStandard();
-    }
     
     @Override
+    /** This returns a deep copy */
     public Grid copy() {
-        g = Grid(self.width, self.height)
-        g.data = [x[:] for x in self.data]
-        return g
+        return deepCopy();
     }
 
     @Override
     public Grid deepCopy() {
-        return self.copy()
+        return new GridStandard(this.data, true);
     }
 
     @Override
     public Grid shallowCopy() {
-        g = Grid(self.width, self.height)
-        g.data = self.data
-        return g
+        return new GridStandard(this.data, false);
     }
 
     @Override
-    public int getCount() {
-        return sum([x.count(item) for x in self.data])
+    public int getCount(Boolean item) {
+        if(item == null) {
+            item = true;
+        }
+        int count = 0;
+        for(List<Boolean> col : this.data) {
+            for(Boolean b : col) {
+                if(item.equals(b)) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     @Override
-    public List<Position> asList() {
-        list = []
-        for x in range(self.width):
-            for y in range(self.height):
-                if self[x][y] == key: list.append( (x,y) )
-        return list
+    public List<Position> asList(Boolean key) {
+        if(key == null) {
+            key = true;
+        }
+        final List list = new ArrayList();
+        for(int x=0; x<width; x++) {
+            for(int y=0; y<height; y++) {
+                if(key.equals(get(x,y))) {
+                    list.add(PositionStandard.newInstance(x, y));
+                }
+            }
+        }
+        return list;
     }
 
     @Override
@@ -201,12 +225,35 @@ public class GridStandard implements Grid {
         }
         return sb.toString();
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GridStandard other = (GridStandard) obj;
+        if (this.width != other.width) {
+            return false;
+        }
+        if (this.height != other.height) {
+            return false;
+        }
+        if (!Objects.equals(this.data, other.data)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public int hashCode() {
-        
+        int hash = 7;
+        hash = 23 * hash + this.width;
+        hash = 23 * hash + this.height;
+        hash = 23 * hash + Objects.hashCode(this.data);
+        return hash;
     }
     
-    public boolean equals(Object o) {
-        
-    }
 }
