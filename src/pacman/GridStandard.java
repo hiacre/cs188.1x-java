@@ -81,6 +81,11 @@ public class GridStandard implements Grid {
     public Grid shallowCopy() {
         return new GridStandard(this.data, false);
     }
+    
+    @Override
+    public int getCount() {
+        return getCount(true);
+    }
 
     @Override
     public int getCount(Boolean item) {

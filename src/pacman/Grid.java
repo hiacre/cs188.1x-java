@@ -21,4 +21,7 @@ public interface Grid {
     public int getWidth();
     public int getHeight();
     
+    /** Returns the number of items in the grid */
+    public int getCount();
+    
 }
