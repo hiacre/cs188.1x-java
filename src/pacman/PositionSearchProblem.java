@@ -25,7 +25,7 @@ import util.Util;
     Note: this search problem is fully specified; you should NOT change it.
  * @author archie
  */
-public class PositionSearchProblem {
+public class PositionSearchProblem implements SearchProblem<GameStatePositionSearchProblem, GameStateSuccessorPositionSearchProblem> {
     
     private final Grid walls;
     private Position startState;

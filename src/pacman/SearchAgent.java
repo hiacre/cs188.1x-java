@@ -24,7 +24,7 @@ public class SearchAgent extends AgentAbstract {
     private final Object searchType;
     private final Object heur;
 
-    public SearchAgent(final Object searchFunc, final Object problem, final Object heuristic) {
+    public SearchAgent(final Object searchFunc, final Problem problem, final Object heuristic) {
         super(null);
         this.searchFunction = (searchFunc == null ? new DepthFirstSearch() : searchFunc);
         this.searchType = (problem == null ? new PositionSearchProblem() : problem);
