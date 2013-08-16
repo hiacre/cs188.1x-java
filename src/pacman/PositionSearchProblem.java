@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.ArrayList;
@@ -28,7 +24,7 @@ import util.Util;
 public class PositionSearchProblem implements SearchProblem<GameStatePositionSearchProblem, GameStateSuccessorPositionSearchProblem> {
     
     private final Grid walls;
-    private Position startState;
+    private GameStatePositionSearchProblem startState;
     private final Position goal;
     private final CostFunction costFn;
     private final Boolean visualize;
@@ -48,7 +44,7 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
             final GameState1 gameState,
             CostFunction costFn,
             Position goal,
-            Position start,
+            GameStatePositionSearchProblem start,
             Boolean warn,
             Boolean visualize) {
         
@@ -66,7 +62,7 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
         }
         
         this.walls = gameState.getWalls();
-        this.startState = gameState.getPacmanPosition();
+        this.startState = new GameStatePositionSearchProblem(gameState.getPacmanPosition());
         if(start != null) {
             this.startState = start;
         }
@@ -84,11 +80,13 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
         this._expanded = 0;
     }
 
-    public Position getStartState() {
+    @Override
+    public GameStatePositionSearchProblem getStartState() {
         return this.startState;
     }
 
-    public boolean isGoalState(final Object state) {
+    @Override
+    public boolean isGoalState(final GameStatePositionSearchProblem state) {
         final boolean isGoal = (state == goal);
 
         // For display purposes only
@@ -114,11 +112,12 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
          required to get there, and 'stepCost' is the incremental
          cost of expanding to that successor
      */
-    public List<GameStateSuccessorPositionSearchProblem> getSuccessors(final Position state) {
+    @Override
+    public List<GameStateSuccessorPositionSearchProblem> getSuccessors(final GameStatePositionSearchProblem state) {
         final List<GameStateSuccessorPositionSearchProblem> successors = new ArrayList();
         for(Direction action : Arrays.asList(Direction.North, Direction.South, Direction.East, Direction.West)) {
-            final int x = state.getX();
-            final int y = state.getY();
+            final int x = state.getPacmanPosition().getX();
+            final int y = state.getPacmanPosition().getY();
             final DirectionVector vector = action.toVector();
             final double dx = vector.getX();
             final double dy = vector.getY();
@@ -144,13 +143,14 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
 
     /** Returns the cost of a particular sequence of actions.  If those actions
         include an illegal move, return maximum cost */
+    @Override
     public int getCostOfActions(final List<Direction> actions) {
 
         if(actions == null) {
             return Util.getMaximumCost();
         }
-        int x = this.getStartState().getX();
-        int y = this.getStartState().getY();
+        int x = this.getStartState().getPacmanPosition().getX();
+        int y = this.getStartState().getPacmanPosition().getY();
         
         int cost = 0;
         for(Direction action : actions) {
