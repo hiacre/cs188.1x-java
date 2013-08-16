@@ -1,83 +1,133 @@
 package pacman;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import util.Util;
+
 /**
  * Implementation of a SearchProblem for the  Eight Puzzle domain
 
       Each state is represented by an instance of an eightPuzzle.
  * @author archie
  */
-public class EightPuzzleSearchProblem implements SearchProblem {
+public class EightPuzzleSearchProblem implements SearchProblem<GameStateEightPuzzleSearchProblem, GameStateSuccessorEightPuzzleSearchProblem> {
+    
+    private final GameStateEightPuzzleSearchProblem puzzle;
+    
+    private final static List<List<Integer>> EIGHT_PUZZLE_DATA =
+            Arrays.asList(
+                Arrays.asList(1, 0, 2, 3, 4, 5, 6, 7, 8),
+                Arrays.asList(1, 7, 8, 2, 3, 4, 5, 6, 0),
+                Arrays.asList(4, 3, 2, 7, 0, 5, 1, 6, 8),
+                Arrays.asList(5, 1, 3, 4, 0, 2, 6, 7, 8),
+                Arrays.asList(1, 2, 5, 7, 6, 8, 0, 4, 3),
+                Arrays.asList(0, 3, 1, 6, 8, 2, 7, 5, 4));
 
-    def __init__(self,puzzle):
-        "Creates a new EightPuzzleSearchProblem which stores search information."
-        self.puzzle = puzzle
+    /** Creates a new EightPuzzleSearchProblem which stores search information. */
+    public EightPuzzleSearchProblem(final GameStateEightPuzzleSearchProblem puzzle) {
+        this.puzzle = puzzle;
+    }
+    
+    /**
+     * puzzleNumber: The number of the eight puzzle to load.
 
-    def getStartState(self):
-        return puzzle
+          Returns an eight puzzle object generated from one of the
+          provided puzzles in EIGHT_PUZZLE_DATA.
 
-    def isGoalState(self,state):
-        return state.isGoal()
+          puzzleNumber can range from 0 to 5.
 
-    def getSuccessors(self,state):
-        """
-          Returns list of (successor, action, stepCost) pairs where
+          >>> print loadEightPuzzle(0)
+          -------------
+          | 1 |   | 2 |
+          -------------
+          | 3 | 4 | 5 |
+          -------------
+          | 6 | 7 | 8 |
+          -------------
+     * @param puzzleNumber
+     * @return 
+     */
+    public static GameStateEightPuzzleSearchProblem loadEightPuzzle(final int puzzleNumber) {
+        return new GameStateEightPuzzleSearchProblem(EIGHT_PUZZLE_DATA.get(puzzleNumber));
+    }
+    
+    /**
+     * moves: number of random moves to apply
+
+          Creates a random eight puzzle by applying
+          a series of 'moves' random moves to a solved
+          puzzle.
+     * @param moves
+     * @return 
+     */
+    public static GameStateEightPuzzleSearchProblem createRandomEightPuzzle(Integer moves) {
+          
+        if(moves == null) {
+            moves = 100;
+        }
+        
+        GameStateEightPuzzleSearchProblem puzzle =
+                new GameStateEightPuzzleSearchProblem(Arrays.asList(0,1,2,3,4,5,6,7,8));
+        
+        for(int i=0; i<moves; i++) {
+            // Execute a random legal move
+            final List<Direction> legalMoves = puzzle.legalMoves();
+            final Direction legalMove = Util.randomChoice(legalMoves);
+            final GameStateSuccessorEightPuzzleSearchProblem successor = puzzle.result(legalMove);
+            puzzle = successor.getState();
+        }
+        return puzzle;
+    }
+
+    @Override
+    public GameStateEightPuzzleSearchProblem getStartState() {
+        return puzzle;
+    }
+
+    @Override
+    public boolean isGoalState(final GameStateEightPuzzleSearchProblem state) {
+        return state.isGoal();
+    }
+
+    /**
+     * Returns list of (successor, action, stepCost) pairs where
           each succesor is either left, right, up, or down
           from the original state and the cost is 1.0 for each
-        """
-        succ = []
-        for a in state.legalMoves():
-            succ.append((state.result(a), a, 1))
-        return succ
+     * @param state
+     * @return 
+     */
+    @Override
+    public List<GameStateSuccessorEightPuzzleSearchProblem> getSuccessors(final GameStateEightPuzzleSearchProblem state) {
+        final List succ = new ArrayList();
+        for(Direction a : state.legalMoves()) {
+            succ.add(
+                new GameStateEightPuzzleSearchProblem(state.result(a), a, 1));
+        }
+        return succ;
+    }
+    
 
-    def getCostOfActions(self, actions):
-        """
-         actions: A list of actions to take
+    /**
+     * actions: A list of actions to take
 
         This method returns the total cost of a particular sequence of actions.  The sequence must
         be composed of legal moves
-        """
-        return len(actions)
+     * @param actions
+     * @return 
+     */
+    @Override
+    public int getCostOfActions(final List<Direction> actions) {
+        return actions.size();
+    }
+}
+
     
-EIGHT_PUZZLE_DATA = [[1, 0, 2, 3, 4, 5, 6, 7, 8],
-                     [1, 7, 8, 2, 3, 4, 5, 6, 0],
-                     [4, 3, 2, 7, 0, 5, 1, 6, 8],
-                     [5, 1, 3, 4, 0, 2, 6, 7, 8],
-                     [1, 2, 5, 7, 6, 8, 0, 4, 3],
-                     [0, 3, 1, 6, 8, 2, 7, 5, 4]]
 
-def loadEightPuzzle(puzzleNumber):
-    """
-      puzzleNumber: The number of the eight puzzle to load.
 
-      Returns an eight puzzle object generated from one of the
-      provided puzzles in EIGHT_PUZZLE_DATA.
 
-      puzzleNumber can range from 0 to 5.
 
-      >>> print loadEightPuzzle(0)
-      -------------
-      | 1 |   | 2 |
-      -------------
-      | 3 | 4 | 5 |
-      -------------
-      | 6 | 7 | 8 |
-      -------------
-    """
-    return EightPuzzleState(EIGHT_PUZZLE_DATA[puzzleNumber])
 
-def createRandomEightPuzzle(moves=100):
-    """
-      moves: number of random moves to apply
-
-      Creates a random eight puzzle by applying
-      a series of 'moves' random moves to a solved
-      puzzle.
-    """
-    puzzle = EightPuzzleState([0,1,2,3,4,5,6,7,8])
-    for i in range(moves):
-        # Execute a random legal move
-        puzzle = puzzle.result(random.sample(puzzle.legalMoves(), 1)[0])
-    return puzzle
 
 if __name__ == '__main__':
     puzzle = createRandomEightPuzzle(25)
