@@ -1,10 +1,11 @@
 package pacman;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Stack;
+import util.Util;
 
 /**
  * The Eight Puzzle is described in the course textbook on
@@ -20,6 +21,15 @@ public class GameStateEightPuzzleSearchProblem implements IGameState {
     
     private final List<List<Integer>> cells;
     private Location blankLocation;
+    final static String horizontalLine;
+    
+    static {
+        final StringBuilder sb = new StringBuilder();
+        for(int i=0; i<13; i++) {
+            sb.append('-');
+        }
+        horizontalLine = sb.toString();
+    }
 
     /**
      * Constructs a new eight puzzle from an ordering of numbers.
@@ -63,6 +73,12 @@ public class GameStateEightPuzzleSearchProblem implements IGameState {
             }
         }
     }
+    
+    private GameStateEightPuzzleSearchProblem(final List<List<Integer>> nums, final Location blankLocation) {
+        this.cells = nums;
+        this.blankLocation = blankLocation;
+    }
+    
     
     private class Location {
         private final int row;
@@ -149,7 +165,7 @@ public class GameStateEightPuzzleSearchProblem implements IGameState {
      * @param direction
      * @return 
      */
-    public GameStateSuccessorEightPuzzleSearchProblem result(Direction move) {
+    public GameStateSuccessorEightPuzzleSearchProblem result(final Direction move) {
         final int row = this.blankLocation.getRow();
         final int col = this.blankLocation.getCol();
         final int newrow;
@@ -175,55 +191,63 @@ public class GameStateEightPuzzleSearchProblem implements IGameState {
                 throw new RuntimeException("Illegal move");
         }
 
-        // Create a copy of the current eightPuzzle
-        final GameStateEightPuzzleSearchProblem newPuzzle =
-                new GameStateEightPuzzleSearchProblem(Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0));
-        newPuzzle.cells = [values[:] for values in self.cells];
-        // And update it to reflect the move
-        newPuzzle.cells[row][col] = self.cells[newrow][newcol];
-        newPuzzle.cells[newrow][newcol] = self.cells[row][col];
-        newPuzzle.blankLocation = newrow, newcol;
 
-        return newPuzzle;
+        // copy this.cells
+        final List<List<Integer>> cellsCopy = new ArrayList<>();
+        for(List<Integer> li : cells) {
+            cellsCopy.add(new ArrayList<>(li));
+        }
+        // And update it to reflect the move
+        cellsCopy.get(row).set(col, this.cells.get(newrow).get(newcol));
+        cellsCopy.get(newrow).set(newcol, this.cells.get(row).get(col));
+        return new GameStateSuccessorEightPuzzleSearchProblem(
+                new GameStateEightPuzzleSearchProblem(cellsCopy, new Location(newrow, newcol)),
+                move,
+                1);
     }
     
 
-    # Utilities for comparison and display
-    def __eq__(self, other):
-        """
-            Overloads '==' such that two eightPuzzles with the same configuration
-          are equal.
+    // Utilities for comparison and display
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GameStateEightPuzzleSearchProblem other = (GameStateEightPuzzleSearchProblem) obj;
+        if (!Objects.equals(this.cells, other.cells)) {
+            return false;
+        }
+        return true;
+    }
 
-          >>> EightPuzzleState([0, 1, 2, 3, 4, 5, 6, 7, 8]) == \
-              EightPuzzleState([1, 0, 2, 3, 4, 5, 6, 7, 8]).result('left')
-          True
-        """
-        for row in range( 3 ):
-            if self.cells[row] != other.cells[row]:
-                return False
-        return True
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.cells);
+        return hash;
+    }
 
-    def __hash__(self):
-        return hash(str(self.cells))
-
-    def __getAsciiString(self):
-        """
-          Returns a display string for the maze
-        """
-        lines = []
-        horizontalLine = ('-' * (13))
-        lines.append(horizontalLine)
-        for row in self.cells:
-            rowLine = '|'
-            for col in row:
-                if col == 0:
-                    col = ' '
-                rowLine = rowLine + ' ' + col.__str__() + ' |'
-            lines.append(rowLine)
-            lines.append(horizontalLine)
-        return '\n'.join(lines)
-
-    def __str__(self):
-        return self.__getAsciiString()
+    /** Returns a display string for the maze */
+    @Override
+    public String toString() {
+        final List lines = new ArrayList();
+        
+        lines.add(horizontalLine);
+        for(List<Integer> row : this.cells) {
+            final StringBuilder rowLine = new StringBuilder().append('|');
+            for(int col : row) {
+                if(col == 0) {
+                    col = ' ';
+                }
+                rowLine.append(' ').append(col==0?' ':col).append(" |");
+            }
+            lines.add(rowLine);
+            lines.add(horizontalLine);
+        }
+        return Util.concatStringList(lines, "\n");
+    }
             
 }

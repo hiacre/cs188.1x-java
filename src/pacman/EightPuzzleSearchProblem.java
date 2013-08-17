@@ -75,7 +75,7 @@ public class EightPuzzleSearchProblem implements SearchProblem<GameStateEightPuz
             final List<Direction> legalMoves = puzzle.legalMoves();
             final Direction legalMove = Util.randomChoice(legalMoves);
             final GameStateSuccessorEightPuzzleSearchProblem successor = puzzle.result(legalMove);
-            puzzle = successor.getState();
+            puzzle = successor.getGameState();
         }
         return puzzle;
     }
@@ -99,10 +99,9 @@ public class EightPuzzleSearchProblem implements SearchProblem<GameStateEightPuz
      */
     @Override
     public List<GameStateSuccessorEightPuzzleSearchProblem> getSuccessors(final GameStateEightPuzzleSearchProblem state) {
-        final List succ = new ArrayList();
+        final List<GameStateSuccessorEightPuzzleSearchProblem> succ = new ArrayList<>();
         for(Direction a : state.legalMoves()) {
-            succ.add(
-                new GameStateEightPuzzleSearchProblem(state.result(a), a, 1));
+            succ.add(state.result(a));
         }
         return succ;
     }
@@ -121,12 +120,6 @@ public class EightPuzzleSearchProblem implements SearchProblem<GameStateEightPuz
         return actions.size();
     }
 }
-
-    
-
-
-
-
 
 
 if __name__ == '__main__':
