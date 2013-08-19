@@ -1,10 +1,10 @@
 package eightpuzzle;
 
 import java.util.List;
+import pacman.BreadthFirstSearch;
 import pacman.Direction;
 import pacman.EightPuzzleSearchProblem;
 import pacman.GameStateEightPuzzleSearchProblem;
-import pacman.GameStateSuccessorEightPuzzleSearchProblem;
 
 /**
  *
@@ -21,7 +21,7 @@ public class EightPuzzle {
         System.out.println(puzzle);
 
         final EightPuzzleSearchProblem problem = new EightPuzzleSearchProblem(puzzle);
-        final List<Direction> path = search.breadthFirstSearch(problem);
+        final List<Direction> path = new BreadthFirstSearch().getActions(problem);
         final StringBuilder message = new StringBuilder();
         message.append("BFS found a path of ").append(path.size()).append(" moves: ").append(path);
         System.out.println(message.toString());
