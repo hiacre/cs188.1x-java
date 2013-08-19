@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.Collection;
@@ -34,5 +30,6 @@ public class LeftTurnAgent implements Agent {
         }
         return Direction.Stop;
     }
+
 
 }

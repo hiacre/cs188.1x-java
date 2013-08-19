@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.ArrayList;
@@ -92,7 +88,7 @@ public class Actions {
     }
 
     public static Position getSuccessor(final Position position, final Direction action) {
-        final DirectionVector posVec = action.toVector(null);
+        final DirectionVector posVec = action.toVector();
         final int dx = posVec.getX();
         final int dy = posVec.getY();
         final int x = position.getX();

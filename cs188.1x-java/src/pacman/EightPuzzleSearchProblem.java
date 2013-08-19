@@ -119,4 +119,9 @@ public class EightPuzzleSearchProblem implements SearchProblem<GameStateEightPuz
     public int getCostOfActions(final List<Direction> actions) {
         return actions.size();
     }
+
+    @Override
+    public int getExpanded() {
+        return 0;
+    }
 }

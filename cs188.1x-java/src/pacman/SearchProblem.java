@@ -28,6 +28,8 @@ public interface SearchProblem<GS extends IGameState, GSS extends GameStateSucce
     /** This method returns the total cost of a particular sequence of actions.  The sequence must
         be composed of legal moves */
     public int getCostOfActions(List<Direction> actions);
-    
+
+    /** Returns the search nodes that have been expanded */
+    public int getExpanded();
     
 }

@@ -53,7 +53,13 @@ public class ApproximateSearchAgent extends AgentAbstract {
         if(walls.get(x2, y2)) {
             throw new RuntimeException("point2 is a wall: " + point2.toString());
         }
-        final PositionSearchProblem prob = new PositionSearchProblem(gameState, null, point2, point1, false, false);
-        return search.bfs(prob).length();
+        final PositionSearchProblem prob = new PositionSearchProblem(
+                gameState,
+                null,
+                point2,
+                gameState,
+                false,
+                false);
+        return new BreadthFirstSearch().getActions(prob).size();
     }
 }

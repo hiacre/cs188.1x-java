@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.ArrayList;
@@ -23,7 +19,7 @@ public class GameStateData {
     private final Object foodAdded;
     private Object foodEaten;
     private List agentStates;
-    private Grid capsules;
+    private GridCapsules capsules;
     private Grid food;
     private Layout layout;
     private List eaten;
@@ -60,10 +56,6 @@ public class GameStateData {
         return result;
     }
     
-    @Override
-    public boolean equals(Object other) {
-        throw new NotImplementedException();
-    }
 
     @Override
     public int hashCode() {
@@ -137,7 +129,7 @@ public class GameStateData {
         return food;
     }
 
-    public Grid getCapsules() {
+    public GridCapsules getCapsules() {
         return capsules;
     }
 
@@ -205,7 +197,7 @@ public class GameStateData {
         return this.lose;
     }
 
-    void setWin(boolean isWIn) {
+    void setWin(boolean isWin) {
         this.win = isWin;
     }
 

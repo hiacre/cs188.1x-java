@@ -127,4 +127,9 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
     public Grid getWalls() {
         return this.walls;
     }
+
+    @Override
+    public int getExpanded() {
+        return _expanded;
+    }
 }

@@ -87,7 +87,7 @@ public class Game {
 
         // inform learning agents of the game start
         for(int i=0; i<agents.size(); i++) {
-            final Object agent = agents.get(i);
+            final Agent agent = agents.get(i);
             if(agent == null) {
                 // this is a null agent, meaning it failed to load
                 // the other team wins

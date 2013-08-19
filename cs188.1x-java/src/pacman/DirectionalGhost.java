@@ -8,11 +8,6 @@ import util.CounterStandard;
 import util.Position;
 import util.PositionStandard;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * A ghost that prefers to rush Pacman, or flee when scared.
  * @author archie

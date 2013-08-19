@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 /**
@@ -16,6 +12,16 @@ class GameStateSuccessor1Standard implements GameStateSuccessor1 {
         this.gameState = gameState;
         this.action = action;
         
+    }
+
+    @Override
+    public Direction getAction() {
+        return action;
+    }
+
+    @Override
+    public GameState1 getState() {
+        return gameState;
     }
     
 }

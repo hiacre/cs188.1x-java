@@ -24,7 +24,7 @@ public class GridStandard implements Grid {
     private final int height;
     private final List<List<Boolean>> data;
 
-    private GridStandard(final int width, final int height, Boolean initialValue, final List<Integer> bitRepresentation) {
+    protected GridStandard(final int width, final int height, Boolean initialValue, final List<Integer> bitRepresentation) {
         if(initialValue == null) {
             initialValue = false;
         }
@@ -41,21 +41,28 @@ public class GridStandard implements Grid {
         }
     }
     
-    private GridStandard(final List<List<Boolean>> data, final boolean isDeepCopy) {
+    protected GridStandard(final List<List<Boolean>> data, final boolean isDeepCopy) {
         this.width = data.size();
         this.height = data.get(0).size();
         if(isDeepCopy) {
-            this.data = new ArrayList();
-            for(int x=0; x<width; x++) {
-                final List<Boolean> column = new ArrayList<>();
-                for(int y=0; y<height; y++) {
-                    column.add(data.get(x).get(y));
-                }
-                this.data.add(column);
-            }
+            this.data = deepCopyGrid(data);
         } else {
             this.data = data;
         }
+    }
+    
+    protected static List<List<Boolean>> deepCopyGrid(List<List<Boolean>> data) {
+        final int width = data.size();
+        final int height = data.get(0).size();
+        final List<List<Boolean>> result = new ArrayList<>();
+        for(int x=0; x<width; x++) {
+            final List<Boolean> column = new ArrayList<>();
+            for(int y=0; y<height; y++) {
+                column.add(data.get(x).get(y));
+            }
+            result.add(column);
+        }
+        return result;
     }
     
     public List<List<Boolean>> getData() {

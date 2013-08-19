@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.io.File;
@@ -34,14 +30,14 @@ public class Layout {
     private GridVisibility visibility;
     private List<AgentTypeAndPosition> agentPositions;
     private Grid food;
-    private Grid capsules;
+    private GridCapsules capsules;
 
     private Layout(final List<String> layoutText) {
         this.width = layoutText.get(0).length();
         this.height= layoutText.size();
         this.walls = GridStandard.newInstance(width, height, false);
         food = GridStandard.newInstance(width, height, false);
-        capsules = GridStandard.newInstance(width, height, false);
+        capsules = GridCapsules.newInstance(width, height, false);
         agentPositions = new ArrayList<>();
         numGhosts = 0;
         processLayoutText(layoutText);
@@ -256,7 +252,7 @@ public class Layout {
         return food;
     }
 
-    public Grid getCapsules() {
+    public GridCapsules getCapsules() {
         return capsules;
     }
     

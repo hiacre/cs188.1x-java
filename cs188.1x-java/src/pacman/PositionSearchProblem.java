@@ -171,4 +171,9 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
     public Position getGoal() {
         return goal;
     }
+
+    @Override
+    public int getExpanded() {
+        return _expanded;
+    }
 }

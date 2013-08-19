@@ -37,3 +37,12 @@ If these floats and integers are outside a certain tolerance, then configuration
    The direction is whatever was given to configuration.
 
 
+
+
+A Search is an object that implements a search algorithm.
+The algorithm is called via getActions, and it takes a SearchProblem.
+
+Problems
+========
+What is a problem?
+

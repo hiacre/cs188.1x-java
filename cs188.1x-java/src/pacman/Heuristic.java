@@ -1,10 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
-
-import pacman.SearchProblem;
 
 /**
  *
@@ -12,7 +6,5 @@ import pacman.SearchProblem;
  */
 public interface Heuristic {
     
-    public State getState();
-    public SearchProblem getProblem();
-    
+    public int calculate(GameState1 state, SearchProblem problem);
 }

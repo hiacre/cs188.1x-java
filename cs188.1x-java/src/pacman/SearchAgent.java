@@ -18,17 +18,17 @@ import java.util.List;
  */
 public class SearchAgent extends AgentAbstract {
     
-    private final Object searchFunction;
+    private final Search searchFunction;
     private int actionIndex;
-    private final List<Direction> actions;
-    private final Object searchType;
-    private final Object heur;
+    private List<Direction> actions;
+    private final ProblemFactory searchType;
+    private final Heuristic heur;
 
-    public SearchAgent(final Object searchFunc, final Problem problem, final Object heuristic) {
+    public SearchAgent(final Search searchFunc, final ProblemFactory problem, final Heuristic heuristic) {
         super(null);
         this.searchFunction = (searchFunc == null ? new DepthFirstSearch() : searchFunc);
-        this.searchType = (problem == null ? new PositionSearchProblem() : problem);
-        this.heur = (heuristic == null ? nullHeuristic : heuristic);
+        searchType = (problem == null ? new PositionSearchProblemFactory() : problem);
+        this.heur = (heuristic == null ? new NullHeuristic(): heuristic);
         
         this.actionIndex = 0;
         
@@ -64,14 +64,15 @@ public class SearchAgent extends AgentAbstract {
         state: a GameState object (pacman.py)
      * @param state 
      */
-    public void registerInitialState(final Object state) {
+    @Override
+    public void registerInitialState(final GameState1 state) {
 
         if(this.searchFunction == null) {
             throw new RuntimeException("No search function provided for SearchAgent");
         }
         final long starttime = System.currentTimeMillis();
-        final Object problem = this.searchType(state); // Makes a new search problem
-        this.actions = this.searchFunction(problem);  // Find a path
+        final SearchProblem problem = searchType.makeProblem(state); // Makes a new search problem
+        this.actions = searchFunction.getActions(problem);  // Find a path
         final int totalCost = problem.getCostOfActions(this.actions);
         final double duration = (starttime - System.currentTimeMillis())/1000;
         System.out.println("Path found with total cost of " + totalCost + " in " + duration + " seconds");
@@ -87,6 +88,7 @@ public class SearchAgent extends AgentAbstract {
      * @param state
      * @return 
      */
+    @Override
     public Direction getAction(final GameState1 state) {
         
         final int i = actionIndex;

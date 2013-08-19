@@ -175,7 +175,7 @@ public class GameState1 {
     }
 
     /** Returns a list of positions (x,y) of the remaining capsules. */
-    public Grid getCapsules() {
+    public GridCapsules getCapsules() {
         return data.getCapsules();
     }
 

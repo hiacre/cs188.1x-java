@@ -12,17 +12,17 @@ import util.Position;
 public class StayWestSearchAgent extends SearchAgent {
 
     public StayWestSearchAgent() {
-        this.searchFunction = search.uniformCostSearch;
-        final CostFunction costFn = new CostFunction() {
-
-            @Override
-            public int eval(Position pos) {
-                return Math.pow(2, pos.getX());
-            }
-        };
-        
-        // searchType is a function that takes a state, and returns a problem
-        this.searchType = lambda state: PositionSearchProblem(state, costFn);
+        super(
+            new UniformCostSearch(),
+            new PositionSearchProblemFactory(
+                new CostFunction() {
+                    @Override
+                    public int eval(Position pos) {
+                        return (int) Math.pow(2, pos.getX());
+                    }
+                }),
+            null
+            );
     }
 
 }

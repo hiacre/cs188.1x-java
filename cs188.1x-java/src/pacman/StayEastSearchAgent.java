@@ -9,17 +9,19 @@ import util.Position;
     The cost function for stepping into a position (x,y) is 1/2^x.
  * @author archie
  */
-public class StayEastSearchAgent implements SearchAgent {
+public class StayEastSearchAgent extends SearchAgent {
 
     public StayEastSearchAgent() {
-        this.searchFunction = search.uniformCostSearch;
-        final CostFunction costFn = new CostFunction() {
-
-            @Override
-            public int eval(Position pos) {
-                return Math.pow(0.5, pos.getX());
-            }
-        };
-        this.searchType = lambda state: PositionSearchProblem(state, costFn);
+        super(
+                new UniformCostSearch(),
+                new PositionSearchProblemFactory(
+                   new CostFunction() {
+                        @Override
+                        public int eval(Position pos) {
+                            return (int)Math.pow(0.5, pos.getX());
+                        }
+                    }
+                ),
+                null);
     }
 }
