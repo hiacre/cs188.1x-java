@@ -1,6 +1,5 @@
 package pacman;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.Position;
 
 /**
@@ -44,6 +43,6 @@ public class AnyFoodSearchProblem extends PositionSearchProblem {
         final double y = pos.getY();
 
         /*** YOUR CODE HERE ***/
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 }

@@ -1,6 +1,5 @@
 package pacman;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.PositionStandard;
 
 /**
@@ -29,7 +28,7 @@ public class ApproximateSearchAgent extends AgentAbstract {
         the Direction enum
         */
         /*** YOUR CODE HERE ***/
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
                 

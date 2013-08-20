@@ -1,7 +1,6 @@
 package pacman;
 
 import java.util.List;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Search the node that has the lowest combined cost and heuristic first.
@@ -15,7 +14,7 @@ public class SearchAStar implements SearchWithHeuristic {
             heuristic = new NullHeuristic();
         }
         
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
 }

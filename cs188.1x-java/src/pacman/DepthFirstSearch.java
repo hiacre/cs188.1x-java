@@ -1,7 +1,6 @@
 package pacman;
 
 import java.util.List;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -26,7 +25,7 @@ public class DepthFirstSearch implements Search {
         **/
         
         /*** YOUR CODE HERE ***/
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
 }

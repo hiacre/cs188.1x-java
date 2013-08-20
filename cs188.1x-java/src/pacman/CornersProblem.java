@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.ArrayList;
@@ -9,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.Position;
 import util.PositionStandard;
 import util.Util;
@@ -59,14 +54,14 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
     @Override
     public GameStateCornersProblem getStartState() {
         /*** YOUR CODE HERE ***/
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /** Returns whether this search state is a goal state of the problem */
     @Override
     public boolean isGoalState(final GameStateCornersProblem gameState) {
         /*** YOUR CODE HERE ***/
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     /**

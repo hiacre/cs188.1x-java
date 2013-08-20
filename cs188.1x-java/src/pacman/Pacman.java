@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 import pacman.OptionParser.Args;
 import pacman.OptionParser.Options;
 import pacman.OptionParser.ParsedArgs;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.Util;
 
 /**
@@ -191,7 +190,7 @@ public class Pacman {
 //            recorded['display'] = args['display']
 //            replayGame(**recorded)
 //            sys.exit(0)
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         return args;
@@ -304,7 +303,7 @@ public class Pacman {
                 final StringBuilder fname = new StringBuilder();
                 fname.append("record-game-").append(i+1);
                 // TODO now add on month-day-hour-minute-seconds
-                throw new NotImplementedException();
+                throw new UnsupportedOperationException();
                 //fname = ('recorded-game-%d' % (i + 1)) +  '-'.join([str(t) for t in time.localtime()[1:6]]);
 //                f = file(fname, 'w');
 //                components = {'layout': layout, 'actions': game.moveHistory};

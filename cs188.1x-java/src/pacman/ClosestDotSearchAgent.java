@@ -2,7 +2,6 @@ package pacman;
 
 import java.util.ArrayList;
 import java.util.List;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.Position;
 
 /**
@@ -50,6 +49,6 @@ public class ClosestDotSearchAgent extends SearchAgent {
         final AnyFoodSearchProblem problem = new AnyFoodSearchProblem(gameState);
 
         /*** YOUR CODE HERE ***/
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 }

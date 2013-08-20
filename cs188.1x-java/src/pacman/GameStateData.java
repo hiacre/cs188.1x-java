@@ -2,7 +2,6 @@ package pacman;
 
 import java.util.ArrayList;
 import java.util.List;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.Position;
 import util.PositionStandard;
 
@@ -46,7 +45,7 @@ public class GameStateData {
     }
     
     public GameStateData deepCopy() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
     
     public List<AgentState> copyAgentStates(final List<AgentState> agentStates) {
