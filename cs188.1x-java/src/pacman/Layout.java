@@ -54,10 +54,10 @@ public class Layout {
             
             final GridVisibility vis = GridVisibility.newInstance(width, height);
             final List<DirectionVector> vecs = Arrays.asList(
-                    DirectionVector.newInstance(-1, 0),
-                    DirectionVector.newInstance( 1, 0),
-                    DirectionVector.newInstance( 0,-1),
-                    DirectionVector.newInstance( 0, 1));
+                    DirectionVector.newInstance(-0.5, 0),
+                    DirectionVector.newInstance( 0.5, 0),
+                    DirectionVector.newInstance( 0,  -0.5),
+                    DirectionVector.newInstance( 0,   0.5));
             final List<Direction> dirs = Arrays.asList(Direction.North, Direction.South, Direction.West, Direction.East);
             if(dirs.size() != vecs.size()) {
                 throw new RuntimeException("Vecs must be the same size as Dirs");
@@ -65,16 +65,17 @@ public class Layout {
             for(int x=0; x<width; x++) {
                 for(int y=0; y<height; y++) {
                     if(!walls.get(x, y)) {
-                        // x,y is a space, not a wall... I think....
+                        // x,y is a space, not a wall
                         for(int i=0; i<vecs.size(); i++) {
                             final DirectionVector vec = vecs.get(i);
                             final Direction direction = dirs.get(i);
-                            final int dx = vec.getX();
-                            final int dy = vec.getY();
-                            int nextx = x + dx;
-                            int nexty = y + dy;
-                            // while((nextx + nexty) != int(nextx) + int(nexty) || !walls.get(x,y)
-                            while(!walls.get(x,y)) {
+                            final double dx = vec.getX();
+                            final double dy = vec.getY();
+                            double nextx = x + dx;
+                            double nexty = y + dy;
+                            while(
+                                    ((nextx + nexty) != (int)nextx + (int)nexty) ||
+                                    !walls.get((int)nextx,(int)nexty)) {
                                 vis.get(x,y,direction).add(PositionStandard.newInstance(nextx, nexty));
                                 nextx = x + dx;
                                 nexty = y + dy;
@@ -91,10 +92,6 @@ public class Layout {
         }
     }
 
-    public boolean isWall(final Position pos) {
-        return walls.get(pos.getX(), pos.getY());
-    }
-    
     public boolean isWall(final int x, final int y) {
         return walls.get(x, y);
     }
@@ -126,10 +123,10 @@ public class Layout {
 
     public Position getFurthestCorner(final Position pacPos) {
         final List<Position> poses = getCorners();
-        int maxDist = -1;
+        double maxDist = -1;
         Position maxPos = null;
         for(Position pos : poses) {
-            final int dist = pos.manhattanDistance(pacPos);
+            final double dist = pos.manhattanDistance(pacPos);
             if(dist > maxDist) {
                 maxDist = dist;
                 maxPos = pos;
@@ -139,8 +136,8 @@ public class Layout {
     }
 
     public boolean isVisibleFrom(final Position ghostPos, final Position pacPos, final Direction pacDirection) {
-        final int row = pacPos.getX();
-        final int col = pacPos.getY();
+        final int row = pacPos.getFloorX();
+        final int col = pacPos.getFloorY();
         return visibility.get(row, col, pacDirection).contains(ghostPos);
     }
 

@@ -1,7 +1,6 @@
 package pacman;
 
 import java.util.List;
-import util.Position;
 
 /**
  *
@@ -31,11 +30,11 @@ public class GridCapsules extends GridStandard {
         return new GridCapsules(deepCopyGrid(getData()));
     }
 
-    public boolean isCapsule(final Position position) {
-        return this.get(position.getX(), position.getY());
+    public boolean isCapsule(final int x, final int y) {
+        return this.get(x, y);
     }
 
-    public void removeCapsule(final Position position) {
-        this.set(position.getX(), position.getY(), false);
+    public void removeCapsule(final int x, final int y) {
+        this.set(x, y, false);
     }
 }

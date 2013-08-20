@@ -80,8 +80,8 @@ public class ConfigurationStandard implements Configuration {
         Actions are movement vectors.
      */
     public Configuration generateSuccessor(final DirectionVector vector) {
-        final int x = this.position.getX();
-        final int y = this.position.getY();
+        final double x = this.position.getX();
+        final double y = this.position.getY();
         final double dx = vector.getX();
         final double dy = vector.getY();
         Direction dir = vector.toDirection();

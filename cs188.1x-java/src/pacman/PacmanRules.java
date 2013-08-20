@@ -44,20 +44,17 @@ public class PacmanRules {
         final Position nearest = PositionStandard.nearestPoint( next.getX(), next.getY() );
         if(next.manhattanDistance(nearest) <= 0.5) {
             // Remove food
-            consume(nearest, state);
+            consume((int)nearest.getX(), (int)nearest.getY(), state);
         }
     }
 
-    public static void consume(final Position position, final GameState1 state) {
-        final int x = position.getX();
-        final int y = position.getY();
-        
+    public static void consume(final int x, final int y, final GameState1 state) {
         // Eat food
         if(state.getData().getFood().get(x,y)) {
             state.getData().setScoreChange(state.getData().getScoreChange() + 10);
             state.getData().setFood(state.getData().getFood().copy());
             state.getData().getFood().set(x,y,false);
-            state.getData().setFoodEaten(position);
+            state.getData().setFoodEaten(x,y);
             // TODO: cache numFood?
             final int numFood = state.getNumFood();
             if(numFood == 0 && !state.getData().getLose()) {
@@ -66,16 +63,16 @@ public class PacmanRules {
             }
         }
         // Eat capsule
-        if(state.getCapsules().isCapsule(position)) {
-            state.getData().getCapsules().removeCapsule( position );
-            state.getData().setCapsuleEaten(position);
+        if(state.getCapsules().isCapsule(x,y)) {
+            state.getData().getCapsules().removeCapsule(x,y);
+            state.getData().setCapsuleEaten(x,y);
             // Reset all ghosts' scared timers
             for(int i=1; i<state.getData().getAgentStates().size(); i++) {
                 ((GhostState)state.getData().getAgentStates().get(i)).setScaredTimer(SCARED_TIME);
             }
         }
     }
-        
+    
     /** Number of moves for which ghosts are scared */
     public static int getScaredTime() {
         return SCARED_TIME;

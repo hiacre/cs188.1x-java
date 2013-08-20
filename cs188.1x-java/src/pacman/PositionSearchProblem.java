@@ -25,7 +25,8 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
     
     private final Grid walls;
     private GameStatePositionSearchProblem startState;
-    private final Position goal;
+    private final int goalX;
+    private final int goalY;
     private final CostFunction costFn;
     private final Boolean visualize;
     
@@ -43,7 +44,8 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
     public PositionSearchProblem(
             final GameState1 gameState,
             CostFunction costFn,
-            Position goal,
+            Integer goalX,
+            Integer goalY,
             GameStatePositionSearchProblem start,
             Boolean warn,
             Boolean visualize) {
@@ -51,9 +53,8 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
         if(costFn == null) {
             costFn = new CostFunctionAlwaysOne();
         }
-        if(goal == null) {
-            goal = PositionStandard.newInstance(1,1);
-        }
+        goalX = goalX == null ? 1 : goalX;
+        goalY = goalY == null ? 1 : goalY;
         if(warn == null) {
             warn = true;
         }
@@ -66,10 +67,11 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
         if(start != null) {
             this.startState = start;
         }
-        this.goal = goal;
+        this.goalX = goalX;
+        this.goalY = goalY;
         this.costFn = costFn;
         this.visualize = visualize;
-        if(warn && (gameState.getNumFood() != 1 || !gameState.hasFood(goal.getX(), goal.getY()))) {
+        if(warn && (gameState.getNumFood() != 1 || !gameState.hasFood(goalX, goalY))) {
             logger.log(Level.WARNING, "Warning: this does not look like a regular search maze");
             System.out.println("Warning: this does not look like a regular search maze");
         }
@@ -87,7 +89,8 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
 
     @Override
     public boolean isGoalState(final GameStatePositionSearchProblem state) {
-        final boolean isGoal = (state == goal);
+        final Position pos = state.getPacmanPosition();
+        final boolean isGoal = (pos.getX() == goalX && pos.getY() == goalY);
 
         // For display purposes only
         if(isGoal && visualize) {
@@ -116,13 +119,13 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
     public List<GameStateSuccessorPositionSearchProblem> getSuccessors(final GameStatePositionSearchProblem state) {
         final List<GameStateSuccessorPositionSearchProblem> successors = new ArrayList();
         for(Direction action : Arrays.asList(Direction.North, Direction.South, Direction.East, Direction.West)) {
-            final int x = state.getPacmanPosition().getX();
-            final int y = state.getPacmanPosition().getY();
+            final double x = state.getPacmanPosition().getX();
+            final double y = state.getPacmanPosition().getY();
             final DirectionVector vector = action.toVector();
             final double dx = vector.getX();
             final double dy = vector.getY();
-            final int nextx = (int) Math.floor(x+dx);
-            final int nexty = (int) Math.floor(y+dy);
+            final int nextx = (int)(x+dx);
+            final int nexty = (int)(y+dy);
             if(!this.walls.get(nextx,nexty)) {
                 final Position nextState = PositionStandard.newInstance(nextx, nexty);
                 final int cost = this.costFn.eval(nextState);
@@ -149,8 +152,8 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
         if(actions == null) {
             return Util.getMaximumCost();
         }
-        int x = this.getStartState().getPacmanPosition().getX();
-        int y = this.getStartState().getPacmanPosition().getY();
+        int x = (int)this.getStartState().getPacmanPosition().getX();
+        int y = (int)this.getStartState().getPacmanPosition().getY();
         
         int cost = 0;
         for(Direction action : actions) {
@@ -158,8 +161,8 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
             final DirectionVector vector = action.toVector();
             final double dx = vector.getX();
             final double dy = vector.getY();
-            x = (int)Math.floor(x+dx);
-            y = (int)Math.floor(y+dy);
+            x = (int)(x+dx);
+            y = (int)(y+dy);
             if(this.walls.get(x,y)) {
                 return Util.getMaximumCost();
             }
@@ -168,8 +171,12 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
         return cost;
     }
 
-    public Position getGoal() {
-        return goal;
+    public int getGoalX() {
+        return goalX;
+    }
+    
+    public int getGoalY() {
+        return goalY;
     }
 
     @Override

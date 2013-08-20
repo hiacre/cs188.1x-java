@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import util.Position;
@@ -16,23 +12,26 @@ public class GameState2 {
     private boolean tr;
     private boolean bl;
     private boolean br;
-    private final Position size;
+    private final int width;
+    private final int height;
     
     public GameState2(
             final Position position,
-            final Position size,
+            final int width,
+            final int height,
             final boolean visitedTopLeft,
             final boolean visitedTopRight,
             final boolean visitedBottomLeft,
             final boolean visitedBottomRight) {
         this.position = position;
+        this.width = width;
+        this.height = height;
         this.tl = visitedTopLeft;
         this.tr = visitedTopRight;
         this.bl = visitedBottomLeft;
         this.br = visitedBottomRight;
-        this.size = size;
-        final int right = size.getX();
-        final int top = size.getY();
+        final int right = width;
+        final int top = height;
         if(position.getX() == 1 && position.getY() == 1) {
             this.bl = true;
         }
@@ -51,17 +50,15 @@ public class GameState2 {
     public static GameState2 fromGameState(final GameState2 gameState) {
         final GameState2 gs = gameState;
         return new GameState2(
-                 gs.getPosition(),
-                 gs.getSize(),
-                 gs.getVisitedTopLeft(),
-                 gs.getVisitedTopRight(),
-                 gs.getVisitedBottomLeft(),
-                 gs.getVisitedBottomRight());
+            gs.getPosition(),
+            gs.getWidth(),
+            gs.getHeight(),
+            gs.getVisitedTopLeft(),
+            gs.getVisitedTopRight(),
+            gs.getVisitedBottomLeft(),
+            gs.getVisitedBottomRight());
     }
 
-    public Position getSize() {
-        return size;
-    }
     public Position getPosition() {
         return position;
     }
@@ -77,10 +74,17 @@ public class GameState2 {
     public boolean getVisitedBottomRight() {
         return this.br;
     }
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
+    }
     public GameState2 copy(final GameState2 gameState) {
         return new GameState2(
                         gameState.getPosition(),
-                        gameState.getSize(),
+                        gameState.getWidth(),
+                        gameState.getHeight(),
                         gameState.getVisitedTopLeft(),
                         gameState.getVisitedTopRight(),
                         gameState.getVisitedBottomLeft(),

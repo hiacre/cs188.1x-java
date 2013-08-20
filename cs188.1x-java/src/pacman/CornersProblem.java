@@ -105,14 +105,14 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
         if(actions == null) {
             return Util.getMaximumCost();
         }
-        int x = startingPosition.getX();
-        int y = startingPosition.getY();
+        int x = (int)startingPosition.getX();
+        int y = (int)startingPosition.getY();
         for(Direction action : actions) {
             final DirectionVector v = action.toVector();
             final double dx = v.getX();
             final double dy = v.getY();
-            x = (int) Math.floor(x + dx);
-            y = (int) Math.floor(y + dy);
+            x = (int)(x + dx);
+            y = (int)(y + dy);
             if(walls.get(x,y)) {
                 return Util.getMaximumCost();
             }

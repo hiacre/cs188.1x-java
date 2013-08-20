@@ -1,21 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package util;
-
 
 public class PositionStandard implements Position {
 
-    private final int x;
-    private final int y;
+    private final double x;
+    private final double y;
     
-    private PositionStandard(final int x, final int y) {
+    private PositionStandard(final double x, final double y) {
         this.x = x;
         this.y = y;
     }
     
-    public static PositionStandard newInstance(final int x, final int y) {
+    public static PositionStandard newInstance(final double x, final double y) {
         return new PositionStandard(x, y);
     }
     
@@ -23,24 +18,34 @@ public class PositionStandard implements Position {
      * Finds the nearest grid point to a position (discretizes)
      */
     public static Position nearestPoint(final double x, final double y) {
-        final int newX = (int)(x+0.5);
-        final int newY = (int)(y+0.5);
-        return new PositionStandard(newX, newY);
+        final int gridRow = (int)(x+0.5);
+        final int gridCol = (int)(y+0.5);
+        return new PositionStandard(gridRow, gridRow);
     }
     
     @Override
-    public int getX() {
+    public double getX() {
         return x;
     }
 
     @Override
-    public int getY() {
+    public double getY() {
         return y;
     }
 
     @Override
-    public int manhattanDistance(final Position point) {
+    public double manhattanDistance(final Position point) {
         return Math.abs(getX()-point.getX()) + Math.abs(getY()-point.getY());
+    }
+
+    @Override
+    public int getRoundedX() {
+        return (int)(x+0.5);
+    }
+
+    @Override
+    public int getRoundedY() {
+        return (int)(y+0.5);
     }
     
 }

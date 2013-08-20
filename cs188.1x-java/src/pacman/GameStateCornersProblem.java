@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.List;
@@ -17,7 +13,7 @@ public interface GameStateCornersProblem extends IGameState {
     
     public Position getPacmanPosition();
 
-    public boolean hasFood(Position corner);
+    public boolean hasFood(int x, int y);
 
     public List<Boolean> getCornersState();
 

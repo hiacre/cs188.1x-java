@@ -36,25 +36,21 @@ public class Actions {
     public static List<Direction> getPossibleActions(final Configuration config, final Grid walls) {
         final List<Direction> possible = new ArrayList<>();
         final Position pos = config.getPosition();
-       
-        final int x = pos.getX();
-        final int y = pos.getY();
-       
-        // in the original Python, some rounding occurs here,
-        // so it's possible that Position should be able to store floating point values.
-        // or this might have been put in to deal with a Python deficiency.
-        final int x_int = x;
-        final int y_int = y;
+        
+        final double x = pos.getX();
+        final double y = pos.getY();
+        final int x_int = pos.getRoundedX();
+        final int y_int = pos.getRoundedY();
 
-        //# In between grid points, all agents must continue straight
+        // In between grid points, all agents must continue straight
         if(Math.abs(x - x_int) + Math.abs(y - y_int) > TOLERANCE) {
             return Arrays.asList(config.getDirection());
         }
         for(Entry<Direction, DirectionVector> dirVec : _directions.entrySet()) {
             final Direction dir = dirVec.getKey();
             final DirectionVector vec = dirVec.getValue();
-            final int next_y = y_int + vec.getY();
-            final int next_x = x_int + vec.getX();
+            final int next_y = y_int + (int)vec.getY();
+            final int next_x = x_int + (int)vec.getX();
             if(!walls.get(next_x, next_y)) {
                 possible.add(dir);
             }
@@ -64,14 +60,14 @@ public class Actions {
     }
 
     public static List<Position> getLegalNeighbors(final Position position, final Grid walls) {
-        final int x_int = position.getX();
-        final int y_int = position.getY();
+        final int x_int = position.getRoundedX();
+        final int y_int = position.getRoundedY();
         final List neighbors = new ArrayList();
         for(Entry<Direction, DirectionVector> dirVec : _directions.entrySet()) {
             final Direction dir = dirVec.getKey();
             final DirectionVector vec = dirVec.getValue();
-            final int dx = vec.getX();
-            final int dy = vec.getY();
+            final int dx = (int)vec.getX();
+            final int dy = (int)vec.getY();
             final int next_x = x_int + dx;
             if(next_x < 0 || next_x == walls.getWidth()) {
                 continue;
@@ -89,10 +85,10 @@ public class Actions {
 
     public static Position getSuccessor(final Position position, final Direction action) {
         final DirectionVector posVec = action.toVector();
-        final int dx = posVec.getX();
-        final int dy = posVec.getY();
-        final int x = position.getX();
-        final int y = position.getY();
+        final double dx = posVec.getX();
+        final double dy = posVec.getY();
+        final double x = position.getX();
+        final double y = position.getY();
         return PositionStandard.newInstance(x + dx, y + dy);
     }
 }

@@ -1,7 +1,7 @@
 package pacman;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import util.Position;
+import util.PositionStandard;
 
 /**
  ******************
@@ -41,23 +41,19 @@ public class ApproximateSearchAgent extends AgentAbstract {
 
         This might be a useful helper function for your ApproximateSearchAgent.
         */
-    public int mazeDistance(final Position point1, final Position point2, final GameState1 gameState) {
-        final int x1 = point1.getX();
-        final int y1 = point1.getY();
-        final int x2 = point2.getX();
-        final int y2 = point2.getY();
+    public int mazeDistance(final int x1, final int y1, final int x2, final int y2, final GameState1 gameState) {
         final Grid walls = gameState.getWalls();
         if(walls.get(x1, y1)) {
-            throw new RuntimeException("point1 is a wall: " + point1.toString());
+            throw new RuntimeException("point1 is a wall: " + PositionStandard.newInstance(x1, y1));
         }
         if(walls.get(x2, y2)) {
-            throw new RuntimeException("point2 is a wall: " + point2.toString());
+            throw new RuntimeException("point2 is a wall: " + PositionStandard.newInstance(x2, y2));
         }
         final PositionSearchProblem prob = new PositionSearchProblem(
                 gameState,
                 null,
-                point2,
-                gameState,
+                PositionStandard.newInstance(x2, y2),
+                new GameStatePositionSearchProblem(gameState.getPacmanPosition()),
                 false,
                 false);
         return new BreadthFirstSearch().getActions(prob).size();

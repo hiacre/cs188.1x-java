@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.Position;
+import util.PositionStandard;
 
 /**
  *
@@ -17,7 +18,7 @@ public class GameStateData {
     private Integer agentMoved;
     private Object capsuleEaten;
     private final Object foodAdded;
-    private Object foodEaten;
+    private Position foodEaten;
     private List agentStates;
     private GridCapsules capsules;
     private Grid food;
@@ -59,12 +60,12 @@ public class GameStateData {
 
     @Override
     public int hashCode() {
-        throw new NotImplementedException();
+
     }
     
     @Override
     public String toString() {
-        throw new NotImplementedException();
+
     }
     
     
@@ -189,8 +190,8 @@ public class GameStateData {
         this.food = food;
     }
 
-    void setFoodEaten(Position position) {
-        this.foodEaten = position;
+    void setFoodEaten(final int x, final int y) {
+        this.foodEaten = PositionStandard.newInstance(x, y);
     }
 
     boolean getLose() {
@@ -201,7 +202,7 @@ public class GameStateData {
         this.win = isWin;
     }
 
-    void setCapsuleEaten(Position position) {
-        this.capsuleEaten = position;
+    void setCapsuleEaten(final int x, final int y) {
+        this.capsuleEaten = PositionStandard.newInstance(x, y);
     }
 }

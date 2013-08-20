@@ -34,8 +34,8 @@ public class GameStateCornersProblemStandard implements GameStateCornersProblem 
     }
 
     @Override
-    public boolean hasFood(Position corner) {
-        return walls.get(corner.getX(), corner.getY());
+    public boolean hasFood(final int x, final int y) {
+        return walls.get(x,y);
     }
     
     @Override

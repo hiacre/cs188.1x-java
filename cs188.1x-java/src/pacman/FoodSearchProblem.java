@@ -54,16 +54,15 @@ public class FoodSearchProblem implements SearchProblem<GameStateFoodSearchProbl
         for(Direction direction : Arrays.asList(Direction.North, Direction.South, Direction.East, Direction.West)) {
             final Position pos = state.getPacmanPosition();
             final DirectionVector dv = direction.toVector();
-            final int x = pos.getX();
-            final int y = pos.getY();
+            final double x = pos.getX();
+            final double y = pos.getY();
             final double dx = dv.getX();
             final double dy = dv.getY();
-            final int nextx = (int) Math.floor(x + dx);
-            final int nexty = (int) Math.floor(y + dy);
+            final int nextx = (int)(x + dx);
+            final int nexty = (int)(y + dy);
             if(!walls.get(nextx, nexty)) {
                 final Grid nextFood = state.getFood().copy();
                 nextFood.set(nextx, nexty, false);
-                //successors.append( ( ((nextx, nexty), nextFood), direction, 1) );
                 successors.add(
                         new GameStateSuccessorFoodSearchProblem(
                             new GameStateFoodSearchProblemStandard(
@@ -82,16 +81,16 @@ public class FoodSearchProblem implements SearchProblem<GameStateFoodSearchProbl
     public int getCostOfActions(final List<Direction> actions) {
         
         final Position pos = getStartState().getPacmanPosition();
-        int x = pos.getX();
-        int y = pos.getY();
+        int x = pos.getFloorX();
+        int y = pos.getFloorY();
         int cost = 0;
         for(Direction action : actions) {
             // figure out the next state and see whether it's legal
             final DirectionVector vector = action.toVector();
             final double dx = vector.getX();
             final double dy = vector.getY();
-            x = (int) Math.floor(x + dx);
-            y = (int) Math.floor(y + dy);
+            x = (int)(x + dx);
+            y = (int)(y + dy);
             if(walls.get(x,y)) {
                 return Util.getMaximumCost();
             }

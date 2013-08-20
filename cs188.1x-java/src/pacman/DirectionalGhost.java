@@ -52,7 +52,7 @@ public class DirectionalGhost extends GhostAgent {
         // Select best actions given the state
         final List<Integer> distancesToPacman = new ArrayList<>();
         for(Position pos2 : newPositions) {
-            distancesToPacman.add(pos2.manhattanDistance(pacmanPosition));
+            distancesToPacman.add((int)Math.round(pos2.manhattanDistance(pacmanPosition)));
         }
         final int bestScore;
         final double bestProb;

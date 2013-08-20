@@ -136,9 +136,8 @@ public class GridStandard implements Grid {
         int currentInt = 0;
         for(int i=0; i<this.height * this.width; i++) {
             final int bit = CELLS_PER_INT - (i % CELLS_PER_INT) - 1;
-            final Position pos = cellIndexToPosition(i);
-            final int x = pos.getX();
-            final int y = pos.getY();
+            final int x = cellIndexToX(i);
+            final int y = cellIndexToY(i);
             if(get(x,y)) {
                 currentInt += Math.pow(2, bit);
             }
@@ -151,10 +150,12 @@ public class GridStandard implements Grid {
         return bits;
     }
     
-    private Position cellIndexToPosition(final int index) {
-        final int x = index / height;
-        final int y = index % height;
-        return PositionStandard.newInstance(x, y);
+    private int cellIndexToX(final int index) {
+        return index / height;
+    }
+    
+    private int cellIndexToY(final int index) {
+        return index % height;
     }
     
     /** Fills in data from a bit-level representation */
@@ -165,16 +166,15 @@ public class GridStandard implements Grid {
                 if(cell == width * height) {
                     break;
                 }
-                final Position pos = cellIndexToPosition(cell);
-                final int x = pos.getX();
-                final int y = pos.getY();
+                final int x = cellIndexToX(cell);
+                final int y = cellIndexToY(cell);
                 this.set(x,y, bit);
                 cell += 1;
             }
         }
     }
-            
-            
+    
+    
     private List<Boolean> unpackInt(int packed, final int size) {
         final List<Boolean> bools = new ArrayList();
         if(packed < 0) {

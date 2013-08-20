@@ -23,26 +23,3 @@ textDisplay
 util
 
 
-
-Something is weird and screwy about positions and vectors.  It's not clear which
-positions are grid-based (entirely integers), and which are... sub-grid-based (floats).
-
-Evidence
-
-getPossibleActions
-==================
-Gets a configuration's x and y.
-It feels the need to round x and y to the nearest integers.
-If these floats and integers are outside a certain tolerance, then configuration's direction is returned.
-   The direction is whatever was given to configuration.
-
-
-
-
-A Search is an object that implements a search algorithm.
-The algorithm is called via getActions, and it takes a SearchProblem.
-
-Problems
-========
-What is a problem?
-

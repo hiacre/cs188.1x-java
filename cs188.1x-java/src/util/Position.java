@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package util;
 
 /**
@@ -12,8 +8,12 @@ package util;
  */
 public interface Position {
     
-    public int getX();
-    public int getY();
-    public int manhattanDistance(Position point);
+    public double getX();
+    public double getY();
+    public double manhattanDistance(Position point);
+    public int getRoundedX();
+    public int getRoundedY();
+    public int getFloorX();
+    public int getFloorY();
     
 }
