@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.ArrayList;
@@ -21,7 +17,7 @@ import util.Util;
       foodGrid:       a Grid (see game.py) of either True or False, specifying remaining food
  * @author archie
  */
-public class FoodSearchProblem {
+public class FoodSearchProblem implements SearchProblem<GameStateFoodSearchProblem, GameStateSuccessorFoodSearchProblem> {
     
     private final Position startPosition;
     private final Grid startFood;
@@ -39,15 +35,18 @@ public class FoodSearchProblem {
         this.heuristicInfo = new HashMap();  // A dictionary for the heuristic to store information
     }
 
+    @Override
     public GameStateFoodSearchProblem getStartState() {
         return startingGameState;
     }
 
+    @Override
     public boolean isGoalState(final GameStateFoodSearchProblem state) {
         return state.isEmpty();
     }
 
     /** Returns successor states, the actions they require, and a cost of 1. */
+    @Override
     public List getSuccessors(final GameStateFoodSearchProblem state) {
         
         final List successors = new ArrayList();
@@ -66,7 +65,7 @@ public class FoodSearchProblem {
                 nextFood.set(nextx, nexty, false);
                 //successors.append( ( ((nextx, nexty), nextFood), direction, 1) );
                 successors.add(
-                        new GameStateSuccessorFoodSearchProblemStandard(
+                        new GameStateSuccessorFoodSearchProblem(
                             new GameStateFoodSearchProblemStandard(
                                 PositionStandard.newInstance(nextx, nexty),
                                 nextFood),
@@ -79,7 +78,8 @@ public class FoodSearchProblem {
 
     /** Returns the cost of a particular sequence of actions.  If those actions
         include an illegal move, return maximum cost */
-    private int getCostOfActions(final List<Direction> actions) {
+    @Override
+    public int getCostOfActions(final List<Direction> actions) {
         
         final Position pos = getStartState().getPacmanPosition();
         int x = pos.getX();
@@ -98,5 +98,10 @@ public class FoodSearchProblem {
             cost += 1;
         }
         return cost;
+    }
+    
+    @Override
+    public int getExpanded() {
+        return _expanded;
     }
 }
