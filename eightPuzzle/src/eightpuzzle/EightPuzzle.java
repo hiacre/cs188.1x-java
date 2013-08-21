@@ -3,8 +3,6 @@ package eightpuzzle;
 import java.util.List;
 import pacman.BreadthFirstSearch;
 import pacman.Direction;
-import pacman.EightPuzzleSearchProblem;
-import pacman.GameStateEightPuzzleSearchProblem;
 
 /**
  *
