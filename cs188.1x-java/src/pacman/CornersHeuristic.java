@@ -16,13 +16,13 @@ import util.Position;
         it should be admissible (as well as consistent).
  * @author archie
  */
-public class CornersHeuristic implements Heuristic {
+public class CornersHeuristic implements Heuristic<CornersProblem> {
 
     public CornersHeuristic() {
     }
 
     @Override
-    public int calculate(GameState1 state, SearchProblem problem) {
+    public int calculate(GameState1 state, CornersProblem problem) {
 
         final List<Position> corners = problem.getCorners();   // These are the corner coordinates
         final Grid walls = problem.getWalls();  // These are the walls of the maze, as a Grid

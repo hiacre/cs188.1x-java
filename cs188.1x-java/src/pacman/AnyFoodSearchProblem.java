@@ -25,7 +25,8 @@ public class AnyFoodSearchProblem extends PositionSearchProblem {
         super(
             gameState,
             new CostFunctionAlwaysOne(),
-            gameState.getPacmanPosition(),
+            null,
+            null,
             new GameStatePositionSearchProblem(gameState.getPacmanPosition()),
             null,
             null);

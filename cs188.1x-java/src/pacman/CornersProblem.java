@@ -37,7 +37,7 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
         corners.add(PositionStandard.newInstance(right, 1));
         corners.add(PositionStandard.newInstance(right, top));
         for(Position corner : corners) {
-            if(!startingGameState.hasFood(corner)) {
+            if(!startingGameState.hasFood(corner.getRoundedX(), corner.getRoundedY())) {
                 logger.log(Level.WARNING, "Warning: no food in corner {0}", corner.toString());
             }
         }

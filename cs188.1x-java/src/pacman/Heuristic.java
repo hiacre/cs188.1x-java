@@ -4,7 +4,7 @@ package pacman;
  *
  * @author archie
  */
-public interface Heuristic {
+public interface Heuristic<P extends SearchProblem> {
     
-    public int calculate(GameState1 state, SearchProblem problem);
+    public int calculate(GameState1 state, P problem);
 }

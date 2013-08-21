@@ -51,7 +51,8 @@ public class ApproximateSearchAgent extends AgentAbstract {
         final PositionSearchProblem prob = new PositionSearchProblem(
                 gameState,
                 null,
-                PositionStandard.newInstance(x2, y2),
+                x2,
+                y2,
                 new GameStatePositionSearchProblem(gameState.getPacmanPosition()),
                 false,
                 false);
