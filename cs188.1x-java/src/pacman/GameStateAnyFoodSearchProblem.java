@@ -6,7 +6,7 @@ import util.Position;
  *
  * @author archie
  */
-public class GameStateAnyFoodSearchProblem implements IGameState {
+public class GameStateAnyFoodSearchProblem implements GameState {
     
     private final Position pacmanPosition;
     

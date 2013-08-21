@@ -65,7 +65,7 @@ public class FoodSearchProblem implements SearchProblem<GameStateFoodSearchProbl
                 nextFood.set(nextx, nexty, false);
                 successors.add(
                         new GameStateSuccessorFoodSearchProblem(
-                            new GameStateFoodSearchProblemStandard(
+                            new GameStateFoodSearchProblem(
                                 PositionStandard.newInstance(nextx, nexty),
                                 nextFood),
                             direction,

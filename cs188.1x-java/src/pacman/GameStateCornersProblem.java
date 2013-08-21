@@ -7,14 +7,31 @@ import util.Position;
  *
  * @author archie
  */
-public interface GameStateCornersProblem extends IGameState {
+public class GameStateCornersProblem {
 
-    public Grid getWalls();
+    private final Grid walls;
+    private final Position pacmanPosition;
+    private final List cornersState;
     
-    public Position getPacmanPosition();
+    public GameStateCornersProblem(final Grid walls, final Position pacmanPosition, final List cornersState) {
+        this.walls = walls;
+        this.pacmanPosition = pacmanPosition;
+        this.cornersState = cornersState;
+    }
 
-    public boolean hasFood(int x, int y);
+    public Grid getWalls() {
+        return walls;
+    }
 
-    public List<Boolean> getCornersState();
+    public Position getPacmanPosition() {
+        return pacmanPosition;
+    }
 
+    public boolean hasFood(final int x, final int y) {
+        return walls.get(x,y);
+    }
+    
+    public List getCornersState() {
+        return this.cornersState;
+    }
 }

@@ -10,12 +10,12 @@ package pacman;
  */
 class GameStateSuccessorCornersProblemStandard implements GameStateSuccessorCornersProblem {
     
-    private final GameStateCornersProblemStandard gameState;
+    private final GameStateCornersProblem gameState;
     private final Direction action;
     private final int costOfActions;
 
     public GameStateSuccessorCornersProblemStandard(
-            final GameStateCornersProblemStandard gameState,
+            final GameStateCornersProblem gameState,
             final Direction action,
             final int costOfActions) {
         this.gameState = gameState;

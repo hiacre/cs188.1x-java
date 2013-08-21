@@ -4,6 +4,6 @@ package pacman;
  *
  * @author archie
  */
-public interface IGameState {
+public interface GameState {
     
 }

@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author archie
  */
-public interface SearchProblem<GS extends IGameState, GSS extends GameStateSuccessor> {
+public interface SearchProblem<GS extends GameState, GSS extends GameStateSuccessor> {
     
     /** Returns the start state for the search problem */
     public GS getStartState();

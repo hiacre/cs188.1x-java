@@ -23,3 +23,61 @@ textDisplay
 util
 
 
+GameState
+=========
+There is a GameState interface.
+
+GameState1
+    getAndResetExplored
+    getLegalActions
+    generateSuccessor
+    getLegalPacmanActions
+    generatePacmanSuccessor
+    getPacmanState
+    getPacmanPosition
+    getGhostStates
+    getGhostState
+    getGhostPosition
+    getGhostPositions
+    getNumAgents
+    getScore
+    getCapsules
+    getNumFood
+    getFood
+    getWalls
+    hasFood
+    hasWall
+    isLose
+    isWin
+GameState2
+    getPosition
+    getVisitedTL/TR/BL/BR
+    getWidth/Height
+GameStateAnyFoodSearchProblem -> 
+    getPacmanPosition
+GameStateCornersProblem
+    getCornersState
+    getPacmanPosition
+    getWalls
+    hasFood
+GameStateEightPuzzleSearchProblem
+    getSuccessor
+    isGoal
+    legalMoves
+GameStateFoodSearchProblem
+    getFood
+    getPacmanPosition
+    getWalls
+    isEmpty
+GameStatePositionSearchProblem
+    getPacmanPosition
+
+What do all GameStates have in common?
+
+They all have getPacmanPosition, except for GameStateEightPuzzleSearchProblem.
+
+So, perhaps we need a GameStatePacman interface, which extends GameState.
+Doesn't really buy us much though, just to say that each class supports getPacmanPosition.
+
+
+GameState2 doesn't appear to be used by anything.  Definitely look into this.
