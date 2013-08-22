@@ -25,7 +25,7 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
     private final Grid walls;
 
     /** Stores the walls, pacman's starting position and corners. */
-    public CornersProblem(final GameStateCornersProblem startingGameState) {
+    public CornersProblem(final GameState1 startingGameState) {
 
         walls = startingGameState.getWalls();
         startingPosition = startingGameState.getPacmanPosition();
