@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.ArrayList;
@@ -13,7 +9,7 @@ import util.Util;
  * An agent controlled by the keyboard.
  * @author archie
  */
-public class KeyboardAgent implements Agent {
+public class KeyboardAgent extends AgentAbstract {
 
     // NOTE: Arrow keys also work.
     private final static char WEST_KEY  = 'a';
@@ -22,16 +18,14 @@ public class KeyboardAgent implements Agent {
     private final static char SOUTH_KEY = 's';
     private final static char STOP_KEY = 'q';
     private Direction lastMove;
-    private final int index;
     private List<Character> keys;
 
     public KeyboardAgent() {
         this(0);
     }
     public KeyboardAgent(final int index) {
-
+        super(index);
         lastMove = Direction.Stop;
-        this.index = index;
         this.keys = new ArrayList<>();
     }
 
@@ -44,7 +38,7 @@ public class KeyboardAgent implements Agent {
             this.keys = keys2;
         }
 
-        final Collection<Direction> legal = state.getLegalActions(index);
+        final Collection<Direction> legal = state.getLegalActions(getIndex());
         Direction move = getMove(legal);
 
         if(Direction.Stop.equals(move)) {

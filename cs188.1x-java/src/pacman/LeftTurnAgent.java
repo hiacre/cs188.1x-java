@@ -6,7 +6,11 @@ import java.util.Collection;
  * An agent that turns left at every opportunity
  * @author archie
  */
-public class LeftTurnAgent implements Agent {
+public class LeftTurnAgent extends AgentAbstract {
+
+    public LeftTurnAgent() {
+        super(0);
+    }
 
     @Override
     public Direction getAction(final GameState1 state) {
