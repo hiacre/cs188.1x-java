@@ -49,10 +49,6 @@ GameState1
     hasWall
     isLose
     isWin
-GameState2
-    getPosition
-    getVisitedTL/TR/BL/BR
-    getWidth/Height
 GameStateAnyFoodSearchProblem -> 
     getPacmanPosition
 GameStateCornersProblem
@@ -79,5 +75,3 @@ They all have getPacmanPosition, except for GameStateEightPuzzleSearchProblem.
 So, perhaps we need a GameStatePacman interface, which extends GameState.
 Doesn't really buy us much though, just to say that each class supports getPacmanPosition.
 
-
-GameState2 doesn't appear to be used by anything.  Definitely look into this.
