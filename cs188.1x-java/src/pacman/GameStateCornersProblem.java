@@ -7,7 +7,7 @@ import util.Position;
  *
  * @author archie
  */
-public class GameStateCornersProblem {
+public class GameStateCornersProblem implements GameState {
 
     private final Grid walls;
     private final Position pacmanPosition;
