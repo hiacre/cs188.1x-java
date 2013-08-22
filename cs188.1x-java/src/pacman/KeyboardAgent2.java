@@ -37,5 +37,4 @@ public class KeyboardAgent2 extends KeyboardAgent {
         }
         return Direction.Stop;
     }
-
 }

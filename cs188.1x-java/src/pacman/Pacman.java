@@ -138,7 +138,7 @@ public class Pacman {
         // Choose a Pacman agent
         final boolean noKeyboard =
                 options.get("gameToReplay") == null && (options.contains("textGraphics") || options.contains("quietGraphics"));
-        final Object pacmanType = loadAgent(AgentDirectory.valueOf(options.get("pacman")), noKeyboard);
+        final Object pacmanType = loadAgent(AgentDirectoryPacman.valueOf(options.get("pacman")), noKeyboard);
         final Map agentOpts = parseAgentArgs(options.get("agentArgs"));
         if(Integer.parseInt(options.get("numTraining")) > 0) {
             args.put("numTraining", options.get("numTraining"));
@@ -196,7 +196,7 @@ public class Pacman {
         return args;
     }
 
-    private static Object loadAgent(final AgentDirectory agentName, final Object nographics) {
+    private static Object loadAgent(final AgentDirectoryPacman agentName, final Object nographics) {
         // Looks through all pythonPath Directories for the right module,
 //        pythonPathStr = os.path.expandvars("$PYTHONPATH")
 //        if pythonPathStr.find(';') == -1:
@@ -229,7 +229,7 @@ public class Pacman {
         // Return a reference to the located agentName, which is a class.
         // Example, RandomGhost, which extends GhostAgent, which extends Agent.
         
-        return agentName.getAgentType();
+        return agentName.getFactory();
     }
 
 //    private void replayGame(final Layout layout, final Object actions, final Object display) {

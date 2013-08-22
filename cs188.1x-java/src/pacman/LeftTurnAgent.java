@@ -34,6 +34,4 @@ public class LeftTurnAgent extends AgentAbstract {
         }
         return Direction.Stop;
     }
-
-
 }

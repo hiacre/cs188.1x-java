@@ -17,6 +17,7 @@ public class ClosestDotSearchAgent extends SearchAgent {
         super(null, null, null);
     }
             
+    @Override
     public void registerInitialState(final GameState1 state) {
         this.actions = new ArrayList<>();
         GameState1 currentState = state;

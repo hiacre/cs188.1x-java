@@ -24,5 +24,4 @@ public class StayWestSearchAgent extends SearchAgent {
             null
             );
     }
-
 }

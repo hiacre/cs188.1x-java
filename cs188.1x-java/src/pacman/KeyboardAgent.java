@@ -81,5 +81,4 @@ public class KeyboardAgent extends AgentAbstract {
     protected List<Character> getKeys() {
         return keys;
     }
-
 }

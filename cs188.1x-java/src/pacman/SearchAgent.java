@@ -24,6 +24,9 @@ public class SearchAgent extends AgentAbstract {
     private final ProblemFactory searchType;
     private final Heuristic heur;
 
+    public SearchAgent() {
+        this(new DepthFirstSearch(), new PositionSearchProblemFactory(), new NullHeuristic());
+    }
     public SearchAgent(final Search searchFunc, final ProblemFactory problem, final Heuristic heuristic) {
         super(null);
         this.searchFunction = (searchFunc == null ? new DepthFirstSearch() : searchFunc);
@@ -100,5 +103,4 @@ public class SearchAgent extends AgentAbstract {
             return Direction.Stop;
         }
     }
-
 }
