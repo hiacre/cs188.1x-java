@@ -19,7 +19,7 @@ class PositionSearchProblemFactory implements ProblemFactory {
     @Override
     public PositionSearchProblem makeProblem(GameState1 state) {
         return new PositionSearchProblem(
-                state, costFunction, null, new GameStatePositionSearchProblem(state.getPacmanPosition()), null, null);
+                state, costFunction, null, null, new GameStatePositionSearchProblem(state.getPacmanPosition()), null, null);
     }
     
 }

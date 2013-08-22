@@ -47,5 +47,15 @@ public class PositionStandard implements Position {
     public int getRoundedY() {
         return (int)(y+0.5);
     }
+
+    @Override
+    public int getFloorX() {
+        return (int)x;
+    }
+
+    @Override
+    public int getFloorY() {
+        return (int)y;
+    }
     
 }

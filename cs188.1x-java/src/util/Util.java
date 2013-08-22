@@ -136,19 +136,20 @@ public class Util {
     }
     
     /** The Manhattan distance heuristic for a PositionSearchProblem */
-    public int manhattanHeuristic(final Position position, final PositionSearchProblem problem, Map info) {
+    public double manhattanHeuristic(final Position position, final PositionSearchProblem problem, Map info) {
         final Position xy1 = position;
-        // Problem is PositionSearchProblem
-        final Position xy2 = problem.getGoal();
-        return Math.abs(xy1.getX() - xy2.getX()) + Math.abs(xy1.getY() - xy2.getY());
+        final int x2 = problem.getGoalX();
+        final int y2 = problem.getGoalY();
+        return Math.abs(xy1.getX() - x2) + Math.abs(xy1.getY() - y2);
     }
 
     /** The Euclidean distance heuristic for a PositionSearchProblem */
     public double euclideanHeuristic(final Position position, final PositionSearchProblem problem, Map info) {
         final Position xy1 = position;
-        final Position xy2 = problem.getGoal();
+        final int x2 = problem.getGoalX();
+        final int y2 = problem.getGoalY();
         return  Math.sqrt(
-                    Math.pow(xy1.getX() - xy2.getX(), 2) +
-                    Math.pow(xy1.getY() - xy2.getY(), 2));
+                    Math.pow(xy1.getX() - x2, 2) +
+                    Math.pow(xy1.getY() - y2, 2));
     }    
 }

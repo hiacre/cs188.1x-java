@@ -99,12 +99,12 @@ public class CounterStandard<K extends Comparable> implements Counter<K> {
     }
 
     @Override
-    public Map<K, Double> getNormalized() throws IllegalStateException {
+    public Counter<K> getNormalized() throws IllegalStateException {
         double totalCount = getTotalCount();
         
-        final Map<K, Double> result = new HashMap<>();
+        final Counter<K> result = new CounterStandard<>();
         for(Entry<K, Double> entry : map.entrySet()) {
-            result.put(entry.getKey(), Double.valueOf(entry.getValue()) / totalCount);
+            result.put(entry.getKey(), entry.getValue() / totalCount);
         }
         return result;
     }

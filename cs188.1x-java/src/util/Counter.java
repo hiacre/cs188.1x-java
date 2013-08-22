@@ -5,7 +5,6 @@
 package util;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,7 +39,7 @@ public interface Counter<K extends Comparable> {
     /** Gets the sum of counts for all keys. */
     public double getTotalCount();
     
-    /** Returns a map containing the same keys, but with values changed
+    /** Returns a Counter containing the same keys, but with values changed
      * such that the total count is 1.  The ratio of counts for all keys
      * will remain the same.  Note that normalizing an empty Counter will
      * result in an IllegalStateException.
