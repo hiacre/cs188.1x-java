@@ -7,12 +7,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pacman.OptionParser.Args;
-import pacman.OptionParser.Options;
-import pacman.OptionParser.ParsedArgs;
 import util.Util;
 
 /**
@@ -83,29 +79,17 @@ public class Pacman {
         parser.add_option("-p", "--pacman", "pacman", null,  "the agent TYPE in the pacmanAgents module to use", "TYPE", "KeyboardAgent", null);
         parser.add_option("-t", "--textGraphics", "textGraphics", null, "Display output as text only", null, false, "store_true");
         parser.add_option("-q", "--quietTextGraphics", "quietGraphics", null, "Generate minimal output and no graphics", null, false, "store_true");
-//        parser.add_option('-g', '--ghosts', dest='ghost',
-//                          help=default('the ghost agent TYPE in the ghostAgents module to use'),
-//                          metavar = 'TYPE', default='RandomGhost')
-//        parser.add_option('-k', '--numghosts', type='int', dest='numGhosts',
-//                          help=default('The maximum number of ghosts to use'), default=4)
-//        parser.add_option('-z', '--zoom', type='float', dest='zoom',
-//                          help=default('Zoom the size of the graphics window'), default=1.0)
-//        parser.add_option('-f', '--fixRandomSeed', action='store_true', dest='fixRandomSeed',
-//                          help='Fixes the random seed to always play the same game', default=False)
-//        parser.add_option('-r', '--recordActions', action='store_true', dest='record',
-//                          help='Writes game histories to a file (named by the time they were played)', default=False)
-//        parser.add_option('--replay', dest='gameToReplay',
-//                          help='A recorded game file (pickle) to replay', default=None)
-//        parser.add_option('-a','--agentArgs',dest='agentArgs',
-//                          help='Comma separated values sent to agent. e.g. "opt1=val1,opt2,opt3=val3"')
-//        parser.add_option('-x', '--numTraining', dest='numTraining', type='int',
-//                          help=default('How many episodes are training (suppresses output)'), default=0)
-//        parser.add_option('--frameTime', dest='frameTime', type='float',
-//                          help=default('Time to delay between frames; <0 means keyboard'), default=0.1)
-//        parser.add_option('-c', '--catchExceptions', action='store_true', dest='catchExceptions',
-//                          help='Turns on exception handling and timeouts during games', default=False)
-//        parser.add_option('--timeout', dest='timeout', type='int',
-//                          help=default('Maximum length of time an agent can spend computing in a single game'), default=30)
+        parser.add_option("-g", "--ghosts", "dest", null, "the ghost agent TYPE in the ghostAgents module to use", "TYPE", "RandomGhost", null);
+        parser.add_option("-k", "--numGhosts", "numGhosts", "int", "The maximum number of ghosts to use", null, 4, null);
+        parser.add_option("-z", "--zoom", "zoom", "float", "Zoom the size of the graphics window", null, 1.0, null);
+        parser.add_option("-f", "--fixRandomSeed", "fixRandomSeed", null, "Fixes the random seed to always play the same game", null, false, null);
+        parser.add_option("-r", "--recordActions", "record", null, "Writes game histories to a file (named by the time they were played)", null, false, "store_true");
+        parser.add_option(null, "--replay", "gameToReplay", null, "A recorded game file (pickle) to replay", null, null, null);
+        parser.add_option("-a", "--agentArgs", "agentArgs", null, "Comma separated values sent to agent. e.g. 'opt1=val1,opt2,opt3=val3'", null, null, null);
+        parser.add_option("-x", "--numTraining", "numTraining", "int", "How many episodes are training (suppresses output)", null, 0, null);
+        parser.add_option(null, "--frameTime", "frameTime", "float", "Time to delay between frames; <0 means keyboard", null, 0.1, null);
+        parser.add_option("-c", "--catchExceptions", "catchExceptions", null, "Turns on exception handling and timeouts during games", null, false, "store_true");
+        parser.add_option(null, "--timeout", "timeout", "int", "Maximum length of time an agent can spend computing in a single game", null, 30, null);
 
         final ParsedArgs parsedArgs = parser.parse_args(argv);
         final Options options = parsedArgs.getOptions();
@@ -135,7 +119,7 @@ public class Pacman {
         final AgentFactoryPacman pacmanType = loadAgentPacman(AgentDirectoryPacman.valueOf(options.get("pacman")), noKeyboard);
         final Map agentOpts = parseAgentArgs(options.get("agentArgs"));
         if(Integer.parseInt(options.get("numTraining")) > 0) {
-            args.setNumTraining(options.get("numTraining"));
+            args.setNumTraining(Integer.parseInt(options.get("numTraining")));
             if(!agentOpts.containsKey("numTraining")) {
                 agentOpts.put("numTraining", options.get("numTraining"));
             }
@@ -169,7 +153,7 @@ public class Pacman {
             // import graphicsDisplay
             args.set("display", graphicsDisplay.PacmanGraphics(options.get("zoom"), frameTime = options.get("frameTime")));
         }
-        args.setNumGames(options.get("numGames"));
+        args.setNumGames(Integer.parseInt(options.get("numGames")));
         args.setRecord(options.get("record"));
         args.setCatchExceptions(options.get("catchExceptions"));
         args.setTimeout(options.get("timeout"));
