@@ -29,7 +29,7 @@ public class ClassicGameRules {
     public Game newGame(
             final Layout layout,
             final Agent pacmanAgent,
-            final List<Agent> ghostAgents,
+            final List<GhostAgent> ghostAgents,
             final Object display,
             final Boolean quiet,
             final Boolean catchExceptions) {
@@ -48,7 +48,7 @@ public class ClassicGameRules {
     public Game newGame(
             final Layout layout,
             final Agent pacmanAgent,
-            final List<Agent> ghostAgents,
+            final List<GhostAgent> ghostAgents,
             final Object display) {
         return newGame(layout, pacmanAgent, ghostAgents, display, false, false);
     }

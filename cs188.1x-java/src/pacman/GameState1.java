@@ -24,7 +24,7 @@ import util.Util;
  * @author archie
  */
 public class GameState1 {
-    
+    // TODO rename GameState to something else, and GameState1 to GameState
     private static Set<GameState1> explored = new HashSet<>();
     private GameStateData data;
     private final static int TIME_PENALTY = 1;

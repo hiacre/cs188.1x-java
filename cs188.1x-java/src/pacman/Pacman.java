@@ -7,8 +7,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pacman.OptionParser.Args;
+import pacman.OptionParser.Options;
+import pacman.OptionParser.ParsedArgs;
 import util.Util;
 
 /**
@@ -200,40 +204,28 @@ public class Pacman {
         return agentName.getFactory();
     }
     
-    private static AgentFactoryGhost loadAgent(final AgentDirectoryGhost agentName, final Object nographics) {
-        // Python code establishes the Python paths, and the current working directory.
-        // Loops over the paths, finding the directories
-        // Finds the files (aka modules) in each directory ending with "gents.py"
-        // For each of these modules, imports the module, and looks for an object
-        // in the module called 'agentName'.  
-        // If agentName is found in the module 'keyboardAgents.py' and 'nographics' is specified,
-        // then raise an error (Using the keyboard requires graphics, not text display).
-        // Return a reference to the located agentName, which is a class.
-        // Example, RandomGhost, which extends GhostAgent, which extends Agent.
-        
-        return agentName.getFactory();
-    }
+    private void replayGame(final Layout layout, final List<Direction> actions, final Object display) {
+        final ClassicGameRules rules = new ClassicGameRules();
+        final List<Agent> agents = new ArrayList();
+        agents.add(new GreedyAgent());
+        for(int i=0; i<layout.getNumGhosts(); i++) {
+            agents.add(new RandomGhost(i+1));
+        }
+        final Game game = rules.newGame(layout, agents.get(0), agents.subList(1, agents.size()), display);
+        GameState1 state = game.getState();
+        display.initialize(state.getData());
 
-//    private void replayGame(final Layout layout, final Object actions, final Object display) {
-//        final ClassicGameRules rules = new ClassicGameRules();
-//        final List<Agent> agents = new ArrayList();
-//        agents.add(new GreedyAgent());
-//        for(int i=0; i<layout.getNumGhosts(); i++) {
-//            agents.add(new RandomGhost(i+1));
-//        }
-//        final Game game = rules.newGame(layout, agents.get(0), agents.subList(1, agents.size()), display);
-//        GameState state = game.getState();
-//        display.initialize(state.getData());
-//
-//        for(Action action : actions) {
-//            // Execute the action
-//            state = state.generateSuccessor( *action );
-//            # Change the display
-//            display.update( state.data )
-//            # Allow for game specific conditions (winning, losing, etc.)
-//            rules.process(state, game)
-//
-//        display.finish()
+        for(Direction action : actions) {
+            // Execute the action
+            state = state.generateSuccessor(null, action);
+            // Change the display
+            display.update( state.getData() );
+            // Allow for game specific conditions (winning, losing, etc.)
+            rules.process(state, game);
+        }
+
+        display.finish();
+    }
 
     private static List<Game> runGames(
             final Layout layout,
