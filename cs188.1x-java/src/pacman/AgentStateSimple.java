@@ -37,6 +37,7 @@ public class AgentStateSimple implements AgentState {
         return configuration;
     }
     
+    @Override
     public void setConfiguration(final Configuration configuration) {
         this.configuration = configuration;
     }

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.io.IOException;
@@ -25,25 +21,23 @@ import util.Util;
  */
 public class Pacman {
 
-    private final Logger logger = Logger.getLogger(getClass().getPackage().getName());
-    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         
         final List<String> argList = Arrays.asList(args);
-        final Map<String, Object> mapArgs = readCommand(argList.subList(1, argList.size()) ); // Get game components based on input
+        final Command mapArgs = readCommand(argList.subList(1, argList.size()) ); // Get game components based on input
         runGames(
-                (Layout)mapArgs.get("layout"),
-                (Agent)mapArgs.get("pacman"),
-                (List<Agent>)mapArgs.get("ghosts"),
-                (Object)mapArgs.get("display"),
-                (int)mapArgs.get("numGames"),
-                (boolean)mapArgs.get("record"),
-                (int)mapArgs.get("numTraining"),
-                (boolean)mapArgs.get("catchExceptions"),
-                (int)mapArgs.get("timeout"));
+                mapArgs.getLayout(),
+                mapArgs.getPacman(),
+                mapArgs.getGhosts(),
+                mapArgs.getDisplay(),
+                mapArgs.getNumGames(),
+                mapArgs.getRecord(),
+                mapArgs.getNumTraining(),
+                mapArgs.isCatchExceptions(),
+                mapArgs.getTimeout());
     }
     
     /*
@@ -73,7 +67,7 @@ public class Pacman {
     }
 
     /** Processes the command used to run pacman from the command line. */
-    private static Map<String, Object> readCommand(final List<String> argv) {
+    private static Command readCommand(final List<String> argv) {
         List<String> usageStr = new ArrayList<>();
         try {
             usageStr = Util.readSmallTextFile("usage.txt");
@@ -128,40 +122,40 @@ public class Pacman {
             random.setSeed(188);
         }
 
-        Map<String, Object> args = new HashMap<>();
+        final Command args = new Command();
         // Choose a layout
-        args.put("layout", Layout.getLayout( options.get("layout")));
-        if(args.get("layout") == null) {
+        args.setLayout(Layout.getLayout( options.get("layout")));
+        if(args.getLayout() == null) {
             throw new RuntimeException("The layout " + options.get("layout") + " cannot be found");
         }
 
         // Choose a Pacman agent
         final boolean noKeyboard =
                 options.get("gameToReplay") == null && (options.contains("textGraphics") || options.contains("quietGraphics"));
-        final Object pacmanType = loadAgent(AgentDirectoryPacman.valueOf(options.get("pacman")), noKeyboard);
+        final AgentFactoryPacman pacmanType = loadAgentPacman(AgentDirectoryPacman.valueOf(options.get("pacman")), noKeyboard);
         final Map agentOpts = parseAgentArgs(options.get("agentArgs"));
         if(Integer.parseInt(options.get("numTraining")) > 0) {
-            args.put("numTraining", options.get("numTraining"));
+            args.setNumTraining(options.get("numTraining"));
             if(!agentOpts.containsKey("numTraining")) {
                 agentOpts.put("numTraining", options.get("numTraining"));
             }
         }
-        Object pacman = pacmanType(agentOpts); // Instantiate Pacman with agentArgs
-        args.put("pacman", pacman);
+        final Agent pacman = pacmanType.make();  // TODO Instantiate Pacman with agentArgs
+        args.setPacman(pacman);
 
         // Don't display training games
         if(agentOpts.containsKey("numTrain")) {
-            options.put("numQuiet", (int)agentOpts.get("numTrain"));
-            options.put("numIgnore", (int)agentOpts.get("numTrain"));
+            options.setNumQuiet((int)agentOpts.get("numTrain"));
+            options.setNumIgnore((int)agentOpts.get("numTrain"));
         }
 
         // Choose a ghost agent
-        Object ghostType = loadAgent(options.get("ghost"), noKeyboard);
-        List<Object> ghostTypes = new ArrayList<>();
+        final AgentFactoryGhost ghostType = loadAgentGhost(AgentDirectoryGhost.valueOf(options.get("ghost")));
+        final List<GhostAgent> ghostTypes = new ArrayList<>();
         for(int i=0; i<Integer.parseInt(options.get("numGhosts")); i++) {
-            ghostTypes.add(ghostType(i+1));
+            ghostTypes.add(ghostType.make(i+1));
         }
-        args.put("ghosts", ghostTypes);
+        args.setGhosts(ghostTypes);
 
         // Choose a display format
         if(options.contains("quietGraphics")) {
@@ -175,10 +169,10 @@ public class Pacman {
             // import graphicsDisplay
             args.set("display", graphicsDisplay.PacmanGraphics(options.get("zoom"), frameTime = options.get("frameTime")));
         }
-        args.put("numGames", options.get("numGames"));
-        args.put("record", options.get("record"));
-        args.put("catchExceptions", options.get("catchExceptions"));
-        args.put("timeout", options.get("timeout"));
+        args.setNumGames(options.get("numGames"));
+        args.setRecord(options.get("record"));
+        args.setCatchExceptions(options.get("catchExceptions"));
+        args.setTimeout(options.get("timeout"));
 
         // Special case: recorded games don't use the runGames method or args structure
         if(options.get("gameToReplay") != null) {
@@ -196,29 +190,33 @@ public class Pacman {
         return args;
     }
 
-    private static Object loadAgent(final AgentDirectoryPacman agentName, final Object nographics) {
-        // Looks through all pythonPath Directories for the right module,
-//        pythonPathStr = os.path.expandvars("$PYTHONPATH")
-//        if pythonPathStr.find(';') == -1:
-//            pythonPathDirs = pythonPathStr.split(':')
-//        else:
-//            pythonPathDirs = pythonPathStr.split(';')
-//        pythonPathDirs.append('.')
-
-//        for moduleDir in pythonPathDirs:
-//            if not os.path.isdir(moduleDir): continue
-//            moduleNames = [f for f in os.listdir(moduleDir) if f.endswith('gents.py')]
-//            for modulename in moduleNames:
-//                try:
-//                    module = __import__(modulename[:-3])
-//                except ImportError:
-//                    continue
-//                if agentName in dir(module):
-//                    if nographics and modulename == 'keyboardAgents.py':
-//                        raise Exception('Using the keyboard requires graphics (not text display)')
-//                    return getattr(module, agentName)
-//        raise Exception('The agent ' + agentName + ' is not specified in any *Agents.py.')
+    private static AgentFactoryPacman loadAgentPacman(final AgentDirectoryPacman agentName, final boolean nographics) {
+        // Python code establishes the Python paths, and the current working directory.
+        // Loops over the paths, finding the directories
+        // Finds the files (aka modules) in each directory ending with "gents.py"
+        // For each of these modules, imports the module, and looks for an object
+        // in the module called 'agentName'.  
+        // If agentName is found in the module 'keyboardAgents.py' and 'nographics' is specified,
+        // then raise an error (Using the keyboard requires graphics, not text display).
+        // Return a reference to the located agentName, which is a class.
+        // Example, RandomGhost, which extends GhostAgent, which extends Agent.
+        if(nographics) {
+            switch(agentName) {
+                case KeyboardAgent:
+                case KeyboardAgent2:
+                    throw new RuntimeException("A KeyboardAgent has been specified, but nographics has been specified");
+            }
+            
+        }
         
+        return agentName.getFactory();
+    }
+    
+    private static AgentFactoryGhost loadAgentGhost(final AgentDirectoryGhost agentName) {
+        return agentName.getFactory();
+    }
+    
+    private static AgentFactoryGhost loadAgent(final AgentDirectoryGhost agentName, final Object nographics) {
         // Python code establishes the Python paths, and the current working directory.
         // Loops over the paths, finding the directories
         // Finds the files (aka modules) in each directory ending with "gents.py"
@@ -256,7 +254,7 @@ public class Pacman {
     private static List<Game> runGames(
             final Layout layout,
             final Agent pacman,
-            final List<Agent> ghosts,
+            final List<GhostAgent> ghosts,
             final Object display,
             final int numGames,
             final boolean record,

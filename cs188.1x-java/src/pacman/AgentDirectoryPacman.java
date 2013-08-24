@@ -4,66 +4,66 @@ package pacman;
  *
  * @author archie
  */
-public enum AgentDirectoryPacman {
+public enum AgentDirectoryPacman implements AgentDirectory {
 
-    KeyboardAgent(new AgentFactory() {
+    KeyboardAgent(new AgentFactoryPacman() {
                         @Override
                         public Agent make() { return new KeyboardAgent(); }
                     }),
-    KeyboardAgent2(new AgentFactory() {
+    KeyboardAgent2(new AgentFactoryPacman() {
                         @Override
                         public Agent make() { return new KeyboardAgent(); }
                     }),
-    LeftTurnAgent(new AgentFactory() {
+    LeftTurnAgent(new AgentFactoryPacman() {
                         @Override
                         public Agent make() { return new LeftTurnAgent(); }
                     }),
-    GreedyAgent(new AgentFactory() {
+    GreedyAgent(new AgentFactoryPacman() {
                     @Override
                     public Agent make() { return new GreedyAgent(); }
                 }),
-    SearchAgent(new AgentFactory() {
+    SearchAgent(new AgentFactoryPacman() {
                     @Override
                     public Agent make() { return new SearchAgent(); }
                 }),
-    StayEastSearchAgent(new AgentFactory() {
+    StayEastSearchAgent(new AgentFactoryPacman() {
                             @Override
                             public Agent make() { return new StayEastSearchAgent(); }
                         }),
-    StayWestSearchAgent(new AgentFactory() {
+    StayWestSearchAgent(new AgentFactoryPacman() {
                             @Override
                             public Agent make() { return new StayWestSearchAgent(); }
                         }),
-    GoWestAgent(new AgentFactory() {
+    GoWestAgent(new AgentFactoryPacman() {
                     @Override
                     public Agent make() { return new GoWestAgent(); }
                 }),
-    AStarCornersAgent(new AgentFactory() {
+    AStarCornersAgent(new AgentFactoryPacman() {
                             @Override
                             public Agent make() { return new AStarCornersAgent(); }
                         }),
-    AStarFoodSearchAgent(new AgentFactory() {
+    AStarFoodSearchAgent(new AgentFactoryPacman() {
                             @Override
                             public Agent make() { return new AStarFoodSearchAgent(); }
                         }),
-    ClosestDotSearchAgent(new AgentFactory() {
+    ClosestDotSearchAgent(new AgentFactoryPacman() {
                             @Override
                             public Agent make() { return new ClosestDotSearchAgent(); }
                         }),
-    ApproximateSearchAgent(new AgentFactory() {
+    ApproximateSearchAgent(new AgentFactoryPacman() {
                                 @Override
                                 public Agent make() { return new ApproximateSearchAgent(); }
                             })
     ;
     
-    private final AgentFactory factory;
+    private final AgentFactoryPacman factory;
     
-    private AgentDirectoryPacman(final AgentFactory factory) {
+    private AgentDirectoryPacman(final AgentFactoryPacman factory) {
         this.factory = factory;
     }
 
-    public AgentFactory getFactory() {
+    @Override
+    public AgentFactoryPacman getFactory() {
         return this.factory;
     }
-
 }

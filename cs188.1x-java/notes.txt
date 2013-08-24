@@ -75,3 +75,8 @@ They all have getPacmanPosition, except for GameStateEightPuzzleSearchProblem.
 So, perhaps we need a GameStatePacman interface, which extends GameState.
 Doesn't really buy us much though, just to say that each class supports getPacmanPosition.
 
+
+
+Program entry points
+pacman.py
+

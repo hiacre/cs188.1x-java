@@ -6,5 +6,4 @@ package pacman;
  */
 public interface AgentFactory {
     
-    public Agent make();
 }
