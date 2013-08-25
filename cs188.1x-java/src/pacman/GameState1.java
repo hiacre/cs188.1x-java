@@ -217,6 +217,10 @@ public class GameState1 {
     public boolean hasWall(final int x, final int y) {
         return data.getLayout().getWalls().get(x,y);
     }
+    
+    public Layout getLayout() {
+        return data.getLayout();
+    }
 
     public boolean isLose() {
         return data.isLose();
@@ -283,5 +287,21 @@ public class GameState1 {
 
     private void setData(final GameStateData data) {
         this.data = data;
+    }
+
+    int getAgentMoved() {
+        return this.data.getAgentMoved();
+    }
+
+    List<AgentState> getAgentStates() {
+        return data.getAgentStates();
+    }
+
+    Position getFoodEaten() {
+        return data.getFoodEaten();
+    }
+
+    Object getCapsuleEaten() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

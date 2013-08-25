@@ -14,7 +14,7 @@ public class GameStateData {
     private boolean lose;
     private boolean win;
     private Integer agentMoved;
-    private Object capsuleEaten;
+    private Position capsuleEaten;
     private final Object foodAdded;
     private Position foodEaten;
     private List agentStates;
@@ -143,6 +143,10 @@ public class GameStateData {
     public List getEaten() {
         return eaten;
     }
+    
+    public Position getFoodEaten() {
+        return foodEaten;
+    }
 
     public int getScore() {
         return score;
@@ -158,6 +162,10 @@ public class GameStateData {
     
     public void setAgentMoved(final int agentIndex) {
         this.agentMoved = agentIndex;
+    }
+    
+    public int getAgentMoved() {
+        return this.agentMoved;
     }
 
     public void setscore(final int score) {
@@ -202,5 +210,9 @@ public class GameStateData {
 
     void setCapsuleEaten(final int x, final int y) {
         this.capsuleEaten = Position.newInstance(x, y);
+    }
+    
+    Position getCapsuleEaten() {
+        return capsuleEaten;
     }
 }

@@ -1,6 +1,9 @@
 package pacman;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import util.Position;
 
 /**
  *
@@ -11,11 +14,18 @@ public class PacmanGraphicsNonText {
     private final HashMap<Object, Object> currentGhostImages;
     private final double zoom;
     private final boolean capture;
-    private final double frameTime;
+    private double frameTime;
     private boolean isBlue;
     private GameState1 previousState;
+    private Layout layout;
+    private int width;
+    private int height;
+    private InfoPane infoPane;
+    private int gridSize;
+    private Layout currentState;
+    private List<List> distributionImages;
 
-    public PacmanGraphicsNonText(Double zoom, Double frameTime, Boolean capture) {
+    private PacmanGraphicsNonText(Double zoom, Double frameTime, Boolean capture) {
         zoom = zoom == null ? 1.0 : zoom;
         frameTime = frameTime == null ? 0.0 : frameTime;
         capture = capture == null ? false : capture;
@@ -29,7 +39,7 @@ public class PacmanGraphicsNonText {
         this.frameTime = frameTime;
     }
 
-    public void initialize(final GameState1 state, Boolean isBlue) {
+    private void initialize(final GameState1 state, Boolean isBlue) {
         this.isBlue = isBlue == null ? false : isBlue;
         
         this.startGraphics(state);
@@ -44,155 +54,180 @@ public class PacmanGraphicsNonText {
     }
     
 
-    public void startGraphics(final GameState1 state) {
-        this.layout = state.layout;
-        layout = this.layout;
-        this.width = layout.width;
-        this.height = layout.height;
+    private void startGraphics(final GameState1 state) {
+        this.layout = state.getLayout();
+        final Layout l = this.layout;
+        this.width = l.getWidth();
+        this.height = l.getHeight();
         this.make_window(this.width, this.height);
-        this.infoPane = InfoPane(layout, this.gridSize);
-        this.currentState = layout;
+        this.infoPane = new InfoPane(l, this.gridSize);
+        this.currentState = l;
     }
 
-    def drawDistributions(self, state):
-        walls = state.layout.walls
-        dist = []
-        for x in range(walls.width):
-            distx = []
-            dist.append(distx)
-            for y in range(walls.height):
-                ( screen_x, screen_y ) = this.to_screen( (x, y) )
+    private void drawDistributions(final GameState1 state) {
+        final Grid walls = state.getLayout().getWalls();
+        final List<List> dist = new ArrayList<>();
+        for(int x=0; x<walls.getWidth(); x++) {
+            final List distx = new ArrayList();
+            dist.add(distx);
+            for(int y=0; y<walls.getHeight(); y++) {
+                ( screen_x, screen_y ) = this.to_screen( (x, y) );
                 block = square( (screen_x, screen_y),
                                 0.5 * this.gridSize,
                                 color = BACKGROUND_COLOR,
-                                filled = 1, behind=2)
-                distx.append(block)
-        this.distributionImages = dist
+                                filled = 1, behind=2);
+                distx.append(block);
+            }
+        this.distributionImages = dist;
+    }
 
-    def drawStaticObjects(self, state):
-        layout = this.layout
-        this.drawWalls(layout.walls)
-        this.food = this.drawFood(layout.food)
-        this.capsules = this.drawCapsules(layout.capsules)
-        refresh()
+    private void drawStaticObjects(final GameState1 state) {
+        final Layout layout = this.layout;
+        this.drawWalls(layout.getWalls());
+        this.food = this.drawFood(layout.getFood());
+        this.capsules = this.drawCapsules(layout.getCapsules());
+        refresh();
+    }
 
-    def drawAgentObjects(self, state):
-        this.agentImages = [] # (agentState, image)
-        for index, agent in enumerate(state.agentStates):
-            if agent.isPacman:
-                image = this.drawPacman(agent, index)
-                this.agentImages.append( (agent, image) )
-            else:
-                image = this.drawGhost(agent, index)
-                this.agentImages.append( (agent, image) )
-        refresh()
+    private void drawAgentObjects(final GameState1 state) {
+        this.agentImages = new ArrayList();  // (agentState, image)
+        for(index, agent in enumerate(state.agentStates)) {
+            if(agent.isPacman) {
+                image = this.drawPacman(agent, index);
+                this.agentImages.append( (agent, image) );
+            } else {
+                image = this.drawGhost(agent, index);
+                this.agentImages.append( (agent, image) );
+            }
+        }
+        refresh();
+    }
+    
+    /** Changes an image from a ghost to a pacman or vis versa (for capture) */
+    private void swapImages(final int agentIndex, final GameState1 newState) {
+        prevState, prevImage = this.agentImages.get(agentIndex);
+        for item in prevImage: remove_from_screen(item);
+        if(newState.isPacman) {
+            image = this.drawPacman(newState, agentIndex);
+            this.agentImages[agentIndex] = (newState, image );
+        } else {
+            image = this.drawGhost(newState, agentIndex);
+            this.agentImages[agentIndex] = (newState, image );
+        }
+        refresh();
+    }
 
-    def swapImages(self, agentIndex, newState):
-        """
-          Changes an image from a ghost to a pacman or vis versa (for capture)
-        """
-        prevState, prevImage = this.agentImages[agentIndex]
-        for item in prevImage: remove_from_screen(item)
-        if newState.isPacman:
-            image = this.drawPacman(newState, agentIndex)
-            this.agentImages[agentIndex] = (newState, image )
-        else:
-            image = this.drawGhost(newState, agentIndex)
-            this.agentImages[agentIndex] = (newState, image )
-        refresh()
+    private void update(final GameState1 newState) {
+        final int agentIndex = newState.getAgentMoved();
+        final AgentState agentState = newState.getAgentStates().get(agentIndex);
 
-    def update(self, newState):
-        agentIndex = newState._agentMoved
-        agentState = newState.agentStates[agentIndex]
+        if(this.agentImages.get(agentIndex).get(0).isPacman != agentState.isPacman()) {
+            this.swapImages(agentIndex, agentState);
+        }
+        prevState, prevImage = this.agentImages.get(agentIndex);
+        if(agentState.isPacman()) {
+            this.animatePacman(agentState, prevState, prevImage);
+        } else {
+            this.moveGhost(agentState, agentIndex, prevState, prevImage);
+        }
+        this.agentImages.get(agentIndex) = (agentState, prevImage);
 
-        if this.agentImages[agentIndex][0].isPacman != agentState.isPacman: this.swapImages(agentIndex, agentState)
-        prevState, prevImage = this.agentImages[agentIndex]
-        if agentState.isPacman:
-            this.animatePacman(agentState, prevState, prevImage)
-        else:
-            this.moveGhost(agentState, agentIndex, prevState, prevImage)
-        this.agentImages[agentIndex] = (agentState, prevImage)
+        if(newState.getFoodEaten() != null) {
+            this.removeFood(newState.getFoodEaten(), this.food);
+        }
+        if(newState.getCapsuleEaten() != null) {
+            this.removeCapsule(newState.getCapsuleEaten(), this.capsules);
+        }
+        this.infoPane.updateScore(newState.getScore());
+        // TODO we only do the following if newState supports the getGhostDistances() method
+        this.infoPane.updateGhostDistances(newState.getGhostDistances());
+    }
+    
 
-        if newState._foodEaten != None:
-            this.removeFood(newState._foodEaten, this.food)
-        if newState._capsuleEaten != None:
-            this.removeCapsule(newState._capsuleEaten, this.capsules)
-        this.infoPane.updateScore(newState.score)
-        if 'ghostDistances' in dir(newState):
-            this.infoPane.updateGhostDistances(newState.ghostDistances)
-
-    def make_window(self, width, height):
-        grid_width = (width-1) * this.gridSize
-        grid_height = (height-1) * this.gridSize
-        screen_width = 2*this.gridSize + grid_width
-        screen_height = 2*this.gridSize + grid_height + INFO_PANE_HEIGHT
+    private void make_window(final int width, final int height) {
+        final int grid_width = (width-1) * this.gridSize;
+        final int grid_height = (height-1) * this.gridSize;
+        final int screen_width = 2*this.gridSize + grid_width;
+        final int screen_height = 2*this.gridSize + grid_height + INFO_PANE_HEIGHT;
 
         begin_graphics(screen_width,
                        screen_height,
                        BACKGROUND_COLOR,
-                       "CS188 Pacman")
+                       "CS188 Pacman");
+    }
 
-    def drawPacman(self, pacman, index):
-        position = this.getPosition(pacman)
-        screen_point = this.to_screen(position)
-        endpoints = this.getEndpoints(this.getDirection(pacman))
+    private void drawPacman(final Object pacman, final int index) {
+        position = this.getPosition(pacman);
+        screen_point = this.to_screen(position);
+        endpoints = this.getEndpoints(this.getDirection(pacman));
 
-        width = PACMAN_OUTLINE_WIDTH
-        outlineColor = PACMAN_COLOR
-        fillColor = PACMAN_COLOR
+        width = PACMAN_OUTLINE_WIDTH;
+        outlineColor = PACMAN_COLOR;
+        fillColor = PACMAN_COLOR;
 
-        if this.capture:
-            outlineColor = TEAM_COLORS[index % 2]
-            fillColor = GHOST_COLORS[index]
-            width = PACMAN_CAPTURE_OUTLINE_WIDTH
+        if(this.capture) {
+            outlineColor = TEAM_COLORS[index % 2];
+            fillColor = GHOST_COLORS[index];
+            width = PACMAN_CAPTURE_OUTLINE_WIDTH;
+        }
 
         return [circle(screen_point, PACMAN_SCALE * this.gridSize,
                        fillColor = fillColor, outlineColor = outlineColor,
                        endpoints = endpoints,
-                       width = width)]
+                       width = width)];
+    }
 
-    def getEndpoints(self, direction, position=(0,0)):
-        x, y = position
-        pos = x - int(x) + y - int(y)
-        width = 30 + 80 * math.sin(math.pi* pos)
+    private Endpoints getEndpoints(final Direction direction, Position position) {
+        position = position == null ? Position.newInstance(0, 0) : position;
+        final double x = position.getX();
+        final double y = position.getY();
+        double pos = x - (int)x + y - (int)y;
+        final double w = 30 + 80 * Math.sin(Math.PI * pos);
 
-        delta = width / 2
-        if (direction == 'West'):
-            endpoints = (180+delta, 180-delta)
-        elif (direction == 'North'):
-            endpoints = (90+delta, 90-delta)
-        elif (direction == 'South'):
-            endpoints = (270+delta, 270-delta)
-        else:
-            endpoints = (0+delta, 0-delta)
-        return endpoints
+        final double delta = w / 2;
+        final Endpoints endpoints;
+        switch(direction) {
+            case West: endpoints = new Endpoints(180+delta, 180-delta); break;
+            case North: endpoints = new Endpoints(90+delta, 90-delta); break;
+            case South: endpoints = new Endpoints(270+delta, 270-delta); break;
+            default:
+                endpoints = new Endpoints(0+delta, 0-delta);
+        }
+        return endpoints;
+    }
 
-    def movePacman(self, position, direction, image):
-        screenPosition = this.to_screen(position)
-        endpoints = this.getEndpoints( direction, position )
-        r = PACMAN_SCALE * this.gridSize
-        moveCircle(image[0], screenPosition, r, endpoints)
-        refresh()
+    private void movePacman(final Position position, final Direction direction, final Object image) {
+        screenPosition = this.to_screen(position);
+        final Endpoints endpoints = this.getEndpoints( direction, position );
+        r = PACMAN_SCALE * this.gridSize;
+        moveCircle(image[0], screenPosition, r, endpoints);
+        refresh();
+    }
 
-    def animatePacman(self, pacman, prevPacman, image):
-        if this.frameTime < 0:
-            print 'Press any key to step forward, "q" to play'
-            keys = wait_for_keys()
-            if 'q' in keys:
-                this.frameTime = 0.1
-        if this.frameTime > 0.01 or this.frameTime < 0:
-            start = time.time()
-            fx, fy = this.getPosition(prevPacman)
-            px, py = this.getPosition(pacman)
-            frames = 4.0
-            for i in range(1,int(frames) + 1):
-                pos = px*i/frames + fx*(frames-i)/frames, py*i/frames + fy*(frames-i)/frames
-                this.movePacman(pos, this.getDirection(pacman), image)
-                refresh()
-                sleep(abs(this.frameTime) / frames)
-        else:
-            this.movePacman(this.getPosition(pacman), this.getDirection(pacman), image)
-        refresh()
+    private void animatePacman(final Object pacman, final Object prevPacman, final Object image) {
+        if(this.frameTime < 0) {
+            System.out.println("Press any key to step forward, 'q' to play");
+            final List<Character> keys = wait_for_keys();
+            if(keys.contains('q')) {
+                this.frameTime = 0.1;
+            }
+        }
+        if(this.frameTime > 0.01 || this.frameTime < 0) {
+            start = time.time();
+            fx, fy = this.getPosition(prevPacman);
+            px, py = this.getPosition(pacman);
+            frames = 4.0;
+            for(int i=1; i<(int)frames+1; i++) {
+                pos = px*i/frames + fx*(frames-i)/frames, py*i/frames + fy*(frames-i)/frames;
+                this.movePacman(pos, this.getDirection(pacman), image);
+                refresh();
+                sleep(abs(this.frameTime) / frames);
+            }
+        } else {
+            this.movePacman(this.getPosition(pacman), this.getDirection(pacman), image);
+        }
+        refresh();
+    }
 
     def getGhostColor(self, ghost, ghostIndex):
         if ghost.scaredTimer > 0:
