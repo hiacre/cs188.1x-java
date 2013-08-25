@@ -78,7 +78,7 @@ public class PacmanGraphicsNonText {
             final List distx = new ArrayList();
             dist.add(distx);
             for(int y=0; y<walls.getHeight(); y++) {
-                ( screen_x, screen_y ) = this.to_screen( (x, y) );
+                ( screen_x, screen_y ) = this.to_screen(x,y);
                 block = square( (screen_x, screen_y),
                                 0.5 * this.gridSize,
                                 color = BACKGROUND_COLOR,
