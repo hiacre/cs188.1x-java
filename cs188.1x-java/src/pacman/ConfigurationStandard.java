@@ -2,7 +2,7 @@ package pacman;
 
 import java.util.Objects;
 import util.Position;
-import util.PositionStandard;
+import util.Position;
 
 /**
  *
@@ -85,7 +85,7 @@ public class ConfigurationStandard implements Configuration {
             dir = this.direction;  // There is no stop direction
         }
         return new ConfigurationStandard(
-                PositionStandard.newInstance(x + dx, y+dy),
+                Position.newInstance(x + dx, y+dy),
                 dir);
     }
     

@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Position;
-import util.PositionStandard;
+import util.Position;
 import util.Util;
 
 /**
@@ -127,7 +127,7 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
             final int nextx = (int)(x+dx);
             final int nexty = (int)(y+dy);
             if(!this.walls.get(nextx,nexty)) {
-                final Position nextState = PositionStandard.newInstance(nextx, nexty);
+                final Position nextState = Position.newInstance(nextx, nexty);
                 final int cost = this.costFn.eval(nextState);
                 successors.add(
                         new GameStateSuccessorPositionSearchProblem(nextState, action, cost));
@@ -166,7 +166,7 @@ public class PositionSearchProblem implements SearchProblem<GameStatePositionSea
             if(this.walls.get(x,y)) {
                 return Util.getMaximumCost();
             }
-            cost += this.costFn.eval(PositionStandard.newInstance(x,y));
+            cost += this.costFn.eval(Position.newInstance(x,y));
         }
         return cost;
     }

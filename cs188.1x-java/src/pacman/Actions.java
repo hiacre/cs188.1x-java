@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import util.Position;
-import util.PositionStandard;
 
 /**
  * A collection of static methods for manipulating move actions.
@@ -77,7 +76,7 @@ public class Actions {
                 continue;
             }
             if(!walls.get(next_x, next_y)) {
-                neighbors.add(PositionStandard.newInstance(next_x, next_y));
+                neighbors.add(Position.newInstance(next_x, next_y));
             }
         }
         return neighbors;
@@ -89,6 +88,6 @@ public class Actions {
         final double dy = posVec.getY();
         final double x = position.getX();
         final double y = position.getY();
-        return PositionStandard.newInstance(x + dx, y + dy);
+        return Position.newInstance(x + dx, y + dy);
     }
 }

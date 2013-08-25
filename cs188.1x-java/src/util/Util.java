@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package util;
 
 import java.io.BufferedReader;
@@ -47,6 +43,14 @@ public class Util {
 
     public static Collection<List<Position>> getPermutations(List<Position> cornersUnvisited) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public static void makeDirectory(final String dirName) {
+        final String dir = dirName;
+        final File saveDir = new File(dir);
+        if(!saveDir.exists()) {
+          saveDir.mkdirs();
+        }
     }
 
     private Util() {

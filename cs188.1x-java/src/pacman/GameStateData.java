@@ -3,7 +3,6 @@ package pacman;
 import java.util.ArrayList;
 import java.util.List;
 import util.Position;
-import util.PositionStandard;
 
 /**
  *
@@ -190,7 +189,7 @@ public class GameStateData {
     }
 
     void setFoodEaten(final int x, final int y) {
-        this.foodEaten = PositionStandard.newInstance(x, y);
+        this.foodEaten = Position.newInstance(x, y);
     }
 
     boolean getLose() {
@@ -202,6 +201,6 @@ public class GameStateData {
     }
 
     void setCapsuleEaten(final int x, final int y) {
-        this.capsuleEaten = PositionStandard.newInstance(x, y);
+        this.capsuleEaten = Position.newInstance(x, y);
     }
 }

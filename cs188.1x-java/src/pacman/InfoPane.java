@@ -2,7 +2,6 @@ package pacman;
 
 import java.util.List;
 import util.Position;
-import util.PositionStandard;
 
 /**
  *
@@ -12,6 +11,7 @@ public class InfoPane {
     private final int gridSize;
     private final int base;
     private final int width;
+    private final int fontSize;
 
     public InfoPane(final Layout layout, final int gridSize) {
         this.gridSize = gridSize;
@@ -35,17 +35,17 @@ public class InfoPane {
 
         x += this.gridSize; // Margin
         y += this.base;
-        return PositionStandard.newInstance(x, y);
+        return Position.newInstance(x, y);
     }
 
-    public void drawPane() {
+    public final void drawPane() {
         this.scoreText = text( this.toScreen(0, 0  ), this.textColor, "SCORE:    0", "Times", this.fontSize, "bold");
     }
 
     public void initializeGhostDistances(final List distances) {
-        this.ghostDistanceText = [];
+        this.ghostDistanceText = new ArrayList();
 
-        size = 20;
+        int size = 20;
         if(this.width < 240) {
             size = 12;
         }
@@ -59,20 +59,28 @@ public class InfoPane {
         }
     }
 
-    def updateScore(self, score):
-        changeText(self.scoreText, "SCORE: % 4d" % score)
+    public void updateScore(score) {
+        changeText(self.scoreText, "SCORE: % 4d" % score);
+    }
 
-    def setTeam(self, isBlue):
-        text = "RED TEAM"
-        if isBlue: text = "BLUE TEAM"
-        self.teamText = text( self.toScreen(300, 0  ), self.textColor, text, "Times", self.fontSize, "bold")
+    public void setTeam(self, isBlue) {
+        text = "RED TEAM";
+        if isBlue: text = "BLUE TEAM";
+        self.teamText = text( self.toScreen(300, 0  ), self.textColor, text, "Times", self.fontSize, "bold");
+    }
 
-    def updateGhostDistances(self, distances):
-        if len(distances) == 0: return
-        if 'ghostDistanceText' not in dir(self): self.initializeGhostDistances(distances)
-        else:
-            for i, d in enumerate(distances):
-                changeText(self.ghostDistanceText[i], d)
+    public void updateGhostDistances(final List distances) {
+        if(distances.isEmpty()) {
+            return;
+        }
+        if('ghostDistanceText' not in dir(self)) {
+            self.initializeGhostDistances(distances);
+        } else {
+            for(i, d in enumerate(distances)) {
+                changeText(self.ghostDistanceText[i], d);
+            }
+        }
+    }
 
     def drawGhost(self):
         pass

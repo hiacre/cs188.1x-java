@@ -1,7 +1,7 @@
 package pacman;
 
 import util.Position;
-import util.PositionStandard;
+import util.Position;
 
 /**
  *
@@ -12,7 +12,7 @@ public class GameStateFoodSearchProblem implements GameState {
     private final Position position;
     private final Grid food;
     
-    public GameStateFoodSearchProblem(PositionStandard position, Grid food) {
+    public GameStateFoodSearchProblem(Position position, Grid food) {
         this.position = position;
         this.food = food;
     }

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Position;
-import util.PositionStandard;
+import util.Position;
 import util.Util;
 
 /**
@@ -32,10 +32,10 @@ public class CornersProblem implements SearchProblem<GameStateCornersProblem, Ga
         final int top = walls.getHeight() - 2;
         final int right = walls.getWidth() - 2;
         corners = new ArrayList<>();
-        corners.add(PositionStandard.newInstance(1,1));
-        corners.add(PositionStandard.newInstance(1,top));
-        corners.add(PositionStandard.newInstance(right, 1));
-        corners.add(PositionStandard.newInstance(right, top));
+        corners.add(Position.newInstance(1,1));
+        corners.add(Position.newInstance(1,top));
+        corners.add(Position.newInstance(right, 1));
+        corners.add(Position.newInstance(right, top));
         for(Position corner : corners) {
             if(!startingGameState.hasFood(corner.getRoundedX(), corner.getRoundedY())) {
                 logger.log(Level.WARNING, "Warning: no food in corner {0}", corner.toString());

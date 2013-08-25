@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import util.Position;
-import util.PositionStandard;
+import util.Position;
 import util.Util;
 
 /**
@@ -66,7 +66,7 @@ public class FoodSearchProblem implements SearchProblem<GameStateFoodSearchProbl
                 successors.add(
                         new GameStateSuccessorFoodSearchProblem(
                             new GameStateFoodSearchProblem(
-                                PositionStandard.newInstance(nextx, nexty),
+                                Position.newInstance(nextx, nexty),
                                 nextFood),
                             direction,
                             1));

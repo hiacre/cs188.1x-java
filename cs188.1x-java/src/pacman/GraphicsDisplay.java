@@ -1,7 +1,11 @@
 package pacman;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import util.Position;
+import util.Util;
 
 /**
  *
@@ -10,7 +14,7 @@ import java.util.List;
 public class GraphicsDisplay {
 
     final static double DEFAULT_GRID_SIZE = 30.0;
-    final static int INFO_PANE_HEIGHT = 35
+    final static int INFO_PANE_HEIGHT = 35;
     final static Object BACKGROUND_COLOR = formatColor(0,0,0);
     final static Object WALL_COLOR = formatColor(0.0/255.0, 51.0/255.0, 255.0/255.0);
     final static Object INFO_PANE_COLOR = formatColor(.4,.4,0);
@@ -34,19 +38,19 @@ public class GraphicsDisplay {
 
     final static List TEAM_COLORS = GHOST_COLORS.subList(0, 2);
 
-    GHOST_SHAPE = [
-        ( 0,    0.3 ),
-        ( 0.25, 0.75 ),
-        ( 0.5,  0.3 ),
-        ( 0.75, 0.75 ),
-        ( 0.75, -0.5 ),
-        ( 0.5,  -0.75 ),
-        (-0.5,  -0.75 ),
-        (-0.75, -0.5 ),
-        (-0.75, 0.75 ),
-        (-0.5,  0.3 ),
-        (-0.25, 0.75 )
-      ];
+    final List<Position> GHOST_SHAPE = Arrays.asList(
+        Position.newInstance( 0,     0.3 ),
+        Position.newInstance( 0.25,  0.75 ),
+        Position.newInstance( 0.5,   0.3 ),
+        Position.newInstance( 0.75,  0.75 ),
+        Position.newInstance( 0.75, -0.5 ),
+        Position.newInstance( 0.5,  -0.75 ),
+        Position.newInstance(-0.5,  -0.75 ),
+        Position.newInstance(-0.75, -0.5 ),
+        Position.newInstance(-0.75,  0.75 ),
+        Position.newInstance(-0.5,   0.3 ),
+        Position.newInstance(-0.25,  0.75 )
+    );
     final static double GHOST_SIZE = 0.65;
     final Object SCARED_COLOR = formatColor(1,1,1);
 
@@ -71,25 +75,19 @@ public class GraphicsDisplay {
     final double WALL_RADIUS = 0.15;
 
 
-
-# Saving graphical output
-# -----------------------
-# Note: to make an animated gif from this postscript output, try the command:
-# convert -delay 7 -loop 1 -compress lzw -layers optimize frame* out.gif
-# convert is part of imagemagick (freeware)
-
-SAVE_POSTSCRIPT = False
-POSTSCRIPT_OUTPUT_DIR = 'frames'
-FRAME_NUMBER = 0
-import os
-
-def saveFrame():
-    "Saves the current graphical output as a postscript file"
-    global SAVE_POSTSCRIPT, FRAME_NUMBER, POSTSCRIPT_OUTPUT_DIR
-    if not SAVE_POSTSCRIPT: return
-    if not os.path.exists(POSTSCRIPT_OUTPUT_DIR): os.mkdir(POSTSCRIPT_OUTPUT_DIR)
-    name = os.path.join(POSTSCRIPT_OUTPUT_DIR, 'frame_%08d.ps' % FRAME_NUMBER)
-    FRAME_NUMBER += 1
-    writePostscript(name) # writes the current canvas
+/** Saves the current graphical output as a postscript file */
+public void saveFrame() {
     
+    final boolean SAVE_POSTSCRIPT = false;
+    final String POSTSCRIPT_OUTPUT_DIR = "frames";
+    int FRAME_NUMBER = 0;
+    
+    if(!SAVE_POSTSCRIPT) {
+        return;
+    }
+    Util.makeDirectory(POSTSCRIPT_OUTPUT_DIR);
+    // TODO need to add left 0 padding to FRAME_NUMBER
+    final String name = POSTSCRIPT_OUTPUT_DIR + File.separator + "frame_" + FRAME_NUMBER + ".ps";
+    FRAME_NUMBER += 1;
+    GraphicsUtils.writePostscript(name); // writes the current canvas
 }

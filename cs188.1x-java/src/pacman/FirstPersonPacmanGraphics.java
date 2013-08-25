@@ -4,12 +4,13 @@ package pacman;
  *
  * @author archie
  */
-public class FirstPersonPacmanGraphics {
-class FirstPersonPacmanGraphics(PacmanGraphics):
-    def __init__(self, zoom = 1.0, showGhosts = True, capture = False, frameTime=0):
-        PacmanGraphics.__init__(self, zoom, frameTime=frameTime)
-        self.showGhosts = showGhosts
-        self.capture = capture
+public class FirstPersonPacmanGraphics extends PacmanGraphicsNonText {
+
+    public void FirstPersonPacmanGraphics(Double zoom = 1.0, Boolean showGhosts = True, capture = False, frameTime=0) {
+        super(zoom, frameTime);
+        this.showGhosts = showGhosts;
+        this.capture = capture;
+    }
 
     def initialize(self, state, isBlue = False):
 

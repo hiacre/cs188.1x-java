@@ -3,7 +3,7 @@ package pacman;
 import java.util.ArrayList;
 import java.util.List;
 import util.Position;
-import util.PositionStandard;
+import util.Position;
 
 /**
  *
@@ -39,7 +39,7 @@ public class PacmanGraphicsText {
                 List<Object> ghosts = new ArrayList<>();
                 for(int i=1; i<numAgents; i++) {
                     final Position pos = state.getGhostPosition(i);
-                    ghosts.add(PositionStandard.nearestPoint(pos.getX(), pos.getY()));
+                    ghosts.add(Position.nearestPoint(pos.getX(), pos.getY()));
                 }
                 print "%4d) P: %-8s" % (self.turn, str(pacman.nearestPoint(state.getPacmanPosition())));
                 print '| Score: %-5d' % state.score,'| Ghosts:', ghosts;

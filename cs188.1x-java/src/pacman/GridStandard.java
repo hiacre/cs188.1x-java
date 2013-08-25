@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import util.Position;
-import util.PositionStandard;
+import util.Position;
 import util.Util;
 
 /**
@@ -119,7 +119,7 @@ public class GridStandard implements Grid {
         for(int x=0; x<width; x++) {
             for(int y=0; y<height; y++) {
                 if(key.equals(get(x,y))) {
-                    list.add(PositionStandard.newInstance(x, y));
+                    list.add(Position.newInstance(x, y));
                 }
             }
         }

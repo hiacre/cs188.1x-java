@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Position;
-import util.PositionStandard;
+import util.Position;
 import util.Util;
 
 /**
@@ -76,7 +76,7 @@ public class Layout {
                             while(
                                     ((nextx + nexty) != (int)nextx + (int)nexty) ||
                                     !walls.get((int)nextx,(int)nexty)) {
-                                vis.get(x,y,direction).add(PositionStandard.newInstance(nextx, nexty));
+                                vis.get(x,y,direction).add(Position.newInstance(nextx, nexty));
                                 nextx = x + dx;
                                 nexty = y + dy;
                             }
@@ -104,15 +104,15 @@ public class Layout {
             x = r.nextInt(width);
             y = r.nextInt(height);
         }
-        return PositionStandard.newInstance(x, y);
+        return Position.newInstance(x, y);
     }
     
     private List<Position> getCorners() {
         final List<Position> poses = new ArrayList<>();
-        poses.add(PositionStandard.newInstance(1, 1));
-        poses.add(PositionStandard.newInstance(1, height - 2));
-        poses.add(PositionStandard.newInstance(width - 2, 1));
-        poses.add(PositionStandard.newInstance(width - 2, height - 2));
+        poses.add(Position.newInstance(1, 1));
+        poses.add(Position.newInstance(1, height - 2));
+        poses.add(Position.newInstance(width - 2, 1));
+        poses.add(Position.newInstance(width - 2, height - 2));
         return poses;
     }
     
@@ -180,16 +180,16 @@ public class Layout {
             case '%': walls.set(x,y, true); break;
             case '.': food.set(x,y, true); break;
             case 'o': capsules.set(x,y, true); break;
-            case 'P': agentPositions.add(new AgentTypeAndPosition(PositionStandard.newInstance(x, y), 0)); break;
+            case 'P': agentPositions.add(new AgentTypeAndPosition(Position.newInstance(x, y), 0)); break;
             case 'G':
-                agentPositions.add(new AgentTypeAndPosition(PositionStandard.newInstance(x, y), 1));
+                agentPositions.add(new AgentTypeAndPosition(Position.newInstance(x, y), 1));
                 numGhosts++;
                 break;
             case '1':
             case '2':
             case '3':
             case '4':
-                agentPositions.add(new AgentTypeAndPosition(PositionStandard.newInstance(x, y), new Integer(layoutChar)));
+                agentPositions.add(new AgentTypeAndPosition(Position.newInstance(x, y), new Integer(layoutChar)));
                 numGhosts++;
                 break;
             default:

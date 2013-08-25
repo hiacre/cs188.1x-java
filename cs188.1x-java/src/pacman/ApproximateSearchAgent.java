@@ -1,6 +1,6 @@
 package pacman;
 
-import util.PositionStandard;
+import util.Position;
 
 /**
  ******************
@@ -43,10 +43,10 @@ public class ApproximateSearchAgent extends AgentAbstract {
     public int mazeDistance(final int x1, final int y1, final int x2, final int y2, final GameState1 gameState) {
         final Grid walls = gameState.getWalls();
         if(walls.get(x1, y1)) {
-            throw new RuntimeException("point1 is a wall: " + PositionStandard.newInstance(x1, y1));
+            throw new RuntimeException("point1 is a wall: " + Position.newInstance(x1, y1));
         }
         if(walls.get(x2, y2)) {
-            throw new RuntimeException("point2 is a wall: " + PositionStandard.newInstance(x2, y2));
+            throw new RuntimeException("point2 is a wall: " + Position.newInstance(x2, y2));
         }
         final PositionSearchProblem prob = new PositionSearchProblem(
                 gameState,

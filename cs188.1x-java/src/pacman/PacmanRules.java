@@ -7,7 +7,7 @@ package pacman;
 import java.util.Collection;
 import java.util.List;
 import util.Position;
-import util.PositionStandard;
+import util.Position;
 
 /**
  * These functions govern how pacman interacts with his environment under
@@ -41,7 +41,7 @@ public class PacmanRules {
 
         // Eat
         final Position next = pacmanState.getConfiguration().getPosition();
-        final Position nearest = PositionStandard.nearestPoint( next.getX(), next.getY() );
+        final Position nearest = Position.nearestPoint( next.getX(), next.getY() );
         if(next.manhattanDistance(nearest) <= 0.5) {
             // Remove food
             consume((int)nearest.getX(), (int)nearest.getY(), state);

@@ -27,3 +27,10 @@ available to you.
 To play your first game, type 'python pacman.py' from the command line.
 The keys are 'a', 's', 'd', and 'w' to move (or arrow keys).  Have fun!
 
+
+
+Saving graphical output
+=======================
+Note: to make an animated gif from this postscript output, try the command:
+convert -delay 7 -loop 1 -compress lzw -layers optimize frame* out.gif
+convert is part of imagemagick (freeware)

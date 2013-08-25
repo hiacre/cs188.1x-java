@@ -6,7 +6,7 @@ import java.util.List;
 import util.Counter;
 import util.CounterStandard;
 import util.Position;
-import util.PositionStandard;
+import util.Position;
 
 /**
  * A ghost that prefers to rush Pacman, or flee when scared.
@@ -43,7 +43,7 @@ public class DirectionalGhost extends GhostAgent {
         final List<Position> newPositions = new ArrayList<>();
         for(DirectionVector a : actionVectors) {
             newPositions.add(
-                    PositionStandard.newInstance(
+                    Position.newInstance(
                         pos.getX()+a.getX(),
                         pos.getY()+a.getY()));
         }
