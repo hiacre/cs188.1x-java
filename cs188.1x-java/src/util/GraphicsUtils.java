@@ -1,42 +1,82 @@
 package util;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  * @author archie
  */
 public class GraphicsUtils {
-_Windows = sys.platform == 'win32'  # True if on Win95/98/NT
+//_Windows = sys.platform == 'win32'  # True if on Win95/98/NT
 
-_root_window = None      # The root window for graphics output
-_canvas = None      # The canvas which holds graphics
-_canvas_xs = None      # Size of canvas object
-_canvas_ys = None
-_canvas_x = None      # Current position on canvas
-_canvas_y = None
-_canvas_col = None      # Current colour (set to black below)
-_canvas_tsize = 12
-_canvas_tserifs = 0
+    /** The root windows for graphics output */
+    _root_window = null;
+    /** The canvas which holds graphics */
+    _canvas = null;
+    /** Size of canvas object */
+    _canvas_xs = null;
+    _canvas_ys = null;
+    /** Current position on canvas */
+    _canvas_x = null;
+    _canvas_y = null;
+    /** Current colour (set to black below) */
+    _canvas_col = null;
+    _canvas_tsize = 12;
+    _canvas_tserifs = 0;
 
-def formatColor(r, g, b):
-    return '#%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
+    
+    private String formatColor(final double r, final double g, final double b) {
+        if(r<0 || g<0 || b<0 || r>1 || g>1 || b>0) {
+            throw new RuntimeException("All components must be between 0 and 1 inclusive");
+        }
+        final StringBuilder sb = new StringBuilder();
+        final int red = (int)r*255;
+        final int green = (int)g*255;
+        final int blue = (int)b*255;
+        
+        sb.append("#").append(hex(red)).append(hex(green)).append(hex(blue));
+        return sb.toString();
+    }
+    
+    /** Takes an integer between 0 and 255 (inclusive) and returns its zero-left-padded hex string representation. */
+    private String hex(final int colour) {
+        final String hex = Integer.toHexString(colour);
+        if(hex.length()<2) {
+            return "0" + hex;
+        } else {
+            return hex;
+        }
+    }
 
-def colorToVector(color):
-    return map(lambda x: int(x, 16) / 256.0, [color[1:3], color[3:5], color[5:7]])
+    /** Takes a colour in hex notation (e.g. #abcdef) and returns it as a vector
+     * of numbers between 0 and 1 (fractions of 255).
+     */
+    private List<Double> colorToVector(final String color) {
+        final String hexRed = color.substring(1, 3);
+        final String hexGreen = color.substring(3, 5);
+        final String hexBlue = color.substring(5, 7);
+        
+        return Arrays.asList(
+                Integer.parseInt(hexRed, 16) / 256.0,
+                Integer.parseInt(hexGreen, 16) / 256.0,
+                Integer.parseInt(hexBlue, 16) / 256.0);
+    }
 
-if _Windows:
-    _canvas_tfonts = ['times new roman', 'lucida console']
-else:
-    _canvas_tfonts = ['times', 'lucidasans-24']
-    pass # XXX need defaults here
+//if _Windows:
+//    _canvas_tfonts = ['times new roman', 'lucida console']
+//else:
+//    _canvas_tfonts = ['times', 'lucidasans-24']
+//    pass # XXX need defaults here
 
-def sleep(secs):
-    global _root_window
-    if _root_window == None:
-        time.sleep(secs)
-    else:
-        _root_window.update_idletasks()
-        _root_window.after(int(1000 * secs), _root_window.quit)
-        _root_window.mainloop()
+    def sleep(secs):
+        global _root_window
+        if _root_window == None:
+            time.sleep(secs)
+        else:
+            _root_window.update_idletasks()
+            _root_window.after(int(1000 * secs), _root_window.quit)
+            _root_window.mainloop()
 
 def begin_graphics(width=640, height=480, color=formatColor(0, 0, 0), title=None):
 
