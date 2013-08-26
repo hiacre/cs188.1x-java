@@ -5,17 +5,19 @@ package pacman;
  * @author archie
  */
 public class FirstPersonPacmanGraphics extends PacmanGraphicsNonText {
+    private boolean showGhosts;
 
-    public void FirstPersonPacmanGraphics(Double zoom = 1.0, Boolean showGhosts = True, capture = False, frameTime=0) {
-        super(zoom, frameTime);
-        this.showGhosts = showGhosts;
-        this.capture = capture;
+    public FirstPersonPacmanGraphics(final Double zoom, Boolean showGhosts, Boolean capture, Double frameTime) {
+        super(zoom, frameTime, capture);
+        this.showGhosts = showGhosts == null ? true : showGhosts;
     }
 
-    def initialize(self, state, isBlue = False):
+    // TODO this is very similar to super.initialize().  There's a better way to do this.
+    private void initialize(final GameState1 state, Boolean isBlue) {
 
-        self.isBlue = isBlue
-        PacmanGraphics.startGraphics(self, state)
+        this.isBlue = isBlue == null ? false : isBlue;
+        
+        PacmanGraphicsNonText.startGraphics(state);
         # Initialize distribution images
         walls = state.layout.walls
         dist = []

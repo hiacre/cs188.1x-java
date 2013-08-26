@@ -11,7 +11,7 @@ public class GraphicsUtils {
 //_Windows = sys.platform == 'win32'  # True if on Win95/98/NT
 
     /** The root windows for graphics output */
-    _root_window = null;
+    private static Object _root_window = null;
     /** The canvas which holds graphics */
     _canvas = null;
     /** Size of canvas object */
@@ -69,14 +69,15 @@ public class GraphicsUtils {
 //    _canvas_tfonts = ['times', 'lucidasans-24']
 //    pass # XXX need defaults here
 
-    def sleep(secs):
-        global _root_window
-        if _root_window == None:
-            time.sleep(secs)
-        else:
-            _root_window.update_idletasks()
-            _root_window.after(int(1000 * secs), _root_window.quit)
-            _root_window.mainloop()
+    private void sleep(secs) {
+        if(this._root_window == null) {
+            time.sleep(secs);
+        } else {
+            this._root_window.update_idletasks();
+            this._root_window.after(int(1000 * secs), _root_window.quit);
+            this._root_window.mainloop();
+        }
+    }
 
 def begin_graphics(width=640, height=480, color=formatColor(0, 0, 0), title=None):
 

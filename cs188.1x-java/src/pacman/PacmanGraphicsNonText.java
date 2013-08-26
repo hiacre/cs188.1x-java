@@ -24,15 +24,15 @@ public class PacmanGraphicsNonText {
     private double frameTime;
     private boolean isBlue;
     private GameState1 previousState;
-    private Layout layout;
-    private int width;
-    private int height;
+    private static Layout layout;
+    private static int width;
+    private static int height;
     private InfoPane infoPane;
     private int gridSize;
     private Layout currentState;
     private List<List> distributionImages;
 
-    private PacmanGraphicsNonText(Double zoom, Double frameTime, Boolean capture) {
+    PacmanGraphicsNonText(Double zoom, Double frameTime, Boolean capture) {
         zoom = zoom == null ? 1.0 : zoom;
         frameTime = frameTime == null ? 0.0 : frameTime;
         capture = capture == null ? false : capture;
@@ -61,11 +61,11 @@ public class PacmanGraphicsNonText {
     }
     
 
-    private void startGraphics(final GameState1 state) {
-        this.layout = state.getLayout();
-        final Layout l = this.layout;
-        this.width = l.getWidth();
-        this.height = l.getHeight();
+    static void startGraphics(final GameState1 state) {
+        layout = state.getLayout();
+        final Layout l = layout;
+        width = l.getWidth();
+        height = l.getHeight();
         this.make_window(this.width, this.height);
         this.infoPane = new InfoPane(l, this.gridSize);
         this.currentState = l;
