@@ -3,7 +3,10 @@ package pacman;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import util.GraphicsUtils;
+import static util.GraphicsUtils.formatColor;
 import util.Position;
 import util.Util;
 
@@ -15,25 +18,25 @@ public class GraphicsDisplay {
 
     final static double DEFAULT_GRID_SIZE = 30.0;
     final static int INFO_PANE_HEIGHT = 35;
-    final static Object BACKGROUND_COLOR = formatColor(0,0,0);
-    final static Object WALL_COLOR = formatColor(0.0/255.0, 51.0/255.0, 255.0/255.0);
-    final static Object INFO_PANE_COLOR = formatColor(.4,.4,0);
-    final static Object SCORE_COLOR = formatColor(.9, .9, .9);
+    final static String BACKGROUND_COLOR = formatColor(0,0,0);
+    final static String WALL_COLOR = formatColor(0.0/255.0, 51.0/255.0, 255.0/255.0);
+    final static String INFO_PANE_COLOR = formatColor(.4,.4,0);
+    final static String SCORE_COLOR = formatColor(.9, .9, .9);
     final static int PACMAN_OUTLINE_WIDTH = 2;
     final static int PACMAN_CAPTURE_OUTLINE_WIDTH = 4;
 
-    final static List GHOST_COLORS;
+    final static List<String> GHOST_COLORS;
     static {
-        List GhostColors = new ArrayList();
+        final List<String> GhostColors = new ArrayList<>();
         
-        GhostColors.append(formatColor(.9,0,0)); // Red
-        GhostColors.append(formatColor(0,.3,.9)); // Blue
-        GhostColors.append(formatColor(.98,.41,.07)); // Orange
-        GhostColors.append(formatColor(.1,.75,.7)); // Green
-        GhostColors.append(formatColor(1.0,0.6,0.0)); // Yellow
-        GhostColors.append(formatColor(.4,0.13,0.91)); // Purple
+        GhostColors.add(formatColor((float)0.9,         0,           0));    // Red
+        GhostColors.add(formatColor((float)0,    (float)0.3,  (float)0.9));  // Blue
+        GhostColors.add(formatColor((float)0.98, (float)0.41, (float)0.07)); // Orange
+        GhostColors.add(formatColor((float)0.1,  (float)0.75, (float)0.7));  // Green
+        GhostColors.add(formatColor((float)1.0,  (float)0.6,  (float)0.0));  // Yellow
+        GhostColors.add(formatColor((float)0.4,  (float)0.13, (float)0.91)); // Purple
         
-        GHOST_COLORS = ChostColors;
+        GHOST_COLORS = Collections.unmodifiableList(GhostColors);
     }
 
     final static List TEAM_COLORS = GHOST_COLORS.subList(0, 2);
@@ -52,42 +55,51 @@ public class GraphicsDisplay {
         Position.newInstance(-0.25,  0.75 )
     );
     final static double GHOST_SIZE = 0.65;
-    final Object SCARED_COLOR = formatColor(1,1,1);
+    final String SCARED_COLOR = formatColor(1,1,1);
 
-    final Object GHOST_VEC_COLORS = map(colorToVector, GHOST_COLORS);
+    final static List<List<Double>> GHOST_VEC_COLORS;
+    static {
+        List<List<Double>> ghostVecColors = new ArrayList<>();
+        for(String c : GHOST_COLORS) {
+            ghostVecColors.add(GraphicsUtils.colorToVector(c));
+        }
+        GHOST_VEC_COLORS = Collections.unmodifiableList(ghostVecColors);
+    }
 
-    final Object PACMAN_COLOR = formatColor(255.0/255.0,255.0/255.0,61.0/255);
+    final static String PACMAN_COLOR = formatColor(255.0/255.0,255.0/255.0,61.0/255);
     final double PACMAN_SCALE = 0.5;
 
     // Food
-    final Object FOOD_COLOR = formatColor(1,1,1);
+    final String FOOD_COLOR = formatColor(1,1,1);
     final double FOOD_SIZE = 0.1;
 
     // Laser
-    final Object LASER_COLOR = formatColor(1,0,0);
+    final String LASER_COLOR = formatColor(1,0,0);
     final double LASER_SIZE = 0.02;
 
     // Capsule graphics
-    final Object CAPSULE_COLOR = formatColor(1,1,1);
+    final String CAPSULE_COLOR = formatColor(1,1,1);
     final double CAPSULE_SIZE = 0.25;
 
     // Drawing walls
     final double WALL_RADIUS = 0.15;
 
 
-/** Saves the current graphical output as a postscript file */
-public void saveFrame() {
-    
-    final boolean SAVE_POSTSCRIPT = false;
-    final String POSTSCRIPT_OUTPUT_DIR = "frames";
-    int FRAME_NUMBER = 0;
-    
-    if(!SAVE_POSTSCRIPT) {
-        return;
+    /** Saves the current graphical output as a postscript file */
+    public void saveFrame() {
+
+        final boolean SAVE_POSTSCRIPT = false;
+        final String POSTSCRIPT_OUTPUT_DIR = "frames";
+        int FRAME_NUMBER = 0;
+
+        if(!SAVE_POSTSCRIPT) {
+            return;
+        }
+        Util.makeDirectory(POSTSCRIPT_OUTPUT_DIR);
+        final StringBuilder name = new StringBuilder();
+        name.append(POSTSCRIPT_OUTPUT_DIR).append(File.separator).append("frame_");
+        name.append(String.format("%010d", FRAME_NUMBER)).append(".ps");
+        FRAME_NUMBER += 1;
+        GraphicsUtils.writePostscript(name.toString()); // writes the current canvas
     }
-    Util.makeDirectory(POSTSCRIPT_OUTPUT_DIR);
-    // TODO need to add left 0 padding to FRAME_NUMBER
-    final String name = POSTSCRIPT_OUTPUT_DIR + File.separator + "frame_" + FRAME_NUMBER + ".ps";
-    FRAME_NUMBER += 1;
-    GraphicsUtils.writePostscript(name); // writes the current canvas
 }

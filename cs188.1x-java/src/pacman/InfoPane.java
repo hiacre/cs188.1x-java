@@ -1,7 +1,9 @@
 package pacman;
 
+import java.awt.Color;
 import java.util.List;
 import util.Position;
+
 
 /**
  *
@@ -12,14 +14,16 @@ public class InfoPane {
     private final int base;
     private final int width;
     private final int fontSize;
+    private final int height;
+    private final Color textColor;
 
     public InfoPane(final Layout layout, final int gridSize) {
         this.gridSize = gridSize;
         this.width = (layout.getWidth()) * gridSize;
         this.base = (layout.getHeight() + 1) * gridSize;
-        this.height = INFO_PANE_HEIGHT;
+        this.height = GraphicsDisplay.INFO_PANE_HEIGHT;
         this.fontSize = 24;
-        this.textColor = PACMAN_COLOR;
+        this.textColor = GraphicsDisplay.PACMAN_COLOR;
         this.drawPane();
     }
 
@@ -81,7 +85,6 @@ public class InfoPane {
             }
         }
     }
-
     def drawGhost(self):
         pass
 

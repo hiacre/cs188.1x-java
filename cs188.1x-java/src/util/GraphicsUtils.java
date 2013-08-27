@@ -26,7 +26,7 @@ public class GraphicsUtils {
     _canvas_tserifs = 0;
 
     
-    private String formatColor(final double r, final double g, final double b) {
+    public static String formatColor(final double r, final double g, final double b) {
         if(r<0 || g<0 || b<0 || r>1 || g>1 || b>0) {
             throw new RuntimeException("All components must be between 0 and 1 inclusive");
         }
@@ -52,7 +52,7 @@ public class GraphicsUtils {
     /** Takes a colour in hex notation (e.g. #abcdef) and returns it as a vector
      * of numbers between 0 and 1 (fractions of 255).
      */
-    private List<Double> colorToVector(final String color) {
+    public static List<Double> colorToVector(final String color) {
         final String hexRed = color.substring(1, 3);
         final String hexGreen = color.substring(3, 5);
         final String hexBlue = color.substring(5, 7);
@@ -61,6 +61,15 @@ public class GraphicsUtils {
                 Integer.parseInt(hexRed, 16) / 256.0,
                 Integer.parseInt(hexGreen, 16) / 256.0,
                 Integer.parseInt(hexBlue, 16) / 256.0);
+    }
+    
+    /** Writes the current canvas to a postscript file. */
+    public static void writePostscript(final String filename) {
+        psfile = file(filename, 'w');
+        psfile.write(_canvas.postscript(pageanchor='sw',
+                         y='0.c',
+                         x='0.c'));
+        psfile.close();
     }
 
 //if _Windows:
@@ -392,13 +401,6 @@ def move_by(object, x, y=None,
     if lift:
         _canvas.tag_raise(object)
 
-def writePostscript(filename):
-    "Writes the current canvas to a postscript file."
-    psfile = file(filename, 'w')
-    psfile.write(_canvas.postscript(pageanchor='sw',
-                     y='0.c',
-                     x='0.c'))
-    psfile.close()
 
 ghost_shape = [
     (0, - 0.5),

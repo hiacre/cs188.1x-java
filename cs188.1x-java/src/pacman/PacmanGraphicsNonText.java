@@ -27,10 +27,11 @@ public class PacmanGraphicsNonText {
     private static Layout layout;
     private static int width;
     private static int height;
-    private InfoPane infoPane;
-    private int gridSize;
-    private Layout currentState;
+    private static InfoPane infoPane;
+    private static double gridSize;
+    private static Layout currentState;
     private List<List> distributionImages;
+    private final Object pacmanImage;
 
     PacmanGraphicsNonText(Double zoom, Double frameTime, Boolean capture) {
         zoom = zoom == null ? 1.0 : zoom;
@@ -41,7 +42,7 @@ public class PacmanGraphicsNonText {
         this.currentGhostImages = new HashMap<>();
         this.pacmanImage = null;
         this.zoom = zoom;
-        this.gridSize = DEFAULT_GRID_SIZE * zoom;
+        gridSize = GraphicsDisplay.DEFAULT_GRID_SIZE * zoom;
         this.capture = capture;
         this.frameTime = frameTime;
     }
@@ -49,7 +50,7 @@ public class PacmanGraphicsNonText {
     private void initialize(final GameState1 state, Boolean isBlue) {
         this.isBlue = isBlue == null ? false : isBlue;
         
-        this.startGraphics(state);
+        PacmanGraphicsNonText.startGraphics(state);
 
         // this.drawDistributions(state)
         this.distributionImages = null;  // Initialized lazily
@@ -66,9 +67,9 @@ public class PacmanGraphicsNonText {
         final Layout l = layout;
         width = l.getWidth();
         height = l.getHeight();
-        this.make_window(this.width, this.height);
-        this.infoPane = new InfoPane(l, this.gridSize);
-        this.currentState = l;
+        make_window(width, height);
+        infoPane = new InfoPane(l, gridSize);
+        currentState = l;
     }
 
     private void drawDistributions(final GameState1 state) {
@@ -151,7 +152,7 @@ public class PacmanGraphicsNonText {
     }
     
 
-    private void make_window(final int width, final int height) {
+    private static void make_window(final int width, final int height) {
         final int grid_width = (width-1) * this.gridSize;
         final int grid_height = (height-1) * this.gridSize;
         final int screen_width = 2*this.gridSize + grid_width;
@@ -345,8 +346,8 @@ public class PacmanGraphicsNonText {
     private Position to_screen(final Position point) {
         double x = point.getX();
         double y = point.getY();
-        x = (x + 1)*this.gridSize;
-        y = (this.height  - y)*this.gridSize;
+        x = (x + 1)*gridSize;
+        y = (height  - y)*gridSize;
         return Position.newInstance(x, y);
     }
 
