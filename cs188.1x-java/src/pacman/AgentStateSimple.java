@@ -45,4 +45,9 @@ public class AgentStateSimple implements AgentState {
     public Configuration getStart() {
         return startConfiguration;
     }
+    
+    @Override
+    public boolean isPacman() {
+        return isPacman;
+    }
 }

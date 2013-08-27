@@ -1,5 +1,9 @@
 package pacman;
 
+import java.util.ArrayList;
+import java.util.List;
+import util.Position;
+
 /**
  *
  * @author archie
@@ -12,49 +16,49 @@ public class FirstPersonPacmanGraphics extends PacmanGraphicsNonText {
         this.showGhosts = showGhosts == null ? true : showGhosts;
     }
 
-    // TODO this is very similar to super.initialize().  There's a better way to do this.
-    private void initialize(final GameState1 state, Boolean isBlue) {
 
-        this.isBlue = isBlue == null ? false : isBlue;
-        
-        PacmanGraphicsNonText.startGraphics(state);
-        # Initialize distribution images
-        walls = state.layout.walls
-        dist = []
-        self.layout = state.layout
+    @Override
+    protected void initializeDistributionImages(final GameState1 state) {
+        this.setLayout(state.getLayout());
+    }
+    
 
-        # Draw the rest
-        self.distributionImages = None  # initialize lazily
-        self.drawStaticObjects(state)
-        self.drawAgentObjects(state)
+    public void lookAhead(final Configuration config, final GameState1 state) {
+        // TODO invert this predicate and remove the branch
+        if(Direction.Stop.equals(config.getDirection())) {
+        } else {
+            // Draw relevant ghosts
+            final List<AgentState> allGhosts = state.getGhostStates();
+            final List<AgentState> visibleGhosts = state.getVisibleGhosts();
+            for(int i=0; i<allGhosts.size(); i++) {
+                final AgentState ghost = allGhosts.get(i);
+                if(visibleGhosts.contains(ghost)) {
+                    this.drawGhost(ghost, i);
+                } else {
+                    this.setCurrentGhostImages(i, null);
+                }
+            }
+        }
+    }
 
-        # Information
-        self.previousState = state
+    private String getGhostColor(final Object ghost, final int ghostIndex) {
+        return GraphicsDisplay.GHOST_COLORS.get(ghostIndex);
+    }
 
-    def lookAhead(self, config, state):
-        if config.getDirection() == 'Stop':
-            return
-        else:
-            pass
-            # Draw relevant ghosts
-            allGhosts = state.getGhostStates()
-            visibleGhosts = state.getVisibleGhosts()
-            for i, ghost in enumerate(allGhosts):
-                if ghost in visibleGhosts:
-                    self.drawGhost(ghost, i)
-                else:
-                    self.currentGhostImages[i] = None
+    private Position getPosition2(final AgentState ghostState) {
+        if(!this.showGhosts && !ghostState.isPacman() && ghostState.getPosition().getX() > 1) {
+            return Position.newInstance(-1000, -1000);
+        } else {
+            return PacmanGraphicsNonText.getPosition1(ghostState);
+        }
+    }
 
-    def getGhostColor(self, ghost, ghostIndex):
-        return GHOST_COLORS[ghostIndex]
-
-    def getPosition(self, ghostState):
-        if not self.showGhosts and not ghostState.isPacman and ghostState.getPosition()[1] > 1:
-            return (-1000, -1000)
-        else:
-            return PacmanGraphics.getPosition(self, ghostState)
-
-    def add(x, y):
-        return (x[0] + y[0], x[1] + y[1])
+    /** TODO Does this take and return positions? */
+    private List<Double> add(List<Double> x, List<Double> y) {
+        List result = new ArrayList();
+        result.add(x.get(0) + y.get(0));
+        result.add(x.get(1) + y.get(1));
+        return result;
+    }
 
 }

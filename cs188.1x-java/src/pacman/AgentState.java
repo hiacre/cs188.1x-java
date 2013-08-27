@@ -13,5 +13,6 @@ public interface AgentState {
     public Direction getDirection();
     public Configuration getConfiguration();
     public void setConfiguration(Configuration generateSuccessor);
+    public boolean isPacman();
     
 }

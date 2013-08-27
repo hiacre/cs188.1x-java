@@ -48,9 +48,11 @@ public class PacmanGraphicsNonText {
     }
 
     private void initialize(final GameState1 state, Boolean isBlue) {
-        this.isBlue = isBlue == null ? false : isBlue;
         
+        this.isBlue = isBlue == null ? false : isBlue;
         PacmanGraphicsNonText.startGraphics(state);
+        
+        initializeDistributionImages(state);
 
         // this.drawDistributions(state)
         this.distributionImages = null;  // Initialized lazily
@@ -59,6 +61,11 @@ public class PacmanGraphicsNonText {
 
         // Information
         this.previousState = state;
+    }
+    
+    /** Exists to be overriden */
+    protected void initializeDistributionImages(final GameState1 state) {
+        
     }
     
 
@@ -89,7 +96,7 @@ public class PacmanGraphicsNonText {
         this.distributionImages = dist;
     }
 
-    private void drawStaticObjects(final GameState1 state) {
+    protected void drawStaticObjects(final GameState1 state) {
         final Layout l = this.layout;
         this.drawWalls(l.getWalls());
         this.food = this.drawFood(l.getFood());
@@ -97,7 +104,7 @@ public class PacmanGraphicsNonText {
         refresh();
     }
 
-    private void drawAgentObjects(final GameState1 state) {
+    protected void drawAgentObjects(final GameState1 state) {
         this.agentImages = new ArrayList();  // (agentState, image)
         for(index, agent in enumerate(state.agentStates)) {
             if(agent.isPacman) {
@@ -245,8 +252,8 @@ public class PacmanGraphicsNonText {
         }
     }
 
-    private List drawGhost(final Object ghost, final int agentIndex) {
-        pos = this.getPosition(ghost);
+    protected List drawGhost(final Object ghost, final int agentIndex) {
+        final Position pos = this.getPosition(ghost);
         final Direction dir = this.getDirection(ghost);
         (screen_x, screen_y) = (this.to_screen(pos) );
         coords = new ArrayList();
@@ -325,7 +332,7 @@ public class PacmanGraphicsNonText {
         refresh();
     }
 
-    private Position getPosition(final AgentState agentState) {
+    protected static Position getPosition1(final AgentState agentState) {
         if(agentState.getConfiguration() == null) {
             return Position.newInstance(-1000, -1000);
         }
@@ -587,5 +594,13 @@ public class PacmanGraphicsNonText {
             }
         }
         refresh();
+    }
+    
+    protected void setCurrentGhostImages(final int index, final Object o) {
+        currentGhostImages.put(index, o);
+    }
+    
+    protected static void setLayout(final Layout l) {
+        layout = l;
     }
 }
