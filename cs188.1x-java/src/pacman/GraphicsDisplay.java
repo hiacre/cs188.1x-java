@@ -40,7 +40,7 @@ public class GraphicsDisplay {
         GHOST_COLORS = Collections.unmodifiableList(GhostColors);
     }
 
-    final static List TEAM_COLORS = GHOST_COLORS.subList(0, 2);
+    public final static List<String> TEAM_COLORS = GHOST_COLORS.subList(0, 2);
 
     final List<Position> GHOST_SHAPE = Arrays.asList(
         Position.newInstance( 0,     0.3 ),
@@ -71,8 +71,8 @@ public class GraphicsDisplay {
     final double PACMAN_SCALE = 0.5;
 
     // Food
-    final String FOOD_COLOR = formatColor(1,1,1);
-    final double FOOD_SIZE = 0.1;
+    public static final String FOOD_COLOR = formatColor(1,1,1);
+    public static final double FOOD_SIZE = 0.1;
 
     // Laser
     final String LASER_COLOR = formatColor(1,0,0);

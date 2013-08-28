@@ -12,9 +12,9 @@ import static graphics.utils.GraphicsUtils.changeText;
  * @author archie
  */
 public class InfoPane {
-    private final int gridSize;
-    private final int base;
-    private final int width;
+    private final double gridSize;
+    private final double base;
+    private final double width;
     private final int fontSize;
     private final int height;
     private final String textColor;
@@ -22,7 +22,7 @@ public class InfoPane {
     private List ghostDistanceText = null;
     private Object teamText;
 
-    public InfoPane(final Layout layout, final int gridSize) {
+    public InfoPane(final Layout layout, final double gridSize) {
         this.gridSize = gridSize;
         this.width = (layout.getWidth()) * gridSize;
         this.base = (layout.getHeight() + 1) * gridSize;
@@ -33,7 +33,7 @@ public class InfoPane {
     }
 
     /** Translates a point relative from the bottom left of the info pane. */
-    public Position toScreen(int x, int y) {
+    public Position toScreen(double x, double y) {
         x += this.gridSize; // Margin
         y += this.base;
         return Position.newInstance(x, y);

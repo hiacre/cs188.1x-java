@@ -11,6 +11,9 @@ import static pacman.Direction.West;
 import sun.management.resources.agent;
 import util.Position;
 
+import static graphics.utils.GraphicsUtils.square;
+import static graphics.utils.GraphicsUtils.circle;
+
 /**
  *
  * @author archie
@@ -28,7 +31,7 @@ public class PacmanGraphicsNonText {
     private static int width;
     private static int height;
     private static InfoPane infoPane;
-    private static int gridSize;
+    private static double gridSize;
     private static Layout currentState;
     private List<List> distributionImages;
     private final Object pacmanImage;
@@ -86,18 +89,17 @@ public class PacmanGraphicsNonText {
             final List distx = new ArrayList();
             dist.add(distx);
             for(int y=0; y<walls.getHeight(); y++) {
-                ( screen_x, screen_y ) = this.to_screen(x,y);
-                block = square( (screen_x, screen_y),
-                                0.5 * this.gridSize,
-                                color = BACKGROUND_COLOR,
-                                filled = 1, behind=2);
-                distx.append(block);
+                final Position pos = this.to_screen(x, y);
+                final double screen_x = pos.getX();
+                final double screen_y = pos.getY();
+                final Object block = square(screen_x, screen_y, 0.5 * gridSize, GraphicsDisplay.BACKGROUND_COLOR, 1, 2);
+                distx.add(block);
             }
         this.distributionImages = dist;
     }
 
     protected void drawStaticObjects(final GameState1 state) {
-        final Layout l = this.layout;
+        final Layout l = layout;
         this.drawWalls(l.getWalls());
         this.food = this.drawFood(l.getFood());
         this.capsules = this.drawCapsules(l.getCapsules());
@@ -351,11 +353,13 @@ public class PacmanGraphicsNonText {
     }
 
     private Position to_screen(final Position point) {
-        double x = point.getX();
-        double y = point.getY();
-        x = (x + 1)*gridSize;
-        y = (height  - y)*gridSize;
-        return Position.newInstance(x, y);
+        return to_screen(point.getX(), point.getY());
+    }
+    
+    private Position to_screen(final double x, final double y) {
+        final double newX = (x + 1)*gridSize;
+        final double newY = (height - y)*gridSize;
+        return Position.newInstance(newX, newY);
     }
 
     /** Fixes some TK issue with off-center circles */
@@ -487,28 +491,36 @@ public class PacmanGraphicsNonText {
     }
     
 
-    private drawFood(final Object foodMatrix) {
+    private List drawFood(final Grid foodGrid) {
+        List<List<Boolean>> foodMatrix = foodGrid.getData();
         List foodImages = new ArrayList();
-        color = FOOD_COLOR;
-        for(xNum, x in enumerate(foodMatrix)) {
-            if(this.capture && (xNum * 2) <= foodMatrix.width) {
-                color = TEAM_COLORS[0];
+        String color = GraphicsDisplay.FOOD_COLOR;
+        for(int xNum=0; xNum<foodMatrix.size(); xNum++) {
+            final List<Boolean> x = foodMatrix.get(xNum);
+            if(this.capture && (xNum * 2) <= foodGrid.getWidth()) {
+                color = GraphicsDisplay.TEAM_COLORS.get(0);
             }
-            if(this.capture && (xNum * 2) > foodMatrix.width) {
-                color = TEAM_COLORS[1];
+            if(this.capture && (xNum * 2) > foodGrid.getWidth()) {
+                color = GraphicsDisplay.TEAM_COLORS.get(1);
             }
-            List imageRow = new ArrayList();
-            foodImages.append(imageRow);
-            for(yNum, cell in enumerate(x)) {
+            final List imageRow = new ArrayList();
+            foodImages.add(imageRow);
+            for(int yNum=0; yNum<x.size(); yNum++) {
+                final boolean cell = x.get(yNum);
                 if(cell) { // There's food here
-                    screen = this.to_screen((xNum, yNum ));
-                    dot = circle( screen,
-                                  FOOD_SIZE * this.gridSize,
-                                  outlineColor = color, fillColor = color,
-                                  width = 1);
-                    imageRow.append(dot);
+                    final Position screen = this.to_screen(xNum, yNum);
+                    final Object dot = circle(
+                            screen.getX(),
+                            screen.getY(),
+                            GraphicsDisplay.FOOD_SIZE * gridSize,
+                            color,
+                            color,
+                            null,
+                            null,
+                            1);
+                    imageRow.add(dot);
                 } else {
-                    imageRow.append(None);
+                    imageRow.add(null);
                 }
             }
         }

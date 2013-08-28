@@ -20,6 +20,7 @@ public interface Grid {
     public void set(int x, int y, boolean bool);
     public int getWidth();
     public int getHeight();
+    public List<List<Boolean>> getData();
     
     /** Returns the number of items in the grid */
     public int getCount();
