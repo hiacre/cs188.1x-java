@@ -280,11 +280,15 @@ public class GraphicsUtils {
         return _canvas.create_text(x, y, fill=color, text=contents, font=font, anchor=anchor);
     }
 
-//def changeText(id, newText, font=None, size=12, style='normal'):
-//    _canvas.itemconfigure(id, text=newText)
-//    if font != None:
-//        _canvas.itemconfigure(id, font=(font, '-%d' % size, style))
-//
+    public static void changeText(final Object id, final String newText, String font, Integer size, String style) {
+        size = size == null ? 12 : size;
+        style = style == null ? "normal" : style;
+        _canvas.itemconfigure(id, text=newText);
+        if(font != null) {
+            _canvas.itemconfigure(id, font=(font, '-%d' % size, style));
+        }
+    }
+
 //def changeColor(id, newColor):
 //    _canvas.itemconfigure(id, fill=newColor)
 //
