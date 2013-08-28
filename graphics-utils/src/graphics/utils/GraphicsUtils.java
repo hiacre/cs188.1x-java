@@ -215,25 +215,42 @@ public class GraphicsUtils {
 //    if behind > 0:
 //        _canvas.tag_lower(poly, behind) # Higher should be more visible
 //    return poly
-//
-//def square(pos, r, color, filled=1, behind=0):
-//    x, y = pos
-//    coords = [(x - r, y - r), (x + r, y - r), (x + r, y + r), (x - r, y + r)]
-//    return polygon(coords, color, color, filled, 0, behind=behind)
-//
-//def circle(pos, r, outlineColor, fillColor, endpoints=None, style='pieslice', width=2):
-//    x, y = pos
-//    x0, x1 = x - r - 1, x + r
-//    y0, y1 = y - r - 1, y + r
-//    if endpoints == None:
-//        e = [0, 359]
-//    else:
-//        e = list(endpoints)
-//    while e[0] > e[1]: e[1] = e[1] + 360
-//
-//    return _canvas.create_arc(x0, y0, x1, y1, outline=outlineColor, fill=fillColor,
-//                              extent=e[1] - e[0], start=e[0], style=style, width=width)
-//
+
+    public static Object square(final double x, final double y, final double r, final String color, Integer filled, Integer behind) {
+        filled = filled == null ? 1 : filled;
+        behind = behind == null ? 0 : behind;
+        List coords = Arrays.asList(
+                Arrays.asList(x - r, y - r),
+                Arrays.asList(x + r, y - r),
+                Arrays.asList(x + r, y + r),
+                Arrays.asList(x - r, y + r));
+        return polygon(coords, color, color, filled, 0, behind);
+    }
+
+    public static Object circle(
+            final double x,
+            final double y,
+            final double r,
+            final String outlineColor,
+            final String fillColor,
+            final Object endpoints,
+            String style,
+            Integer width) {
+        style = style == null ? "pieslice" : style;
+        width = width == null ? 2 : width;
+        x, y = pos;
+        x0, x1 = x - r - 1, x + r;
+        y0, y1 = y - r - 1, y + r;
+        if endpoints == None:
+            e = [0, 359];
+        else:
+            e = list(endpoints);
+        while e[0] > e[1]: e[1] = e[1] + 360;
+
+        return _canvas.create_arc(x0, y0, x1, y1, outline=outlineColor, fill=fillColor,
+                                  extent=e[1] - e[0], start=e[0], style=style, width=width);
+    }
+
 //def image(pos, file="../../blueghost.gif"):
 //    x, y = pos
 //    # img = PhotoImage(file=file)
