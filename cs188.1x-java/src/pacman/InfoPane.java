@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import util.Position;
 import static graphics.utils.GraphicsUtils.text;
+import static graphics.utils.GraphicsUtils.changeText;
 
 
 /**
@@ -18,7 +19,8 @@ public class InfoPane {
     private final int height;
     private final String textColor;
     private Object scoreText;
-    private ArrayList ghostDistanceText;
+    private List ghostDistanceText = null;
+    private Object teamText;
 
     public InfoPane(final Layout layout, final int gridSize) {
         this.gridSize = gridSize;
@@ -52,49 +54,58 @@ public class InfoPane {
             size = 10;
         }
 
-        for(i, d in enumerate(distances)) {
-            t = text( this.toScreen(this.width/2 + this.width/8 * i, 0), GHOST_COLORS[i+1], d, "Times", size, "bold");
-            this.ghostDistanceText.append(t);
+        for(int i=0; i<distances.size(); i++) {
+            final String d = distances.get(i).toString();
+            final Position pos = this.toScreen(this.width/2 + this.width/8 * i, 0);
+            final Object t = text(pos.getX(), pos.getY(), GraphicsDisplay.GHOST_COLORS.get(i+1), d, "Times", size, "bold", null);
+            this.ghostDistanceText.add(t);
         }
     }
 
-    public void updateScore(score) {
-        changeText(self.scoreText, "SCORE: % 4d" % score);
+    public void updateScore(final int score) {
+        changeText(this.scoreText, String.format("SCORE: %4d", score), null, null, null);
     }
 
-    public void setTeam(self, isBlue) {
-        text = "RED TEAM";
-        if isBlue: text = "BLUE TEAM";
-        self.teamText = text( self.toScreen(300, 0  ), self.textColor, text, "Times", self.fontSize, "bold");
+    public void setTeam(final boolean isBlue) {
+        String text = "RED TEAM";
+        if(isBlue) {
+            text = "BLUE TEAM";
+        }
+        final Position pos = this.toScreen(300, 0);
+        this.teamText = text(pos.getX(), pos.getY(), this.textColor, text, "Times", this.fontSize, "bold", null);
     }
 
     public void updateGhostDistances(final List distances) {
         if(distances.isEmpty()) {
             return;
         }
-        if('ghostDistanceText' not in dir(self)) {
-            self.initializeGhostDistances(distances);
+        if(this.ghostDistanceText == null) {
+            this.initializeGhostDistances(distances);
         } else {
-            for(i, d in enumerate(distances)) {
-                changeText(self.ghostDistanceText[i], d);
+            for(int i=0; i<distances.size(); i++) {
+                final String d = distances.get(i).toString();
+                changeText(this.ghostDistanceText.get(i), d, null, null, null);
             }
         }
     }
-    def drawGhost(self):
-        pass
+    
+    private void drawGhost() {
+        
+    }
 
-    def drawPacman(self):
-        pass
+    private void drawPacman() {
+        
+    }
 
-    def drawWarning(self):
-        pass
+    private void drawWarning() {
+    }
 
-    def clearIcon(self):
-        pass
+    private void clearIcon() {
+    }
 
-    def updateMessage(self, message):
-        pass
+    private void updateMessage(final Object message) {
+    }
 
-    def clearMessage(self):
-        pass    
+    private void clearMessage() {
+    }
 }
