@@ -28,7 +28,7 @@ public class PacmanGraphicsNonText {
     private static int width;
     private static int height;
     private static InfoPane infoPane;
-    private static double gridSize;
+    private static int gridSize;
     private static Layout currentState;
     private List<List> distributionImages;
     private final Object pacmanImage;

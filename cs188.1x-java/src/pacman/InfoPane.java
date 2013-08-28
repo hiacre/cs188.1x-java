@@ -1,8 +1,9 @@
 package pacman;
 
-import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 import util.Position;
+import static graphics.utils.GraphicsUtils.text;
 
 
 /**
@@ -15,7 +16,9 @@ public class InfoPane {
     private final int width;
     private final int fontSize;
     private final int height;
-    private final Color textColor;
+    private final String textColor;
+    private Object scoreText;
+    private ArrayList ghostDistanceText;
 
     public InfoPane(final Layout layout, final int gridSize) {
         this.gridSize = gridSize;
@@ -28,22 +31,14 @@ public class InfoPane {
     }
 
     /** Translates a point relative from the bottom left of the info pane. */
-    public Position toScreen(final Position pos, Double y) {
-        double x;
-        if(y == null) {
-            x = pos.getX();
-            y = pos.getY();
-        } else {
-            x = pos.getX();
-        }
-
+    public Position toScreen(int x, int y) {
         x += this.gridSize; // Margin
         y += this.base;
         return Position.newInstance(x, y);
     }
 
     public final void drawPane() {
-        this.scoreText = text( this.toScreen(0, 0  ), this.textColor, "SCORE:    0", "Times", this.fontSize, "bold");
+        this.scoreText = text(0, 0, this.textColor, "SCORE:    0", "Times", this.fontSize, "bold", null);
     }
 
     public void initializeGhostDistances(final List distances) {

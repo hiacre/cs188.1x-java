@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import util.GraphicsUtils;
-import static util.GraphicsUtils.formatColor;
 import util.Position;
 import util.Util;
+import static graphics.utils.GraphicsUtils.formatColor;
+import static graphics.utils.GraphicsUtils.colorToVector;
+import static graphics.utils.GraphicsUtils.writePostscript;
 
 /**
  *
@@ -61,7 +62,7 @@ public class GraphicsDisplay {
     static {
         List<List<Double>> ghostVecColors = new ArrayList<>();
         for(String c : GHOST_COLORS) {
-            ghostVecColors.add(GraphicsUtils.colorToVector(c));
+            ghostVecColors.add(colorToVector(c));
         }
         GHOST_VEC_COLORS = Collections.unmodifiableList(ghostVecColors);
     }
@@ -100,6 +101,6 @@ public class GraphicsDisplay {
         name.append(POSTSCRIPT_OUTPUT_DIR).append(File.separator).append("frame_");
         name.append(String.format("%010d", FRAME_NUMBER)).append(".ps");
         FRAME_NUMBER += 1;
-        GraphicsUtils.writePostscript(name.toString()); // writes the current canvas
+        writePostscript(name.toString()); // writes the current canvas
     }
 }
