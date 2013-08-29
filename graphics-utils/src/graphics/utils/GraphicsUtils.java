@@ -233,33 +233,39 @@ public class GraphicsUtils {
             final double r,
             final String outlineColor,
             final String fillColor,
-            final Object endpoints,
+            final List<Integer> endpoints,
             String style,
             Integer width) {
         style = style == null ? "pieslice" : style;
         width = width == null ? 2 : width;
-        x, y = pos;
-        x0, x1 = x - r - 1, x + r;
-        y0, y1 = y - r - 1, y + r;
-        if endpoints == None:
-            e = [0, 359];
-        else:
-            e = list(endpoints);
-        while e[0] > e[1]: e[1] = e[1] + 360;
+        final double x0 = x-r-1;
+        final double x1 = x+r;
+        final double y0 = y-r-1;
+        final double y1 = y+r;
+        final List<Integer> e;
+        if(endpoints == null) {
+            e = Arrays.asList(0, 359);
+        } else {
+            e = endpoints;
+        }
+        while(e.get(0) > e.get(1)) {
+            e.add(1, e.get(1) + 360);
+        }
 
-        return _canvas.create_arc(x0, y0, x1, y1, outline=outlineColor, fill=fillColor,
-                                  extent=e[1] - e[0], start=e[0], style=style, width=width);
+        return _canvas.create_arc(x0, y0, x1, y1, outlineColor, fillColor,
+                                  e[1] - e[0], e[0], style, width);
     }
 
 //def image(pos, file="../../blueghost.gif"):
 //    x, y = pos
 //    # img = PhotoImage(file=file)
 //    return _canvas.create_image(x, y, image = Tkinter.PhotoImage(file=file), anchor = Tkinter.NW)
-//
-//
-//def refresh():
-//    _canvas.update_idletasks()
-//
+
+
+    public static void refresh() {
+        _canvas.update_idletasks();
+    }
+
 //def moveCircle(id, pos, r, endpoints=None):
 //    global _canvas_x, _canvas_y
 //
@@ -383,13 +389,15 @@ public class GraphicsUtils {
 //        keys = keys_pressed()
 //        sleep(0.05)
 //    return keys
-//
-//def remove_from_screen(x,
-//                       d_o_e=Tkinter.tkinter.dooneevent,
-//                       d_w=Tkinter.tkinter.DONT_WAIT):
-//    _canvas.delete(x)
-//    d_o_e(d_w)
-//
+
+    public static void remove_from_screen(final Object x, Object d_o_e, Object d_w) {
+        d_o_e = d_o_e == null ? Tkinter.tkinter.dooneevent : d_o_e;
+        d_w = d_w == null ? Tkinter.tkinter.DONT_WAIT : d_w;
+
+        _canvas.delete(x);
+        d_o_e(d_w);
+    }
+
 //def _adjust_coords(coord_list, x, y):
 //    for i in range(0, len(coord_list), 2):
 //        coord_list[i] = coord_list[i] + x
