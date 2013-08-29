@@ -1,5 +1,6 @@
 package pacman;
 
+import graphics.utils.GraphicsUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,7 @@ public class PacmanGraphicsNonText {
     private static Layout currentState;
     private List<List> distributionImages;
     private final Object pacmanImage;
+    private List<Pair<AgentState, List<Object>>> agentImages;
 
     PacmanGraphicsNonText(Double zoom, Double frameTime, Boolean capture) {
         zoom = zoom == null ? 1.0 : zoom;
@@ -121,24 +123,29 @@ public class PacmanGraphicsNonText {
     }
     
     /** Changes an image from a ghost to a pacman or vis versa (for capture) */
-    private void swapImages(final int agentIndex, final GameState1 newState) {
-        prevState, prevImage = this.agentImages.get(agentIndex);
-        for item in prevImage: remove_from_screen(item);
-        if(newState.isPacman) {
+    private void swapImages(final int agentIndex, final AgentState newState) {
+        final Pair<Object, List> pair = this.agentImages.get(agentIndex);
+        final Object prevState = pair.getFirst();
+        final List prevImage = pair.getSecond();
+        for(Object item : prevImage) {
+            GraphicsUtils.remove_from_screen(item, null, null);
+        }
+        final List<Object> image;
+        if(newState.isPacman()) {
             image = this.drawPacman(newState, agentIndex);
-            this.agentImages[agentIndex] = (newState, image );
+            this.agentImages.add(agentIndex, new Pair<>(newState, image));
         } else {
             image = this.drawGhost(newState, agentIndex);
-            this.agentImages[agentIndex] = (newState, image );
+            this.agentImages.add(agentIndex, new Pair<>(newState, image));
         }
-        refresh();
+        GraphicsUtils.refresh();
     }
 
     private void update(final GameState1 newState) {
         final int agentIndex = newState.getAgentMoved();
         final AgentState agentState = newState.getAgentStates().get(agentIndex);
 
-        if(this.agentImages.get(agentIndex).get(0).isPacman != agentState.isPacman()) {
+        if(this.agentImages.get(agentIndex).get(0).isPacman() != agentState.isPacman()) {
             this.swapImages(agentIndex, agentState);
         }
         prevState, prevImage = this.agentImages.get(agentIndex);
@@ -173,7 +180,7 @@ public class PacmanGraphicsNonText {
                        "CS188 Pacman");
     }
 
-    private void drawPacman(final Object pacman, final int index) {
+    private List<Object> drawPacman(final AgentState pacman, final int index) {
         position = this.getPosition(pacman);
         screen_point = this.to_screen(position);
         endpoints = this.getEndpoints(this.getDirection(pacman));
@@ -527,23 +534,28 @@ public class PacmanGraphicsNonText {
         return foodImages;
     }
 
-    private void drawCapsules(final Object capsules) {
-        final Map capsuleImages = new HashMap();
-        for(capsule in capsules) {
-            ( screen_x, screen_y ) = this.to_screen(capsule);
-            dot = circle( (screen_x, screen_y),
-                              CAPSULE_SIZE * this.gridSize,
-                              outlineColor = CAPSULE_COLOR,
-                              fillColor = CAPSULE_COLOR,
-                              width = 1);
-            capsuleImages[capsule] = dot;
+    private Map<Position, Object> drawCapsules(final List<Position> capsules) {
+        final Map<Position, Object> capsuleImages = new HashMap<>();
+        for(Position capsule : capsules) {
+            final Position pos = this.to_screen(capsule);
+            final double screen_x = pos.getX();
+            final double screen_y = pos.getY();
+            final Object dot = circle(   screen_x, screen_y,
+                            GraphicsDisplay.CAPSULE_SIZE * gridSize,
+                            GraphicsDisplay.CAPSULE_COLOR,
+                            GraphicsDisplay.CAPSULE_COLOR,
+                            null,
+                            null,
+                            1);
+            capsuleImages.put(capsule, dot);
         }
         return capsuleImages;
     }
 
-    private void removeFood(final Object cell, final Object foodImages) {
-        x, y = cell;
-        remove_from_screen(foodImages[x][y]);
+    private void removeFood(final Position cell, final List<List>> foodImages) {
+        final double x = cell.getX();
+        final double y = cell.getY();
+        remove_from_screen(foodImages.get(x).get(y));
     }
 
     private void removeCapsule(final Object cell, final Object capsuleImages) {

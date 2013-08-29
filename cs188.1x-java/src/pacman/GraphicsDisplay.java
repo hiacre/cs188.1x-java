@@ -79,8 +79,8 @@ public class GraphicsDisplay {
     final double LASER_SIZE = 0.02;
 
     // Capsule graphics
-    final String CAPSULE_COLOR = formatColor(1,1,1);
-    final double CAPSULE_SIZE = 0.25;
+    final static String CAPSULE_COLOR = formatColor(1,1,1);
+    final static double CAPSULE_SIZE = 0.25;
 
     // Drawing walls
     final double WALL_RADIUS = 0.15;
