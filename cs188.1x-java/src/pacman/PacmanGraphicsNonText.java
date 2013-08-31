@@ -14,6 +14,7 @@ import util.Position;
 
 import static graphics.utils.GraphicsUtils.square;
 import static graphics.utils.GraphicsUtils.circle;
+import java.util.Arrays;
 
 /**
  *
@@ -105,28 +106,30 @@ public class PacmanGraphicsNonText {
         this.drawWalls(l.getWalls());
         this.food = this.drawFood(l.getFood());
         this.capsules = this.drawCapsules(l.getCapsules());
-        refresh();
+        GraphicsUtils.refresh();
     }
 
     protected void drawAgentObjects(final GameState1 state) {
         this.agentImages = new ArrayList();  // (agentState, image)
-        for(index, agent in enumerate(state.agentStates)) {
-            if(agent.isPacman) {
+        for(int index=0; index<state.getAgentStates().size(); index++) {
+            final AgentState agent = state.getAgentStates().get(index);
+            final List<Object> image;
+            if(agent.isPacman()) {
                 image = this.drawPacman(agent, index);
-                this.agentImages.append( (agent, image) );
+                this.agentImages.add(new Pair<>(agent, image));
             } else {
                 image = this.drawGhost(agent, index);
-                this.agentImages.append( (agent, image) );
+                this.agentImages.add(new Pair<>(agent, image));
             }
         }
-        refresh();
+        GraphicsUtils.refresh();
     }
     
     /** Changes an image from a ghost to a pacman or vis versa (for capture) */
     private void swapImages(final int agentIndex, final AgentState newState) {
-        final Pair<Object, List> pair = this.agentImages.get(agentIndex);
-        final Object prevState = pair.getFirst();
-        final List prevImage = pair.getSecond();
+        final Pair<AgentState, List<Object>> pair = this.agentImages.get(agentIndex);
+        final AgentState prevState = pair.getFirst();
+        final List<Object> prevImage = pair.getSecond();
         for(Object item : prevImage) {
             GraphicsUtils.remove_from_screen(item, null, null);
         }
@@ -145,16 +148,17 @@ public class PacmanGraphicsNonText {
         final int agentIndex = newState.getAgentMoved();
         final AgentState agentState = newState.getAgentStates().get(agentIndex);
 
-        if(this.agentImages.get(agentIndex).get(0).isPacman() != agentState.isPacman()) {
+        if(this.agentImages.get(agentIndex).getFirst().isPacman() != agentState.isPacman()) {
             this.swapImages(agentIndex, agentState);
         }
-        prevState, prevImage = this.agentImages.get(agentIndex);
+        final AgentState prevState = this.agentImages.get(agentIndex).getFirst();
+        final List<Object> prevImage = this.agentImages.get(agentIndex).getSecond();
         if(agentState.isPacman()) {
             this.animatePacman(agentState, prevState, prevImage);
         } else {
             this.moveGhost(agentState, agentIndex, prevState, prevImage);
         }
-        this.agentImages.get(agentIndex) = (agentState, prevImage);
+        this.agentImages.set(agentIndex, new Pair<>(agentState, prevImage));
 
         if(newState.getFoodEaten() != null) {
             this.removeFood(newState.getFoodEaten(), this.food);
@@ -162,21 +166,21 @@ public class PacmanGraphicsNonText {
         if(newState.getCapsuleEaten() != null) {
             this.removeCapsule(newState.getCapsuleEaten(), this.capsules);
         }
-        this.infoPane.updateScore(newState.getScore());
+        infoPane.updateScore(newState.getScore());
         // TODO we only do the following if newState supports the getGhostDistances() method
-        this.infoPane.updateGhostDistances(newState.getGhostDistances());
+        infoPane.updateGhostDistances(newState.getGhostDistances());
     }
     
 
     private static void make_window(final int width, final int height) {
-        final int grid_width = (width-1) * this.gridSize;
-        final int grid_height = (height-1) * this.gridSize;
-        final int screen_width = 2*this.gridSize + grid_width;
-        final int screen_height = 2*this.gridSize + grid_height + INFO_PANE_HEIGHT;
+        final double grid_width = (width-1) * gridSize;
+        final double grid_height = (height-1) * gridSize;
+        final double screen_width = 2*gridSize + grid_width;
+        final double screen_height = 2*gridSize + grid_height + GraphicsDisplay.INFO_PANE_HEIGHT;
 
         begin_graphics(screen_width,
                        screen_height,
-                       BACKGROUND_COLOR,
+                       GraphicsDisplay.BACKGROUND_COLOR,
                        "CS188 Pacman");
     }
 
@@ -195,10 +199,10 @@ public class PacmanGraphicsNonText {
             width = PACMAN_CAPTURE_OUTLINE_WIDTH;
         }
 
-        return [circle(screen_point, PACMAN_SCALE * this.gridSize,
+        return Arrays.asList(circle(screen_point, PACMAN_SCALE * this.gridSize,
                        fillColor = fillColor, outlineColor = outlineColor,
                        endpoints = endpoints,
-                       width = width)];
+                       width = width));
     }
 
     private Endpoints getEndpoints(final Direction direction, Position position) {
@@ -321,10 +325,16 @@ public class PacmanGraphicsNonText {
     }
     
 
-    private void moveGhost(final GhostState ghost, final int ghostIndex, final Object prevGhost, final List ghostImageParts) {
-        old_x, old_y = this.to_screen(this.getPosition(prevGhost));
-        new_x, new_y = this.to_screen(this.getPosition(ghost));
-        final double delta = new_x - old_x, new_y - old_y;
+    private void moveGhost(final AgentState ghost, final int ghostIndex, final AgentState prevGhost, final List ghostImageParts) {
+        
+        final Position posOld = this.to_screen(getPosition1(prevGhost));
+        final double old_x = posOld.getX();
+        final double old_y = posOld.getY();
+        
+        final Position posNew = this.to_screen(getPosition1(ghost));
+        final double new_x = posNew.getX();
+        final double new_y = posNew.getY();
+        final Position delta = Position.newInstance(new_x - old_x, new_y - old_y);
 
         for(Object ghostImagePart : ghostImageParts) {
             move_by(ghostImagePart, delta);
