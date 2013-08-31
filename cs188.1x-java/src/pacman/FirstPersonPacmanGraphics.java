@@ -1,8 +1,8 @@
 package pacman;
 
+import common.Position;
 import java.util.ArrayList;
 import java.util.List;
-import util.Position;
 
 /**
  *
@@ -19,7 +19,7 @@ public class FirstPersonPacmanGraphics extends PacmanGraphicsNonText {
 
     @Override
     protected void initializeDistributionImages(final GameState1 state) {
-        this.setLayout(state.getLayout());
+        setLayout(state.getLayout());
     }
     
 

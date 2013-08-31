@@ -1,7 +1,7 @@
 package pacman;
 
+import common.Position;
 import java.util.List;
-import util.Position;
 
 /**
  * These functions dictate how ghosts interact with their environment.

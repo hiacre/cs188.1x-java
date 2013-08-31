@@ -1,11 +1,11 @@
 package pacman;
 
+import common.Position;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import util.Position;
 import util.Util;
 
 /**
@@ -64,6 +64,7 @@ public class GridStandard implements Grid {
         return result;
     }
     
+    @Override
     public List<List<Boolean>> getData() {
         return data;
     }

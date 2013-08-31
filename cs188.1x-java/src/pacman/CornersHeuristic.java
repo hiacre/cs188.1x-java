@@ -1,7 +1,7 @@
 package pacman;
 
+import common.Position;
 import java.util.List;
-import util.Position;
 
 /**
  * A heuristic for the CornersProblem that you defined.

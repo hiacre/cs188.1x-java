@@ -1,6 +1,6 @@
 package pacman;
 
-import util.Position;
+import common.Position;
 
 /**
  * An agent for position search with a cost function that penalizes being in

@@ -1,6 +1,6 @@
 package pacman;
 
-import util.Position;
+import common.Position;
 
 /**
  *

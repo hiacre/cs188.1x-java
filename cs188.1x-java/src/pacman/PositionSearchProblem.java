@@ -1,5 +1,6 @@
 package pacman;
 
+import common.Position;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.Position;
-import util.Position;
 import util.Util;
 
 /**

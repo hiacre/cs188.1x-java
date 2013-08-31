@@ -1,12 +1,12 @@
 package pacman;
 
+import common.Position;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import util.Position;
 import util.Util;
 
 /**

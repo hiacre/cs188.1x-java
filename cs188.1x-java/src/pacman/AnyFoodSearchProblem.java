@@ -1,6 +1,6 @@
 package pacman;
 
-import util.Position;
+import common.Position;
 
 /**
  * A search problem for finding a path to any food.

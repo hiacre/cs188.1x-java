@@ -1,8 +1,8 @@
 package pacman;
 
+import common.Position;
 import java.util.Collection;
 import java.util.List;
-import util.Position;
 
 /**
  * These functions govern how pacman interacts with his environment under

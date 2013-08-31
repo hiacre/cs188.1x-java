@@ -1,5 +1,6 @@
 package pacman;
 
+import common.Position;
 import graphics.utils.GraphicsUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,8 +10,6 @@ import static pacman.Direction.East;
 import static pacman.Direction.North;
 import static pacman.Direction.South;
 import static pacman.Direction.West;
-import sun.management.resources.agent;
-import util.Position;
 
 import static graphics.utils.GraphicsUtils.square;
 import static graphics.utils.GraphicsUtils.circle;
@@ -185,7 +184,7 @@ public class PacmanGraphicsNonText {
     }
 
     private List<Object> drawPacman(final AgentState pacman, final int index) {
-        position = this.getPosition(pacman);
+        position = getPosition1(pacman);
         screen_point = this.to_screen(position);
         endpoints = this.getEndpoints(this.getDirection(pacman));
 
@@ -232,7 +231,7 @@ public class PacmanGraphicsNonText {
         refresh();
     }
 
-    private void animatePacman(final Object pacman, final Object prevPacman, final Object image) {
+    private void animatePacman(final AgentState pacman, final AgentState prevPacman, final Object image) {
         if(this.frameTime < 0) {
             System.out.println("Press any key to step forward, 'q' to play");
             final List<Character> keys = wait_for_keys();
@@ -242,42 +241,48 @@ public class PacmanGraphicsNonText {
         }
         if(this.frameTime > 0.01 || this.frameTime < 0) {
             start = time.time();
-            fx, fy = this.getPosition(prevPacman);
-            px, py = this.getPosition(pacman);
-            frames = 4.0;
+            final Position posPrev = getPosition1(prevPacman);
+            final double fx = posPrev.getX();
+            final double fy = posPrev.getY();
+            final Position posCurr = getPosition1(pacman);
+            final double px = posCurr.getX();
+            final double py = posCurr.getY();
+            final double frames = 4.0;
             for(int i=1; i<(int)frames+1; i++) {
-                pos = px*i/frames + fx*(frames-i)/frames, py*i/frames + fy*(frames-i)/frames;
+                final Position pos = Position.newInstance(px*i/frames + fx*(frames-i)/frames, py*i/frames + fy*(frames-i)/frames);
                 this.movePacman(pos, this.getDirection(pacman), image);
-                refresh();
-                sleep(abs(this.frameTime) / frames);
+                GraphicsUtils.refresh();
+                GraphicsUtils.sleep((int)(Math.abs(this.frameTime) / frames));
             }
         } else {
-            this.movePacman(this.getPosition(pacman), this.getDirection(pacman), image);
+            this.movePacman(getPosition1(pacman), this.getDirection(pacman), image);
         }
-        refresh();
+        GraphicsUtils.refresh();
     }
 
-    private Object getGhostColor(final GhostState ghost, final int ghostIndex) {
+    private String getGhostColor(final GhostState ghost, final int ghostIndex) {
         if(ghost.getScaredTimer() > 0) {
-            return SCARED_COLOR;
+            return GraphicsDisplay.SCARED_COLOR;
         } else {
-            return GHOST_COLORS.get(ghostIndex);
+            return GraphicsDisplay.GHOST_COLORS.get(ghostIndex);
         }
     }
 
-    protected List drawGhost(final Object ghost, final int agentIndex) {
-        final Position pos = this.getPosition(ghost);
+    protected List drawGhost(final GhostState ghost, final int agentIndex) {
+        final Position pos = getPosition1(ghost);
         final Direction dir = this.getDirection(ghost);
-        (screen_x, screen_y) = (this.to_screen(pos) );
-        coords = new ArrayList();
-        for(Position pos : GHOST_SHAPE) {
-            final double x = pos.getX();
-            final double y = pos.getY();
-            coords.append((x*this.gridSize*GHOST_SIZE + screen_x, y*this.gridSize*GHOST_SIZE + screen_y));
+        final Position screenPos = this.to_screen(pos);
+        final double screen_x = screenPos.getX();
+        final double screen_y = screenPos.getY();
+        final List coords = new ArrayList();
+        for(Position p : GraphicsDisplay.GHOST_SHAPE) {
+            final double x = p.getX();
+            final double y = p.getY();
+            coords.add(Position.newInstance(x*gridSize*GraphicsDisplay.GHOST_SIZE + screen_x, y*gridSize*GraphicsDisplay.GHOST_SIZE + screen_y));
         }
 
-        colour = this.getGhostColor(ghost, agentIndex);
-        body = polygon(coords, colour, filled = 1);
+        final String colour = this.getGhostColor(ghost, agentIndex);
+        body = GraphicsUtils.polygon(coords, colour, 1);
         WHITE = formatColor(1.0, 1.0, 1.0);
         BLACK = formatColor(0.0, 0.0, 0.0);
 
@@ -347,7 +352,7 @@ public class PacmanGraphicsNonText {
             color = GHOST_COLORS[ghostIndex];
         }
         edit(ghostImageParts[0], ('fill', color), ('outline', color));
-        this.moveEyes(this.getPosition(ghost), this.getDirection(ghost), ghostImageParts[-4:]);
+        this.moveEyes(this.getPosition1(ghost), this.getDirection(ghost), ghostImageParts[-4:]);
         refresh();
     }
 

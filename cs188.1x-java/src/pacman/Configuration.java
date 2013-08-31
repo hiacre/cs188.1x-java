@@ -1,6 +1,6 @@
 package pacman;
 
-import util.Position;
+import common.Position;
 
 /**
  * A Configuration holds the (x,y) coordinate of a character, along with its

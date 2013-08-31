@@ -1,8 +1,8 @@
 package pacman;
 
+import common.Position;
 import java.util.ArrayList;
 import java.util.List;
-import util.Position;
 
 /**
  * Search for all food using a sequence of searches

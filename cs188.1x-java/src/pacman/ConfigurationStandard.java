@@ -1,8 +1,7 @@
 package pacman;
 
+import common.Position;
 import java.util.Objects;
-import util.Position;
-import util.Position;
 
 /**
  *

@@ -1,11 +1,10 @@
 package pacman;
 
+import common.Position;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import util.Position;
-import util.Position;
 import util.Util;
 
 /**

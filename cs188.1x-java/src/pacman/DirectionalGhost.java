@@ -1,11 +1,11 @@
 package pacman;
 
+import common.Position;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import util.Counter;
 import util.CounterStandard;
-import util.Position;
 
 /**
  * A ghost that prefers to rush Pacman, or flee when scared.

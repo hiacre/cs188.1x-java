@@ -1,11 +1,11 @@
 package pacman;
 
+import common.Position;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import util.Position;
 import util.Util;
 import static graphics.utils.GraphicsUtils.formatColor;
 import static graphics.utils.GraphicsUtils.colorToVector;
@@ -42,7 +42,7 @@ public class GraphicsDisplay {
 
     public final static List<String> TEAM_COLORS = GHOST_COLORS.subList(0, 2);
 
-    final List<Position> GHOST_SHAPE = Arrays.asList(
+    final static List<Position> GHOST_SHAPE = Arrays.asList(
         Position.newInstance( 0,     0.3 ),
         Position.newInstance( 0.25,  0.75 ),
         Position.newInstance( 0.5,   0.3 ),
@@ -56,7 +56,7 @@ public class GraphicsDisplay {
         Position.newInstance(-0.25,  0.75 )
     );
     final static double GHOST_SIZE = 0.65;
-    final String SCARED_COLOR = formatColor(1,1,1);
+    final static String SCARED_COLOR = formatColor(1,1,1);
 
     final static List<List<Double>> GHOST_VEC_COLORS;
     static {
