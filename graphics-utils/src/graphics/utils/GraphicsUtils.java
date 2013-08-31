@@ -1,5 +1,6 @@
 package graphics.utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -90,53 +91,55 @@ public class GraphicsUtils {
 //            this._root_window.mainloop();
 //        }
 //    }
-//
-//    private static void begin_graphics(Integer width, Integer height, String color, final String title) {
-//        width = width == null ? 640 : width;
-//        height = height == null ? 480 : height;
-//        color = color == null ? formatColor(0,0,0) : color;
-//        //global _root_window, _canvas, _canvas_x, _canvas_y, _canvas_xs, _canvas_ys, _bg_color
-//
-//        // Check for duplicate call
-//        if(_root_window != null) {
-//            // Lose the window.
-//            _root_window.destroy();
-//        }
-//
-//        // Save the canvas size parameters
-//        _canvas_xs = width - 1;
-//        _canvas_ys = height - 1;
-//        _canvas_x = 0;
-//        _canvas_y = _canvas_ys;
-//        _bg_color = color
-//
-//        // Create the root window
-//        _root_window = Tkinter.Tk();
-//        _root_window.protocol('WM_DELETE_WINDOW', _destroy_window);
-//        _root_window.title(title or 'Graphics Window');
-//        _root_window.resizable(0, 0);
-//
-//        # Create the canvas object
-//        try:
-//            _canvas = Tkinter.Canvas(_root_window, width=width, height=height)
-//            _canvas.pack()
-//            draw_background()
-//            _canvas.update()
-//        except:
-//            _root_window = None
-//            raise
-//
-//        # Bind to key-down and key-up events
-//        _root_window.bind( "<KeyPress>", _keypress )
-//        _root_window.bind( "<KeyRelease>", _keyrelease )
-//        _root_window.bind( "<FocusIn>", _clear_keys )
-//        _root_window.bind( "<FocusOut>", _clear_keys )
-//        _root_window.bind( "<Button-1>", _leftclick )
-//        _root_window.bind( "<Button-2>", _rightclick )
-//        _root_window.bind( "<Button-3>", _rightclick )
-//        _root_window.bind( "<Control-Button-1>", _ctrl_leftclick)
-//        _clear_keys()
-//
+
+    private static void begin_graphics(Integer width, Integer height, String color, final String title) {
+        width = width == null ? 640 : width;
+        height = height == null ? 480 : height;
+        color = color == null ? formatColor(0,0,0) : color;
+        //global _root_window, _canvas, _canvas_x, _canvas_y, _canvas_xs, _canvas_ys, _bg_color
+
+        // Check for duplicate call
+        if(_root_window != null) {
+            // Lose the window.
+            _root_window.destroy();
+        }
+
+        // Save the canvas size parameters
+        _canvas_xs = width - 1;
+        _canvas_ys = height - 1;
+        _canvas_x = 0;
+        _canvas_y = _canvas_ys;
+        _bg_color = color
+
+        // Create the root window
+        _root_window = Tkinter.Tk();
+        _root_window.protocol('WM_DELETE_WINDOW', _destroy_window);
+        _root_window.title(title or 'Graphics Window');
+        _root_window.resizable(0, 0);
+
+        // Create the canvas object
+        try {
+            _canvas = Tkinter.Canvas(_root_window, width=width, height=height);
+            _canvas.pack();
+            draw_background();
+            _canvas.update();
+        } catch(Exception ex) {
+            _root_window = None;
+            throw new RuntimeException();
+        }
+
+        // Bind to key-down and key-up events
+        _root_window.bind( "<KeyPress>", _keypress );
+        _root_window.bind( "<KeyRelease>", _keyrelease );
+        _root_window.bind( "<FocusIn>", _clear_keys );
+        _root_window.bind( "<FocusOut>", _clear_keys );
+        _root_window.bind( "<Button-1>", _leftclick );
+        _root_window.bind( "<Button-2>", _rightclick );
+        _root_window.bind( "<Button-3>", _rightclick );
+        _root_window.bind( "<Control-Button-1>", _ctrl_leftclick);
+        _clear_keys();
+    }
+
 //_leftclick_loc = None
 //_rightclick_loc = None
 //_ctrl_leftclick_loc = None
@@ -425,31 +428,39 @@ public class GraphicsUtils {
 //
 //    _canvas.coords(object, *newCoords)
 //    d_o_e(d_w)
-//
-//def move_by(object, x, y=None,
-//            d_o_e=Tkinter.tkinter.dooneevent,
-//            d_w=Tkinter.tkinter.DONT_WAIT, lift=False):
-//    if y is None:
-//        try: x, y = x
-//        except: raise Exception, 'incomprehensible coordinates'
-//
-//    horiz = True
-//    newCoords = []
-//    for coord in  _canvas.coords(object):
-//        if horiz:
-//            inc = x
-//        else:
-//            inc = y
-//        horiz = not horiz
-//
-//        newCoords.append(coord + inc)
-//
-//    _canvas.coords(object, *newCoords)
-//    d_o_e(d_w)
-//    if lift:
-//        _canvas.tag_raise(object)
-//
-//
+
+    public static void move_by(
+            final Object object,
+            final double x,
+            final double y,
+            final Object d_o_e,
+            final Object d_w,
+            Boolean lift) {
+        d_o_e = d_o_e == null ? Tkinter.tkinter.dooneevent : d_o_e;
+        d_w = d_w == null ? Tkinter.tkinter.DONT_WAIT : d_w;
+        lift = lift == null ? false : lift;
+
+        boolean horiz = true;
+        final List newCoords = new ArrayList();
+        for(int coord : _canvas.coords(object)) {
+            final double inc;
+            if(horiz) {
+                inc = x;
+            } else {
+                inc = y;
+            }
+            horiz = !horiz;
+
+            newCoords.add(coord + inc);
+        }
+        
+        _canvas.coords(object, *newCoords);
+        d_o_e(d_w);
+        if(lift) {
+            _canvas.tag_raise(object);
+        }
+    }
+
 //ghost_shape = [
 //    (0, - 0.5),
 //    (0.25, - 0.75),
