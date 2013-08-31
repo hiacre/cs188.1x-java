@@ -1,5 +1,6 @@
 package graphics.utils;
 
+import common.Position;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,16 +82,16 @@ public class GraphicsUtils {
 ////else:
 ////    _canvas_tfonts = ['times', 'lucidasans-24']
 ////    pass # XXX need defaults here
-//
-//    private void sleep(secs) {
-//        if(this._root_window == null) {
-//            time.sleep(secs);
-//        } else {
-//            this._root_window.update_idletasks();
-//            this._root_window.after(int(1000 * secs), _root_window.quit);
-//            this._root_window.mainloop();
-//        }
-//    }
+
+    public static void sleep(final int secs) {
+        if(this._root_window == null) {
+            time.sleep(secs);
+        } else {
+            this._root_window.update_idletasks();
+            this._root_window.after(int(1000 * secs), _root_window.quit);
+            this._root_window.mainloop();
+        }
+    }
 
     private static void begin_graphics(Integer width, Integer height, String color, final String title) {
         width = width == null ? 640 : width;
@@ -206,18 +207,30 @@ public class GraphicsUtils {
 //    _canvas.delete('all')
 //    draw_background()
 //    _canvas_x, _canvas_y = 0, _canvas_ys
-//
-//def polygon(coords, outlineColor, fillColor=None, filled=1, smoothed=1, behind=0, width=1):
-//    c = []
-//    for coord in coords:
-//        c.append(coord[0])
-//        c.append(coord[1])
-//    if fillColor == None: fillColor = outlineColor
-//    if filled == 0: fillColor = ""
-//    poly = _canvas.create_polygon(c, outline=outlineColor, fill=fillColor, smooth=smoothed, width=width)
-//    if behind > 0:
-//        _canvas.tag_lower(poly, behind) # Higher should be more visible
-//    return poly
+
+    public static polygon(
+            final List<Position> coords,
+            final Object outlineColor,
+            final Object fillColor,
+            Integer filled,
+            Integer smoothed,
+            Integer behind,
+            Integer width) {
+        filled = filled == null ? 1 : filled;
+        smoothed = smoothed == null ? 1 : smoothed;
+        behind = behind == null ? 0 : behind;
+        width = width == null ? 1 : width;
+        final List c = new ArrayList();
+        for(Object coord : coords) {
+            c.add(coord[0]);
+            c.add(coord[1]);
+        }
+        if fillColor == None: fillColor = outlineColor
+        if filled == 0: fillColor = ""
+        poly = _canvas.create_polygon(c, outline=outlineColor, fill=fillColor, smooth=smoothed, width=width)
+        if behind > 0:
+            _canvas.tag_lower(poly, behind) # Higher should be more visible
+        return poly
 
     public static Object square(final double x, final double y, final double r, final String color, Integer filled, Integer behind) {
         filled = filled == null ? 1 : filled;
