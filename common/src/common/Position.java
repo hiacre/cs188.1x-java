@@ -1,7 +1,5 @@
 package common;
 
-
-
 public class Position {
 
     private final double x;
@@ -19,10 +17,17 @@ public class Position {
     /**
      * Finds the nearest grid point to a position (discretizes)
      */
-    public static Position nearestPoint(final double x, final double y) {
+    public static PositionGrid nearestPoint(final double x, final double y) {
         final int gridRow = (int)(x+0.5);
         final int gridCol = (int)(y+0.5);
-        return new Position(gridRow, gridCol);
+        return new PositionGrid(gridRow, gridCol);
+    }
+    
+    /**
+     * Finds the nearest grid point to a position (discretizes)
+     */
+    public static PositionGrid nearestPoint(final Position pos) {
+        return nearestPoint(pos.getX(), pos.getY());
     }
     
     public double getX() {
