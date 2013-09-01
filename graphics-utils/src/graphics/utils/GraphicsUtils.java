@@ -1,9 +1,12 @@
 package graphics.utils;
 
+import common.Pair;
 import common.Position;
+import common.Endpoints;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -93,7 +96,7 @@ public class GraphicsUtils {
         }
     }
 
-    private static void begin_graphics(Integer width, Integer height, String color, final String title) {
+    public static void begin_graphics(Integer width, Integer height, String color, final String title) {
         width = width == null ? 640 : width;
         height = height == null ? 480 : height;
         color = color == null ? formatColor(0,0,0) : color;
@@ -186,32 +189,36 @@ public class GraphicsUtils {
 //#    _root_window.destroy()
 //#    _root_window = None
 //    #print "DESTROY"
-//
-//def end_graphics():
-//    global _root_window, _canvas, _mouse_enabled
-//    try:
-//        try:
-//            sleep(1)
-//            if _root_window != None:
-//                _root_window.destroy()
-//        except SystemExit, e:
-//            print 'Ending graphics raised an exception:', e
-//    finally:
-//        _root_window = None
-//        _canvas = None
-//        _mouse_enabled = 0
-//        _clear_keys()
-//
+
+    public static void end_graphics() {
+        //global _root_window, _canvas, _mouse_enabled
+        try {
+            try {
+                sleep(1);
+                if(_root_window != null) {
+                    _root_window.destroy();
+                }
+            } catch (Excetion e) {
+                System.out.println("Ending graphics raised an exception:", e);
+            }
+        } finally {
+            _root_window = null;
+            _canvas = null;
+            _mouse_enabled = 0;
+            _clear_keys();
+        }
+    }
+
 //def clear_screen(background=None):
 //    global _canvas_x, _canvas_y
 //    _canvas.delete('all')
 //    draw_background()
 //    _canvas_x, _canvas_y = 0, _canvas_ys
 
-    public static polygon(
+    public static Object polygon(
             final List<Position> coords,
-            final Object outlineColor,
-            final Object fillColor,
+            final String outlineColor,
+            String fillColor,
             Integer filled,
             Integer smoothed,
             Integer behind,
@@ -221,16 +228,22 @@ public class GraphicsUtils {
         behind = behind == null ? 0 : behind;
         width = width == null ? 1 : width;
         final List c = new ArrayList();
-        for(Object coord : coords) {
-            c.add(coord[0]);
-            c.add(coord[1]);
+        for(Position coord : coords) {
+            c.add(coord.getX());
+            c.add(coord.getY());
         }
-        if fillColor == None: fillColor = outlineColor
-        if filled == 0: fillColor = ""
-        poly = _canvas.create_polygon(c, outline=outlineColor, fill=fillColor, smooth=smoothed, width=width)
-        if behind > 0:
-            _canvas.tag_lower(poly, behind) # Higher should be more visible
-        return poly
+        if(fillColor == null) {
+            fillColor = outlineColor;
+        }
+        if(filled == 0) {
+            fillColor = "";
+        }
+        final Object poly = _canvas.create_polygon(c, outline=outlineColor, fill=fillColor, smooth=smoothed, width=width);
+        if(behind > 0) {
+            _canvas.tag_lower(poly, behind);  // Higher should be more visible
+        }
+        return poly;
+    }
 
     public static Object square(final double x, final double y, final double r, final String color, Integer filled, Integer behind) {
         filled = filled == null ? 1 : filled;
@@ -249,7 +262,7 @@ public class GraphicsUtils {
             final double r,
             final String outlineColor,
             final String fillColor,
-            final List<Integer> endpoints,
+            final Endpoints endpoints,
             String style,
             Integer width) {
         style = style == null ? "pieslice" : style;
@@ -258,14 +271,15 @@ public class GraphicsUtils {
         final double x1 = x+r;
         final double y0 = y-r-1;
         final double y1 = y+r;
-        final List<Integer> e;
+        Endpoints e;
         if(endpoints == null) {
-            e = Arrays.asList(0, 359);
+            e = new Endpoints(0, 359);
         } else {
             e = endpoints;
         }
-        while(e.get(0) > e.get(1)) {
-            e.add(1, e.get(1) + 360);
+        
+        while(e.getClass() > e.getSecond()) {
+            e = new Endpoints(e.getFirst(), e.getSecond() + 360);
         }
 
         return _canvas.create_arc(x0, y0, x1, y1, outlineColor, fillColor,
@@ -282,25 +296,35 @@ public class GraphicsUtils {
         _canvas.update_idletasks();
     }
 
-//def moveCircle(id, pos, r, endpoints=None):
-//    global _canvas_x, _canvas_y
-//
-//    x, y = pos
-//#    x0, x1 = x - r, x + r + 1
-//#    y0, y1 = y - r, y + r + 1
-//    x0, x1 = x - r - 1, x + r
-//    y0, y1 = y - r - 1, y + r
-//    if endpoints == None:
-//        e = [0, 359]
-//    else:
-//        e = list(endpoints)
-//    while e[0] > e[1]: e[1] = e[1] + 360
-//
-//    edit(id, ('start', e[0]), ('extent', e[1] - e[0]))
-//    move_to(id, x0, y0)
-//
-//def edit(id, *args):
-//    _canvas.itemconfigure(id, **dict(args))
+    public static void moveCircle(final Object id, final Position pos, final double r, final Endpoints endpoints) {
+        final double x = pos.getX();
+        final double y = pos.getY();
+        //    x0, x1 = x - r, x + r + 1
+        //    y0, y1 = y - r, y + r + 1
+        final double x0 = x - r - 1;
+        final double x1 = x + r;
+        final double y0 = y - r - 1;
+        final double y1 = y + r;
+        Endpoints e;
+        if(endpoints == null) {
+            e = new Endpoints(0, 359);
+        } else {
+            e = endpoints;
+        }
+        while(e.getFirst() > e.getSecond()) {
+            e = new Endpoints(e.getFirst(), e.getSecond() + 360);
+        }
+
+        edit(
+            id,
+            ('start', e.getFirst()),
+            ('extent', e.getSecond() - e.getFirst()));
+        move_to(id, x0, y0);
+    }
+
+    public static void edit(final Object id, final String fillColor, final String outlineColor) {
+        _canvas.itemconfigure(id, fillColor, outlineColor);  // (itemConfigure settings 'fill' and 'color')
+    }
 
     public static Object text(
             final double x,
