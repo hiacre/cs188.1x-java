@@ -83,7 +83,7 @@ public class GraphicsDisplay {
     final static double CAPSULE_SIZE = 0.25;
 
     // Drawing walls
-    final double WALL_RADIUS = 0.15;
+    final static double WALL_RADIUS = 0.15;
 
 
     /** Saves the current graphical output as a postscript file */

@@ -16,6 +16,7 @@ import static pacman.Direction.West;
 import static graphics.utils.GraphicsUtils.square;
 import static graphics.utils.GraphicsUtils.circle;
 import static pacman.GraphicsDisplay.GHOST_SIZE;
+import static pacman.GraphicsDisplay.WALL_RADIUS;
 import java.util.Arrays;
 
 /**
@@ -414,12 +415,8 @@ public class PacmanGraphicsNonText {
     }
 
     /** Fixes some TK issue with off-center circles */
-    private Position to_screen2(final Position point) {
-        double x = point.getX();
-        double y = point.getY();
-        x = (x + 1)*gridSize;
-        y = (height  - y)*gridSize;
-        return Position.newInstance(x, y);
+    private Position to_screen2(final double x, final double y) {
+        return to_screen(x, y);
     }
 
     private void drawWalls(final Grid wallMatrix) {
@@ -433,103 +430,152 @@ public class PacmanGraphicsNonText {
                 wallColor = GraphicsDisplay.TEAM_COLORS.get(1);
             }
 
-            for(yNum, cell in enumerate(x)) {
+            for(int yNum=0; yNum<x.size(); yNum++) {
+                final boolean cell = x.get(yNum);
                 if(cell) { // There's a wall here
-                    pos = (xNum, yNum);
-                    screen = this.to_screen(pos);
-                    screen2 = this.to_screen2(pos);
+                    final Position screen = this.to_screen(xNum, yNum);
+                    final Position screen2 = this.to_screen2(xNum, yNum);
 
                     // draw each quadrant of the square based on adjacent walls
-                    wIsWall = this.isWall(xNum-1, yNum, wallMatrix);
-                    eIsWall = this.isWall(xNum+1, yNum, wallMatrix);
-                    nIsWall = this.isWall(xNum, yNum+1, wallMatrix);
-                    sIsWall = this.isWall(xNum, yNum-1, wallMatrix);
-                    nwIsWall = this.isWall(xNum-1, yNum+1, wallMatrix);
-                    swIsWall = this.isWall(xNum-1, yNum-1, wallMatrix);
-                    neIsWall = this.isWall(xNum+1, yNum+1, wallMatrix);
-                    seIsWall = this.isWall(xNum+1, yNum-1, wallMatrix);
+                    final boolean wIsWall = this.isWall(xNum-1, yNum, wallMatrix);
+                    final boolean eIsWall = this.isWall(xNum+1, yNum, wallMatrix);
+                    final boolean nIsWall = this.isWall(xNum, yNum+1, wallMatrix);
+                    final boolean sIsWall = this.isWall(xNum, yNum-1, wallMatrix);
+                    final boolean nwIsWall = this.isWall(xNum-1, yNum+1, wallMatrix);
+                    final boolean swIsWall = this.isWall(xNum-1, yNum-1, wallMatrix);
+                    final boolean neIsWall = this.isWall(xNum+1, yNum+1, wallMatrix);
+                    final boolean seIsWall = this.isWall(xNum+1, yNum-1, wallMatrix);
 
                     // NE quadrant
-                    if((not nIsWall) && (not eIsWall)) {
+                    if(!nIsWall && !eIsWall) {
                         // inner circle
-                        circle(screen2, WALL_RADIUS * this.gridSize, wallColor, wallColor, (0,91), 'arc');
+                        GraphicsUtils.circle(screen2, GraphicsDisplay.WALL_RADIUS * gridSize, wallColor, wallColor, new Endpoints(0,91), "arc", null);
                     }
-                    if((nIsWall) and (not eIsWall)) {
+                    if(!nIsWall && !eIsWall) {
                         // vertical line
-                        line(add(screen, (this.gridSize*WALL_RADIUS, 0)), add(screen, (this.gridSize*WALL_RADIUS, this.gridSize*(-0.5)-1)), wallColor);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*GraphicsDisplay.WALL_RADIUS, 0)),
+                                add(screen, Position.newInstance(gridSize*GraphicsDisplay.WALL_RADIUS, gridSize*(-0.5)-1)),
+                                wallColor,
+                                null);
                     }
-                    if((not nIsWall) and (eIsWall)) {
+                    if(!nIsWall && eIsWall) {
                         // horizontal line
-                        line(add(screen, (0, this.gridSize*(-1)*WALL_RADIUS)), add(screen, (this.gridSize*0.5+1, this.gridSize*(-1)*WALL_RADIUS)), wallColor);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(0, gridSize*(-1)*GraphicsDisplay.WALL_RADIUS)),
+                                add(screen, Position.newInstance(gridSize*0.5+1, gridSize*(-1)*WALL_RADIUS)),
+                                wallColor,
+                                null);
                     }
-                    if((nIsWall) and (eIsWall) and (not neIsWall)) {
+                    if(nIsWall && eIsWall && !neIsWall) {
                         // outer circle
-                        circle(add(screen2, (this.gridSize*2*WALL_RADIUS, this.gridSize*(-2)*WALL_RADIUS)), WALL_RADIUS * this.gridSize-1, wallColor, wallColor, (180,271), 'arc');
-                        line(add(screen, (this.gridSize*2*WALL_RADIUS-1, this.gridSize*(-1)*WALL_RADIUS)), add(screen, (this.gridSize*0.5+1, this.gridSize*(-1)*WALL_RADIUS)), wallColor);
-                        line(add(screen, (this.gridSize*WALL_RADIUS, this.gridSize*(-2)*WALL_RADIUS+1)), add(screen, (this.gridSize*WALL_RADIUS, this.gridSize*(-0.5))), wallColor);
+                        GraphicsUtils.circle(
+                                add(screen2, Position.newInstance(gridSize*2*WALL_RADIUS, gridSize*(-2)*WALL_RADIUS)),
+                                WALL_RADIUS * gridSize-1,
+                                wallColor,
+                                wallColor,
+                                new Endpoints(180,271),
+                                "arc",
+                                null);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*2*WALL_RADIUS-1, gridSize*(-1)*WALL_RADIUS)),
+                                add(screen, Position.newInstance(gridSize*0.5+1, gridSize*(-1)*WALL_RADIUS)),
+                                wallColor,
+                                null);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*WALL_RADIUS, gridSize*(-2)*WALL_RADIUS+1)),
+                                add(screen, Position.newInstance(gridSize*WALL_RADIUS, gridSize*(-0.5))),
+                                wallColor,
+                                null);
                     }
 
                     // NW quadrant
-                    if((not nIsWall) and (not wIsWall)) {
+                    if(!nIsWall && !wIsWall) {
                         // inner circle
-                        circle(screen2, WALL_RADIUS * this.gridSize, wallColor, wallColor, (90,181), 'arc');
+                        GraphicsUtils.circle(
+                                screen2,
+                                WALL_RADIUS * gridSize,
+                                wallColor,
+                                wallColor,
+                                new Endpoints(90,181),
+                                "arc",
+                                null);
                     }
-                    if((nIsWall) and (not wIsWall)) {
+                    if(nIsWall && !wIsWall) {
                         // vertical line
-                        line(add(screen, (this.gridSize*(-1)*WALL_RADIUS, 0)), add(screen, (this.gridSize*(-1)*WALL_RADIUS, this.gridSize*(-0.5)-1)), wallColor);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*(-1)*WALL_RADIUS, 0)),
+                                add(screen, Position.newInstance(gridSize*(-1)*WALL_RADIUS, gridSize*(-0.5)-1)),
+                                wallColor,
+                                null);
                     }
-                    if((not nIsWall) and (wIsWall)) {
+                    if(!nIsWall && wIsWall) {
                         // horizontal line
-                        line(add(screen, (0, this.gridSize*(-1)*WALL_RADIUS)), add(screen, (this.gridSize*(-0.5)-1, this.gridSize*(-1)*WALL_RADIUS)), wallColor);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(0, gridSize*(-1)*WALL_RADIUS)),
+                                add(screen, Position.newInstance(gridSize*(-0.5)-1, gridSize*(-1)*WALL_RADIUS)),
+                                wallColor,
+                                null);
                     }
-                    if((nIsWall) and (wIsWall) and (not nwIsWall)) {
+                    if(nIsWall && wIsWall && !nwIsWall) {
                         // outer circle
-                        circle(add(screen2, (this.gridSize*(-2)*WALL_RADIUS, this.gridSize*(-2)*WALL_RADIUS)), WALL_RADIUS * this.gridSize-1, wallColor, wallColor, (270,361), 'arc');
-                        line(add(screen, (this.gridSize*(-2)*WALL_RADIUS+1, this.gridSize*(-1)*WALL_RADIUS)), add(screen, (this.gridSize*(-0.5), this.gridSize*(-1)*WALL_RADIUS)), wallColor);
-                        line(add(screen, (this.gridSize*(-1)*WALL_RADIUS, this.gridSize*(-2)*WALL_RADIUS+1)), add(screen, (this.gridSize*(-1)*WALL_RADIUS, this.gridSize*(-0.5))), wallColor);
+                        GraphicsUtils.circle(
+                                add(screen2, Position.newInstance(gridSize*(-2)*WALL_RADIUS, gridSize*(-2)*WALL_RADIUS)),
+                                WALL_RADIUS * gridSize-1,
+                                wallColor,
+                                wallColor,
+                                new Endpoints(270,361),
+                                "arc",
+                                null);
+                        GraphicsUtils.line(add(screen, (gridSize*(-2)*WALL_RADIUS+1, gridSize*(-1)*WALL_RADIUS)), add(screen, (gridSize*(-0.5), gridSize*(-1)*WALL_RADIUS)), wallColor);
+                        GraphicsUtils.line(add(screen, (gridSize*(-1)*WALL_RADIUS, gridSize*(-2)*WALL_RADIUS+1)), add(screen, (gridSize*(-1)*WALL_RADIUS, gridSize*(-0.5))), wallColor);
                     }
 
                     // SE quadrant
-                    if((not sIsWall) and (not eIsWall)) {
+                    if(!sIsWall && !eIsWall) {
                         // inner circle
-                        circle(screen2, WALL_RADIUS * this.gridSize, wallColor, wallColor, (270,361), 'arc');
+                        GraphicsUtils.circle(screen2, WALL_RADIUS * gridSize, wallColor, wallColor, (270,361), 'arc');
                     }
-                    if((sIsWall) and (not eIsWall)) {
+                    if(sIsWall && !eIsWall) {
                         // vertical line
-                        line(add(screen, (this.gridSize*WALL_RADIUS, 0)), add(screen, (this.gridSize*WALL_RADIUS, this.gridSize*(0.5)+1)), wallColor);
+                        GraphicsUtils.line(add(screen, (gridSize*WALL_RADIUS, 0)), add(screen, (gridSize*WALL_RADIUS, gridSize*(0.5)+1)), wallColor);
                     }
-                    if((not sIsWall) and (eIsWall)) {
+                    if(!sIsWall && eIsWall) {
                         // horizontal line
-                        line(add(screen, (0, this.gridSize*(1)*WALL_RADIUS)), add(screen, (this.gridSize*0.5+1, this.gridSize*(1)*WALL_RADIUS)), wallColor);
+                        GraphicsUtils.line(add(screen, (0, gridSize*(1)*WALL_RADIUS)), add(screen, (gridSize*0.5+1, gridSize*(1)*WALL_RADIUS)), wallColor);
                     }
-                    if((sIsWall) and (eIsWall) and (not seIsWall)) {
+                    if(sIsWall && eIsWall && !seIsWall) {
                         // outer circle
-                        circle(add(screen2, (this.gridSize*2*WALL_RADIUS, this.gridSize*(2)*WALL_RADIUS)), WALL_RADIUS * this.gridSize-1, wallColor, wallColor, (90,181), 'arc');
-                        line(add(screen, (this.gridSize*2*WALL_RADIUS-1, this.gridSize*(1)*WALL_RADIUS)), add(screen, (this.gridSize*0.5, this.gridSize*(1)*WALL_RADIUS)), wallColor);
-                        line(add(screen, (this.gridSize*WALL_RADIUS, this.gridSize*(2)*WALL_RADIUS-1)), add(screen, (this.gridSize*WALL_RADIUS, this.gridSize*(0.5))), wallColor);
+                        GraphicsUtils.circle(add(screen2, (gridSize*2*WALL_RADIUS, gridSize*(2)*WALL_RADIUS)), WALL_RADIUS * gridSize-1, wallColor, wallColor, (90,181), 'arc');
+                        GraphicsUtils.line(add(screen, (gridSize*2*WALL_RADIUS-1, gridSize*(1)*WALL_RADIUS)), add(screen, (gridSize*0.5, gridSize*(1)*WALL_RADIUS)), wallColor);
+                        GraphicsUtils.line(add(screen, (gridSize*WALL_RADIUS, gridSize*(2)*WALL_RADIUS-1)), add(screen, (gridSize*WALL_RADIUS, gridSize*(0.5))), wallColor);
                     }
                     // SW quadrant
-                    if((not sIsWall) and (not wIsWall)) {
+                    if(!sIsWall && !wIsWall) {
                         // inner circle
-                        circle(screen2, WALL_RADIUS * this.gridSize, wallColor, wallColor, (180,271), 'arc');
+                        GraphicsUtils.circle(screen2, WALL_RADIUS * gridSize, wallColor, wallColor, (180,271), 'arc');
                     }
-                    if((sIsWall) and (not wIsWall)) {
+                    if(sIsWall && !wIsWall) {
                         // vertical line
-                        line(add(screen, (this.gridSize*(-1)*WALL_RADIUS, 0)), add(screen, (this.gridSize*(-1)*WALL_RADIUS, this.gridSize*(0.5)+1)), wallColor);
+                        GraphicsUtils.line(add(screen, (gridSize*(-1)*WALL_RADIUS, 0)), add(screen, (gridSize*(-1)*WALL_RADIUS, gridSize*(0.5)+1)), wallColor);
                     }
-                    if((not sIsWall) and (wIsWall)) {
+                    if(!sIsWall && wIsWall) {
                         // horizontal line
-                        line(add(screen, (0, this.gridSize*(1)*WALL_RADIUS)), add(screen, (this.gridSize*(-0.5)-1, this.gridSize*(1)*WALL_RADIUS)), wallColor);
+                        GraphicsUtils.line(add(screen, (0, gridSize*(1)*WALL_RADIUS)), add(screen, (gridSize*(-0.5)-1, gridSize*(1)*WALL_RADIUS)), wallColor);
                     }
-                    if((sIsWall) and (wIsWall) and (not swIsWall)) {
+                    if(sIsWall && wIsWall && !swIsWall) {
                         // outer circle
-                        circle(add(screen2, (this.gridSize*(-2)*WALL_RADIUS, this.gridSize*(2)*WALL_RADIUS)), WALL_RADIUS * this.gridSize-1, wallColor, wallColor, (0,91), 'arc');
-                        line(add(screen, (this.gridSize*(-2)*WALL_RADIUS+1, this.gridSize*(1)*WALL_RADIUS)), add(screen, (this.gridSize*(-0.5), this.gridSize*(1)*WALL_RADIUS)), wallColor);
-                        line(add(screen, (this.gridSize*(-1)*WALL_RADIUS, this.gridSize*(2)*WALL_RADIUS-1)), add(screen, (this.gridSize*(-1)*WALL_RADIUS, this.gridSize*(0.5))), wallColor);
+                        GraphicsUtils.circle(add(screen2, (gridSize*(-2)*WALL_RADIUS, gridSize*(2)*WALL_RADIUS)), WALL_RADIUS * gridSize-1, wallColor, wallColor, (0,91), 'arc');
+                        GraphicsUtils.line(add(screen, (gridSize*(-2)*WALL_RADIUS+1, gridSize*(1)*WALL_RADIUS)), add(screen, (gridSize*(-0.5), gridSize*(1)*WALL_RADIUS)), wallColor);
+                        GraphicsUtils.line(add(screen, (gridSize*(-1)*WALL_RADIUS, gridSize*(2)*WALL_RADIUS-1)), add(screen, (gridSize*(-1)*WALL_RADIUS, gridSize*(0.5))), wallColor);
                     }
                 }
             }
         }
+    }
+    
+    private static Position add(final Position pos1, final Position pos2) {
+        return Position.newInstance(pos1.getX() + pos2.getX(), pos1.getY()+pos2.getY());
     }
 
     private boolean isWall(final int x, final int y, final Grid walls) {
@@ -618,7 +664,7 @@ public class PacmanGraphicsNonText {
             screenPos = this.to_screen( cell);
             cellColor = formatColor(*[(n-k) * c * .5 / n + .25 for c in baseColor]);
             block = square(screenPos,
-                     0.5 * this.gridSize,
+                     0.5 * gridSize,
                      color = cellColor,
                      filled = 1, behind=2);
             this.expandedCells.append(block);
