@@ -96,7 +96,7 @@ public class GraphicsUtils {
         }
     }
 
-    public static void begin_graphics(Integer width, Integer height, String color, final String title) {
+    public static void begin_graphics(Double width, Double height, String color, final String title) {
         width = width == null ? 640 : width;
         height = height == null ? 480 : height;
         color = color == null ? formatColor(0,0,0) : color;
@@ -437,15 +437,17 @@ public class GraphicsUtils {
 //    keys = _keyswaiting.keys()
 //    _keyswaiting = {}
 //    return keys
-//
-//# Block for a list of keys...
-//
-//def wait_for_keys():
-//    keys = []
-//    while keys == []:
-//        keys = keys_pressed()
-//        sleep(0.05)
-//    return keys
+
+    // Block for a list of keys...
+
+    public static List<Character> wait_for_keys() {
+        final List<Character> keys = new ArrayList<>();
+        while(keys.isEmpty()) {
+            keys = keys_pressed();
+            sleep(0.05);
+        }
+        return keys;
+    }
 
     public static void remove_from_screen(final Object x, Object doOnEvent, Object doNotWait) {
         doOnEvent = doOnEvent == null ? Tkinter.tkinter.dooneevent : doOnEvent;
