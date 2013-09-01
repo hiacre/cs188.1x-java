@@ -30,7 +30,7 @@ public class ClassicGameRules {
             final Layout layout,
             final Agent pacmanAgent,
             final List<GhostAgent> ghostAgents,
-            final Object display,
+            final PacmanGraphics display,
             final Boolean quiet,
             final Boolean catchExceptions) {
         List agents = new ArrayList();
@@ -49,7 +49,7 @@ public class ClassicGameRules {
             final Layout layout,
             final Agent pacmanAgent,
             final List<GhostAgent> ghostAgents,
-            final Object display) {
+            final PacmanGraphics display) {
         return newGame(layout, pacmanAgent, ghostAgents, display, false, false);
     }
 

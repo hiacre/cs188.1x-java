@@ -21,7 +21,7 @@ public class ApproximateSearchAgent extends AgentAbstract {
     }
 
     @Override
-    public Direction getAction(final GameState1 state) {
+    public Direction getAction(final GameState1 state, Timeout timeout) {
         /*
         From game.py:
         The Agent will receive a GameState and must return an action from

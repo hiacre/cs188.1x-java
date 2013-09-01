@@ -17,10 +17,10 @@ public abstract class AgentAbstract implements Agent {
     }
 
     @Override
-    abstract public Direction getAction(GameState1 state);
+    abstract public Direction getAction(GameState1 state, Timeout timeout);
 
     @Override
-    public void registerInitialState(GameState1 state) {
+    public void registerInitialState(GameState1 state, Timeout timeout) {
         
     }
 }

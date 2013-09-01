@@ -11,5 +11,4 @@ public class Timeout {
     public Timeout(final int seconds) {
         this.seconds = seconds;
     }
-    
 }

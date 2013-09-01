@@ -24,7 +24,7 @@ public class GreedyAgent extends AgentAbstract {
     }
 
     @Override
-    public Direction getAction(final GameState1 state) {
+    public Direction getAction(final GameState1 state, final Timeout timeout) {
         // Generate candidate actions
         final Collection<Direction> legal = state.getLegalPacmanActions();
         if(legal.contains(Direction.Stop)) {

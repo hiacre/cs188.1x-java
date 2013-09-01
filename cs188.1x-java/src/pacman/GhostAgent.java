@@ -14,7 +14,8 @@ public abstract class GhostAgent extends AgentAbstract {
     }
 
     @Override
-    public Direction getAction(final GameState1 state) {
+    public Direction getAction(final GameState1 state, final Timeout timeout) {
+        // TODO make use of timeout
         final Counter<Direction> dist = getDistribution(state);
         if(dist.isEmpty()) {
             return Direction.Stop;

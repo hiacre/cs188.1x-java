@@ -13,7 +13,7 @@ public class LeftTurnAgent extends AgentAbstract {
     }
 
     @Override
-    public Direction getAction(final GameState1 state) {
+    public Direction getAction(final GameState1 state, final Timeout timeout) {
         final Collection<Direction> legal = state.getLegalPacmanActions();
         Direction current = state.getPacmanState().getConfiguration().getDirection();
         if(Direction.Stop.equals(current)) {

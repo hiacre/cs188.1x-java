@@ -31,7 +31,7 @@ public class KeyboardAgent extends AgentAbstract {
     }
 
     @Override
-    public Direction getAction(final GameState1 state) {
+    public Direction getAction(final GameState1 state, final Timeout timeout) {
         final List<Character> keys2 = new ArrayList<>();
         keys2.addAll(GraphicsUtils.keys_waiting());
         keys2.addAll(GraphicsUtils.keys_pressed());

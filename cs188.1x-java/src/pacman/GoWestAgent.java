@@ -11,7 +11,8 @@ public class GoWestAgent extends AgentAbstract {
     }
     
     @Override
-    public Direction getAction(final GameState1 state) {
+    public Direction getAction(final GameState1 state, final Timeout timeout) {
+        // TODO make use of Timeout
         if(state.getLegalPacmanActions().contains(Direction.West)) {
             return Direction.West;
         } else {

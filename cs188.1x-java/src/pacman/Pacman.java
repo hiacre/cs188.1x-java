@@ -147,15 +147,12 @@ public class Pacman {
 
         // Choose a display format
         if(options.contains("quietGraphics")) {
-            //import textDisplay
-            args.put("display", textDisplay.NullGraphics());
+            args.setDisplay(new NullGraphics(null, null));
         } else if(options.contains("textGraphics")) {
-            // import textDisplay
             textDisplay.setSleepTime(options.get("frameTime"));
-            args.set("display", textDisplay.PacmanGraphics());
+            args.setDisplay(new PacmanGraphicsText(null));
         } else {
-            // import graphicsDisplay
-            args.set("display", graphicsDisplay.PacmanGraphics(options.get("zoom"), frameTime = options.get("frameTime")));
+            args.set("display", new PacmanGraphicsNonText(options.getZoom(), options.getFrameTime()));
         }
         args.setNumGames(Integer.parseInt(options.get("numGames")));
         args.setRecord(options.get("record"));
@@ -204,7 +201,7 @@ public class Pacman {
         return agentName.getFactory();
     }
     
-    private void replayGame(final Layout layout, final List<Direction> actions, final Object display) {
+    private void replayGame(final Layout layout, final List<Direction> actions, final PacmanGraphics display) {
         final ClassicGameRules rules = new ClassicGameRules();
         final List<Agent> agents = new ArrayList();
         agents.add(new GreedyAgent());
@@ -213,13 +210,13 @@ public class Pacman {
         }
         final Game game = rules.newGame(layout, agents.get(0), agents.subList(1, agents.size()), display);
         GameState1 state = game.getState();
-        display.initialize(state.getData());
+        display.initialize(state, null);
 
         for(Direction action : actions) {
             // Execute the action
             state = state.generateSuccessor(null, action);
             // Change the display
-            display.update( state.getData() );
+            display.update(state);
             // Allow for game specific conditions (winning, losing, etc.)
             rules.process(state, game);
         }
@@ -231,7 +228,7 @@ public class Pacman {
             final Layout layout,
             final Agent pacman,
             final List<GhostAgent> ghosts,
-            final Object display,
+            final PacmanGraphics display,
             final int numGames,
             final boolean record,
             Integer numTraining,
@@ -256,11 +253,11 @@ public class Pacman {
 
         for(int i=0; i<numGames; i++) {
             final boolean beQuiet = i < numTraining;
-            final Object gameDisplay;
+            final PacmanGraphics gameDisplay;
             if(beQuiet) {
                 // Suppress output and graphics
                 //import textDisplay
-                gameDisplay = textDisplay.NullGraphics();
+                gameDisplay = new NullGraphics(null, null);
                 rules.setQuiet(true);
             } else {
                 gameDisplay = display;

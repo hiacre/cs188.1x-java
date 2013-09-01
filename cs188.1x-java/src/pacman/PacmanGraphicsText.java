@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author archie
  */
-public class PacmanGraphicsText {
+public class PacmanGraphicsText implements PacmanGraphics {
     
     private final int SLEEP_TIME;
     private int agentCounter;
@@ -20,6 +20,7 @@ public class PacmanGraphicsText {
         }
     }
 
+    @Override
     public void initialize(final GameState1 state, Boolean isBlue) {
         // if isBlue is null, then it should default to false
         // according to original Python (not that it seems to matter here)
@@ -29,6 +30,7 @@ public class PacmanGraphicsText {
         this.agentCounter = 0;
     }
 
+    @Override
     public void update(final GameState1 state) {
         final int numAgents = state.getNumAgents();
         this.agentCounter = (this.agentCounter + 1) % numAgents;
@@ -53,14 +55,15 @@ public class PacmanGraphicsText {
         }
     }
 
-    public void pause() {
+    private void pause() {
         time.sleep(SLEEP_TIME);
     }
 
-    public void draw(final GameState1 state) {
+    private void draw(final GameState1 state) {
         System.out.println(state);
     }
 
+    @Override
     public void finish() {
     }
 }

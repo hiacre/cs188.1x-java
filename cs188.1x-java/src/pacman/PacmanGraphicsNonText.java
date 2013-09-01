@@ -24,7 +24,7 @@ import util.PositionGrid;
  *
  * @author archie
  */
-public class PacmanGraphicsNonText {
+public class PacmanGraphicsNonText implements PacmanGraphics {
     
     private final int have_window;
     private final HashMap<Object, Object> currentGhostImages;
@@ -60,7 +60,8 @@ public class PacmanGraphicsNonText {
         this.frameTime = frameTime;
     }
 
-    private void initialize(final GameState1 state, Boolean isBlue) {
+    @Override
+    public void initialize(final GameState1 state, Boolean isBlue) {
         
         this.isBlue = isBlue == null ? false : isBlue;
         PacmanGraphicsNonText.startGraphics(state);
@@ -69,7 +70,7 @@ public class PacmanGraphicsNonText {
 
         // this.drawDistributions(state)
         this.distributionImages = null;  // Initialized lazily
-        this.drawStaticObjects(state);
+        this.drawStaticObjects();
         this.drawAgentObjects(state);
 
         // Information
@@ -109,7 +110,7 @@ public class PacmanGraphicsNonText {
         this.distributionImages = dist;
     }
 
-    private void drawStaticObjects(final GameState1 state) {
+    private void drawStaticObjects() {
         final Layout l = layout;
         this.drawWalls(l.getWalls());
         this.food = this.drawFood(l.getFood());
@@ -122,11 +123,7 @@ public class PacmanGraphicsNonText {
         for(int index=0; index<state.getAgentStates().size(); index++) {
             final AgentState agent = state.getAgentStates().get(index);
             final List<Object> image;
-            if(agent.isPacman()) {
-                image = this.drawPacman(agent, index);
-            } else {
-                image = this.drawGhost(agent, index);
-            }
+            image = this.draw(agent, index);
             this.agentImages.add(new Pair<>(agent, image));
         }
         GraphicsUtils.refresh();
@@ -142,15 +139,16 @@ public class PacmanGraphicsNonText {
         }
         final List<Object> image;
         if(newState.isPacman()) {
-            image = this.drawPacman(newState, agentIndex);
+            image = this.draw(newState, agentIndex);
         } else {
-            image = this.drawGhost(newState, agentIndex);
+            image = this.draw(newState, agentIndex);
         }
         this.agentImages.add(agentIndex, new Pair<>(newState, image));
         GraphicsUtils.refresh();
     }
 
-    private void update(final GameState1 newState) {
+    @Override
+    public void update(final GameState1 newState) {
         final int agentIndex = newState.getAgentMoved();
         final AgentState agentState = newState.getAgentStates().get(agentIndex);
 
@@ -159,11 +157,7 @@ public class PacmanGraphicsNonText {
         }
         final AgentState prevState = this.agentImages.get(agentIndex).getFirst();
         final List<Object> prevImage = this.agentImages.get(agentIndex).getSecond();
-        if(agentState.isPacman()) {
-            this.animatePacman(agentState, prevState, prevImage);
-        } else {
-            this.moveGhost(agentState, agentIndex, prevState, prevImage);
-        }
+        this.moveAgent(agentState, agentIndex, prevState, prevImage);  // used to call animatePacman or moveGhost
         this.agentImages.set(agentIndex, new Pair<>(agentState, prevImage));
 
         if(newState.getFoodEaten() != null) {
@@ -192,7 +186,7 @@ public class PacmanGraphicsNonText {
                         "CS188 Pacman");
     }
 
-    private List<Object> drawPacman(final AgentState pacman, final int index) {
+    private List<Object> draw(final AgentState pacman, final int index) {
         final Position position = getPosition1(pacman);
         final Position screen_point = this.to_screen(position);
         final Endpoints endpoints = this.getEndpoints(this.getDirection(pacman), null);
@@ -242,7 +236,7 @@ public class PacmanGraphicsNonText {
         GraphicsUtils.refresh();
     }
 
-    private void animatePacman(final AgentState pacman, final AgentState prevPacman, final List<Object> image) {
+    private void moveAgent(final AgentState pacman, final Integer agentIndex, final AgentState prevPacman, final List<Object> image) {
         if(this.frameTime < 0) {
             System.out.println("Press any key to step forward, 'q' to play");
             final List<Character> keys = GraphicsUtils.wait_for_keys();
@@ -278,7 +272,7 @@ public class PacmanGraphicsNonText {
         }
     }
 
-    protected List drawGhost(final GhostState ghost, final int agentIndex) {
+    protected List draw(final GhostState ghost, final int agentIndex) {
         final Position pos = getPosition1(ghost);
         final Direction dir = this.getDirection(ghost);
         final Position screenPos = this.to_screen(pos);
@@ -359,7 +353,7 @@ public class PacmanGraphicsNonText {
     }
     
 
-    private void moveGhost(final GhostState ghost, final int ghostIndex, final AgentState prevGhost, final List ghostImageParts) {
+    private void moveAgent(final GhostState ghost, final int ghostIndex, final AgentState prevGhost, final List ghostImageParts) {
         
         final Position posOld = this.to_screen(getPosition1(prevGhost));
         final double old_x = posOld.getX();
@@ -403,7 +397,8 @@ public class PacmanGraphicsNonText {
         return agentState.getConfiguration().getDirection();
     }
 
-    private void finish() {
+    @Override
+    public void finish() {
         GraphicsUtils.end_graphics();
     }
 

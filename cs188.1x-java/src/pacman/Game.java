@@ -1,5 +1,6 @@
 package pacman;
 
+import common.Pair;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -16,13 +17,13 @@ import util.Util;
 public class Game {
     private boolean agentCrashed;
     private final List<Agent> agents;
-    private final Object display;
+    private final PacmanGraphics display;
     private final ClassicGameRules rules;
     private final int startingIndex;
     private boolean gameOver;
     private final boolean muteAgents;
     private final boolean catchExceptions;
-    private final ArrayList<Object> moveHistory;
+    private final List<Pair<Integer,Direction>> moveHistory;
     private final List<Integer> totalAgentTimes;
     private final List<Integer> totalAgentTimeWarnings;
     
@@ -34,7 +35,7 @@ public class Game {
 
     public Game(
             final List agents,
-            final Object display,
+            final PacmanGraphics display,
             final ClassicGameRules rules,
             final Integer startingIndex,
             final Boolean muteAgents,
@@ -78,7 +79,7 @@ public class Game {
     /** Main control loop for game play. */
     public void run() {
 
-        display.initialize(state.getData());
+        display.initialize(state, null);
         int numMoves = 0;
 
         // inform learning agents of the game start
@@ -104,7 +105,7 @@ public class Game {
                     return;
                 }
             } else {
-                agent.registerInitialState(state.deepCopy());
+                agent.registerInitialState(state.deepCopy(), null);
             }
         }
 
@@ -161,11 +162,11 @@ public class Game {
                     return;
                 }
             } else {
-                action = agent.getAction(observation);
+                action = agent.getAction(observation, null);
             }
 
             // Execute the action
-            moveHistory.add(new AgentAction(agentIndex, action) );
+            moveHistory.add(new Pair<>(agentIndex, action) );
             if(catchExceptions) {
                 try {
                     state = state.generateSuccessor( agentIndex, action );
@@ -179,7 +180,7 @@ public class Game {
             }
 
             // Change the display
-            display.update( state.getData() );
+            display.update(state);
 
             // Allow for game specific conditions (winning, losing, etc.)
             rules.process(state, this);
