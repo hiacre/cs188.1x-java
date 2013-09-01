@@ -52,5 +52,4 @@ public class Position {
     public int getFloorY() {
         return (int)y;
     }
-    
 }
