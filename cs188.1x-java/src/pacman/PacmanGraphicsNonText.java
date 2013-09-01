@@ -1,5 +1,7 @@
 package pacman;
 
+import common.Endpoints;
+import common.Pair;
 import common.Position;
 import graphics.utils.GraphicsUtils;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import static pacman.Direction.West;
 
 import static graphics.utils.GraphicsUtils.square;
 import static graphics.utils.GraphicsUtils.circle;
+import static pacman.GraphicsDisplay.GHOST_SIZE;
 import java.util.Arrays;
 
 /**
@@ -177,31 +180,34 @@ public class PacmanGraphicsNonText {
         final double screen_width = 2*gridSize + grid_width;
         final double screen_height = 2*gridSize + grid_height + GraphicsDisplay.INFO_PANE_HEIGHT;
 
-        begin_graphics(screen_width,
-                       screen_height,
-                       GraphicsDisplay.BACKGROUND_COLOR,
-                       "CS188 Pacman");
+        GraphicsUtils.begin_graphics(
+                        screen_width,
+                        screen_height,
+                        GraphicsDisplay.BACKGROUND_COLOR,
+                        "CS188 Pacman");
     }
 
     private List<Object> drawPacman(final AgentState pacman, final int index) {
-        position = getPosition1(pacman);
-        screen_point = this.to_screen(position);
-        endpoints = this.getEndpoints(this.getDirection(pacman));
+        final Position position = getPosition1(pacman);
+        final Position screen_point = this.to_screen(position);
+        final Endpoints endpoints = this.getEndpoints(this.getDirection(pacman), null);
 
-        width = PACMAN_OUTLINE_WIDTH;
-        outlineColor = PACMAN_COLOR;
-        fillColor = PACMAN_COLOR;
+        width = GraphicsDisplay.PACMAN_OUTLINE_WIDTH;
+        String outlineColor = GraphicsDisplay.PACMAN_COLOR;
+        String fillColor = GraphicsDisplay.PACMAN_COLOR;
 
         if(this.capture) {
-            outlineColor = TEAM_COLORS[index % 2];
-            fillColor = GHOST_COLORS[index];
-            width = PACMAN_CAPTURE_OUTLINE_WIDTH;
+            outlineColor = GraphicsDisplay.TEAM_COLORS.get(index % 2);
+            fillColor = GraphicsDisplay.GHOST_COLORS.get(index);
+            width = GraphicsDisplay.PACMAN_CAPTURE_OUTLINE_WIDTH;
         }
 
-        return Arrays.asList(circle(screen_point, PACMAN_SCALE * this.gridSize,
-                       fillColor = fillColor, outlineColor = outlineColor,
-                       endpoints = endpoints,
-                       width = width));
+        return Arrays.asList(GraphicsUtils.circle(screen_point.getX(), screen_point.getY(), GraphicsDisplay.PACMAN_SCALE * gridSize,
+                       outlineColor,
+                       fillColor,
+                       endpoints,
+                       null,
+                       width));
     }
 
     private Endpoints getEndpoints(final Direction direction, Position position) {
@@ -223,15 +229,15 @@ public class PacmanGraphicsNonText {
         return endpoints;
     }
 
-    private void movePacman(final Position position, final Direction direction, final Object image) {
-        screenPosition = this.to_screen(position);
-        final Endpoints endpoints = this.getEndpoints( direction, position );
-        r = PACMAN_SCALE * this.gridSize;
-        moveCircle(image[0], screenPosition, r, endpoints);
-        refresh();
+    private void movePacman(final Position position, final Direction direction, final List<Object> image) {
+        final Position screenPosition = this.to_screen(position);
+        final Endpoints endpoints = this.getEndpoints( direction, position);
+        final double r = GraphicsDisplay.PACMAN_SCALE * gridSize;
+        GraphicsUtils.moveCircle(image.get(0), screenPosition, r, endpoints);
+        GraphicsUtils.refresh();
     }
 
-    private void animatePacman(final AgentState pacman, final AgentState prevPacman, final Object image) {
+    private void animatePacman(final AgentState pacman, final AgentState prevPacman, final List<Object> image) {
         if(this.frameTime < 0) {
             System.out.println("Press any key to step forward, 'q' to play");
             final List<Character> keys = wait_for_keys();
@@ -274,7 +280,7 @@ public class PacmanGraphicsNonText {
         final Position screenPos = this.to_screen(pos);
         final double screen_x = screenPos.getX();
         final double screen_y = screenPos.getY();
-        final List coords = new ArrayList();
+        final List<Position> coords = new ArrayList<>();
         for(Position p : GraphicsDisplay.GHOST_SHAPE) {
             final double x = p.getX();
             final double y = p.getY();
@@ -282,9 +288,9 @@ public class PacmanGraphicsNonText {
         }
 
         final String colour = this.getGhostColor(ghost, agentIndex);
-        body = GraphicsUtils.polygon(coords, colour, 1);
-        WHITE = formatColor(1.0, 1.0, 1.0);
-        BLACK = formatColor(0.0, 0.0, 0.0);
+        final Object body = GraphicsUtils.polygon(coords, colour, null, 1, null, null, null);
+        final String WHITE = GraphicsUtils.formatColor(1.0, 1.0, 1.0);
+        final String BLACK = GraphicsUtils.formatColor(0.0, 0.0, 0.0);
 
         double dx = 0;
         double dy = 0;
@@ -296,10 +302,11 @@ public class PacmanGraphicsNonText {
             default:
                 throw new RuntimeException("Unhandled direction");
         }
-        final Object leftEye = circle((screen_x+this.gridSize*GHOST_SIZE*(-0.3+dx/1.5), screen_y-this.gridSize*GHOST_SIZE*(0.3-dy/1.5)), this.gridSize*GHOST_SIZE*0.2, WHITE, WHITE);
-        final Object rightEye = circle((screen_x+this.gridSize*GHOST_SIZE*(0.3+dx/1.5), screen_y-this.gridSize*GHOST_SIZE*(0.3-dy/1.5)), this.gridSize*GHOST_SIZE*0.2, WHITE, WHITE);
-        final Object leftPupil = circle((screen_x+this.gridSize*GHOST_SIZE*(-0.3+dx), screen_y-this.gridSize*GHOST_SIZE*(0.3-dy)), this.gridSize*GHOST_SIZE*0.08, BLACK, BLACK);
-        final Object rightPupil = circle((screen_x+this.gridSize*GHOST_SIZE*(0.3+dx), screen_y-this.gridSize*GHOST_SIZE*(0.3-dy)), this.gridSize*GHOST_SIZE*0.08, BLACK, BLACK);
+        
+        final Object leftEye = circle(screen_x+gridSize*GHOST_SIZE*(-0.3+dx/1.5), screen_y-gridSize*GHOST_SIZE*(0.3-dy/1.5), gridSize*GHOST_SIZE*0.2, WHITE, WHITE, null, null, null);
+        final Object rightEye = circle(screen_x+gridSize*GHOST_SIZE*(0.3+dx/1.5), screen_y-gridSize*GHOST_SIZE*(0.3-dy/1.5), gridSize*GHOST_SIZE*0.2, WHITE, WHITE, null, null, null);
+        final Object leftPupil = circle(screen_x+gridSize*GHOST_SIZE*(-0.3+dx), screen_y-gridSize*GHOST_SIZE*(0.3-dy), gridSize*GHOST_SIZE*0.08, BLACK, BLACK, null, null, null);
+        final Object rightPupil = circle(screen_x+gridSize*GHOST_SIZE*(0.3+dx), screen_y-gridSize*GHOST_SIZE*(0.3-dy), gridSize*GHOST_SIZE*0.08, BLACK, BLACK, null, null, null);
         final List ghostImageParts = new ArrayList();
         ghostImageParts.add(body);
         ghostImageParts.add(leftEye);
@@ -311,8 +318,10 @@ public class PacmanGraphicsNonText {
     }
     
     
-    private void moveEyes(final Position pos, final Direction dir, final Object eyes) {
-        (screen_x, screen_y) = (this.to_screen(pos) );
+    private void moveEyes(final Position pos, final Direction dir, final List eyes) {
+        final Position screenPos = this.to_screen(pos);
+        final double screen_x = screenPos.getX();
+        final double screen_y = screenPos.getY();
         double dx = 0;
         double dy = 0;
         switch(dir) {
@@ -323,14 +332,30 @@ public class PacmanGraphicsNonText {
             default:
                 throw new RuntimeException("Unhandled direction");
         }
-        moveCircle(eyes[0],(screen_x+this.gridSize*GHOST_SIZE*(-0.3+dx/1.5), screen_y-this.gridSize*GHOST_SIZE*(0.3-dy/1.5)), this.gridSize*GHOST_SIZE*0.2);
-        moveCircle(eyes[1],(screen_x+this.gridSize*GHOST_SIZE*(0.3+dx/1.5), screen_y-this.gridSize*GHOST_SIZE*(0.3-dy/1.5)), this.gridSize*GHOST_SIZE*0.2);
-        moveCircle(eyes[2],(screen_x+this.gridSize*GHOST_SIZE*(-0.3+dx), screen_y-this.gridSize*GHOST_SIZE*(0.3-dy)), this.gridSize*GHOST_SIZE*0.08);
-        moveCircle(eyes[3],(screen_x+this.gridSize*GHOST_SIZE*(0.3+dx), screen_y-this.gridSize*GHOST_SIZE*(0.3-dy)), this.gridSize*GHOST_SIZE*0.08);
+        GraphicsUtils.moveCircle(
+                eyes.get(0),
+                Position.newInstance(screen_x+gridSize*GHOST_SIZE*(-0.3+dx/1.5), screen_y-gridSize*GHOST_SIZE*(0.3-dy/1.5)),
+                gridSize*GHOST_SIZE*0.2,
+                null);
+        GraphicsUtils.moveCircle(
+                eyes.get(1),
+                Position.newInstance(screen_x+gridSize*GHOST_SIZE*(0.3+dx/1.5), screen_y-gridSize*GHOST_SIZE*(0.3-dy/1.5)),
+                gridSize*GHOST_SIZE*0.2,
+                null);
+        GraphicsUtils.moveCircle(
+                eyes.get(2),
+                Position.newInstance(screen_x+gridSize*GHOST_SIZE*(-0.3+dx), screen_y-gridSize*GHOST_SIZE*(0.3-dy)),
+                gridSize*GHOST_SIZE*0.08,
+                null);
+        GraphicsUtils.moveCircle(
+                eyes.get(3),
+                Position.newInstance(screen_x+gridSize*GHOST_SIZE*(0.3+dx), screen_y-gridSize*GHOST_SIZE*(0.3-dy)),
+                gridSize*GHOST_SIZE*0.08,
+                null);
     }
     
 
-    private void moveGhost(final AgentState ghost, final int ghostIndex, final AgentState prevGhost, final List ghostImageParts) {
+    private void moveGhost(final GhostState ghost, final int ghostIndex, final AgentState prevGhost, final List ghostImageParts) {
         
         final Position posOld = this.to_screen(getPosition1(prevGhost));
         final double old_x = posOld.getX();
@@ -342,18 +367,22 @@ public class PacmanGraphicsNonText {
         final Position delta = Position.newInstance(new_x - old_x, new_y - old_y);
 
         for(Object ghostImagePart : ghostImageParts) {
-            move_by(ghostImagePart, delta);
+            GraphicsUtils.move_by(ghostImagePart, delta.getX(), delta.getY(), null, null, null);
         }
-        refresh();
+        GraphicsUtils.refresh();
 
+        final String color;
         if(ghost.getScaredTimer() > 0) {
-            color = SCARED_COLOR;
+            color = GraphicsDisplay.SCARED_COLOR;
         } else {
-            color = GHOST_COLORS[ghostIndex];
+            color = GraphicsDisplay.GHOST_COLORS.get(ghostIndex);
         }
-        edit(ghostImageParts[0], ('fill', color), ('outline', color));
-        this.moveEyes(this.getPosition1(ghost), this.getDirection(ghost), ghostImageParts[-4:]);
-        refresh();
+        GraphicsUtils.edit(ghostImageParts.get(0), color, color);
+        this.moveEyes(
+                getPosition1(ghost),
+                this.getDirection(ghost),
+                ghostImageParts.subList(ghostImageParts.size()-4, ghostImageParts.size()));
+        GraphicsUtils.refresh();
     }
 
     protected static Position getPosition1(final AgentState agentState) {
@@ -371,7 +400,7 @@ public class PacmanGraphicsNonText {
     }
 
     private void finish() {
-        end_graphics();
+        GraphicsUtils.end_graphics();
     }
 
     private Position to_screen(final Position point) {
@@ -388,19 +417,20 @@ public class PacmanGraphicsNonText {
     private Position to_screen2(final Position point) {
         double x = point.getX();
         double y = point.getY();
-        x = (x + 1)*this.gridSize;
-        y = (this.height  - y)*this.gridSize;
+        x = (x + 1)*gridSize;
+        y = (height  - y)*gridSize;
         return Position.newInstance(x, y);
     }
 
-    private void drawWalls(final Object wallMatrix) {
-        wallColor = WALL_COLOR;
-        for(xNum, x in enumerate(wallMatrix)) {
-            if(this.capture and (xNum * 2) < wallMatrix.width) {
-                wallColor = TEAM_COLORS[0];
+    private void drawWalls(final Grid wallMatrix) {
+        String wallColor = GraphicsDisplay.WALL_COLOR;
+        for(int xNum=0; xNum<wallMatrix.getWidth(); xNum++) {
+            final List<Boolean> x = wallMatrix.getData().get(xNum);
+            if(this.capture && (xNum * 2) < wallMatrix.getWidth()) {
+                wallColor = GraphicsDisplay.TEAM_COLORS.get(0);
             }
-            if(this.capture and (xNum * 2) >= wallMatrix.width) {
-                wallColor = TEAM_COLORS[1];
+            if(this.capture && (xNum * 2) >= wallMatrix.getWidth()) {
+                wallColor = GraphicsDisplay.TEAM_COLORS.get(1);
             }
 
             for(yNum, cell in enumerate(x)) {

@@ -68,7 +68,7 @@ public class GraphicsDisplay {
     }
 
     final static String PACMAN_COLOR = formatColor(255.0/255.0,255.0/255.0,61.0/255);
-    final double PACMAN_SCALE = 0.5;
+    final static double PACMAN_SCALE = 0.5;
 
     // Food
     public static final String FOOD_COLOR = formatColor(1,1,1);
