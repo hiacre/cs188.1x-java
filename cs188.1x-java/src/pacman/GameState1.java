@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import util.PositionGrid;
 import util.Util;
 
 /**
@@ -297,11 +298,11 @@ public class GameState1 {
         return data.getAgentStates();
     }
 
-    Position getFoodEaten() {
+    PositionGrid getFoodEaten() {
         return data.getFoodEaten();
     }
 
-    Object getCapsuleEaten() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    Position getCapsuleEaten() {
+        return data.getCapsuleEaten();
     }
 }

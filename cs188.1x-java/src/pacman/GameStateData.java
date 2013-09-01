@@ -3,6 +3,7 @@ package pacman;
 import common.Position;
 import java.util.ArrayList;
 import java.util.List;
+import util.PositionGrid;
 
 /**
  *
@@ -16,7 +17,7 @@ public class GameStateData {
     private Integer agentMoved;
     private Position capsuleEaten;
     private final Object foodAdded;
-    private Position foodEaten;
+    private PositionGrid foodEaten;
     private List agentStates;
     private GridCapsules capsules;
     private Grid food;
@@ -144,7 +145,7 @@ public class GameStateData {
         return eaten;
     }
     
-    public Position getFoodEaten() {
+    public PositionGrid getFoodEaten() {
         return foodEaten;
     }
 
@@ -197,7 +198,7 @@ public class GameStateData {
     }
 
     void setFoodEaten(final int x, final int y) {
-        this.foodEaten = Position.newInstance(x, y);
+        this.foodEaten = new PositionGrid(x, y);
     }
 
     boolean getLose() {

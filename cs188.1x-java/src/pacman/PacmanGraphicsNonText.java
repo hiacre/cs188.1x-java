@@ -18,6 +18,7 @@ import static graphics.utils.GraphicsUtils.circle;
 import static pacman.GraphicsDisplay.GHOST_SIZE;
 import static pacman.GraphicsDisplay.WALL_RADIUS;
 import java.util.Arrays;
+import util.PositionGrid;
 
 /**
  *
@@ -142,11 +143,10 @@ public class PacmanGraphicsNonText {
         final List<Object> image;
         if(newState.isPacman()) {
             image = this.drawPacman(newState, agentIndex);
-            this.agentImages.add(agentIndex, new Pair<>(newState, image));
         } else {
             image = this.drawGhost(newState, agentIndex);
-            this.agentImages.add(agentIndex, new Pair<>(newState, image));
         }
+        this.agentImages.add(agentIndex, new Pair<>(newState, image));
         GraphicsUtils.refresh();
     }
 
@@ -167,7 +167,8 @@ public class PacmanGraphicsNonText {
         this.agentImages.set(agentIndex, new Pair<>(agentState, prevImage));
 
         if(newState.getFoodEaten() != null) {
-            this.removeFood(newState.getFoodEaten(), this.food);
+            final PositionGrid foodEaten = newState.getFoodEaten();
+            this.removeFood(foodEaten.getX(), foodEaten.getY(), this.food);
         }
         if(newState.getCapsuleEaten() != null) {
             this.removeCapsule(newState.getCapsuleEaten(), this.capsules);
@@ -244,13 +245,12 @@ public class PacmanGraphicsNonText {
     private void animatePacman(final AgentState pacman, final AgentState prevPacman, final List<Object> image) {
         if(this.frameTime < 0) {
             System.out.println("Press any key to step forward, 'q' to play");
-            final List<Character> keys = wait_for_keys();
+            final List<Character> keys = GraphicsUtils.wait_for_keys();
             if(keys.contains('q')) {
                 this.frameTime = 0.1;
             }
         }
         if(this.frameTime > 0.01 || this.frameTime < 0) {
-            start = time.time();
             final Position posPrev = getPosition1(prevPacman);
             final double fx = posPrev.getX();
             final double fy = posPrev.getY();
