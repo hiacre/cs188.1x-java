@@ -285,6 +285,17 @@ public class GraphicsUtils {
         return _canvas.create_arc(x0, y0, x1, y1, outlineColor, fillColor,
                                   e[1] - e[0], e[0], style, width);
     }
+    
+    public static Object circle(
+            final Position pos,
+            final double r,
+            final String outlineColor,
+            final String fillColor,
+            final Endpoints endpoints,
+            String style,
+            Integer width) {
+        return circle(pos.getX(), pos.getY(), r, outlineColor, fillColor, endpoints, style, width);
+    }
 
 //def image(pos, file="../../blueghost.gif"):
 //    x, y = pos
@@ -354,12 +365,17 @@ public class GraphicsUtils {
 
 //def changeColor(id, newColor):
 //    _canvas.itemconfigure(id, fill=newColor)
-//
-//def line(here, there, color=formatColor(0, 0, 0), width=2):
-//    x0, y0 = here[0], here[1]
-//    x1, y1 = there[0], there[1]
-//    return _canvas.create_line(x0, y0, x1, y1, fill=color, width=width)
-//
+
+    public static Object line(final Position here, final Position there, String color, Integer width) {
+        color = color == null ? formatColor(0,0,0) : color;
+        width = width == null ? 2 : width;
+        final double x0 = here.getX();
+        final double y0 = here.getY();
+        final double x1 = there.getX();
+        final double y1 = there.getY();
+        return _canvas.create_line(x0, y0, x1, y1, fill=color, width=width);
+    }
+
 //##############################################################################
 //### Keypress handling ########################################################
 //##############################################################################
