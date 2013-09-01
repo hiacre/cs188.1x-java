@@ -16,7 +16,7 @@ public class Command {
     private Boolean catchExceptions;
     private boolean record;
     private Integer timeout;
-    private PacmanGraphics display;
+    private PacmanDisplay display;
     
     public Layout getLayout() {
         return layout;
@@ -82,11 +82,11 @@ public class Command {
         return timeout;
     }
     
-    public PacmanGraphics getDisplay() {
+    public PacmanDisplay getDisplay() {
         return display;
     }
 
-    void setDisplay(PacmanGraphics display) {
+    void setDisplay(PacmanDisplay display) {
         this.display = display;
     }
 }

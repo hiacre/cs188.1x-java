@@ -3,7 +3,7 @@ package pacman;
 import common.Position;
 import java.util.ArrayList;
 import java.util.List;
-import util.PositionGrid;
+import common.PositionGrid;
 
 /**
  *
@@ -16,7 +16,6 @@ public class GameStateData {
     private boolean win;
     private Integer agentMoved;
     private Position capsuleEaten;
-    private final Object foodAdded;
     private PositionGrid foodEaten;
     private List agentStates;
     private GridCapsules capsules;
@@ -27,7 +26,6 @@ public class GameStateData {
     
     public GameStateData() {
         foodEaten = null;
-        foodAdded = null;
         capsuleEaten = null;
         agentMoved = null;
         lose = false;
@@ -59,16 +57,53 @@ public class GameStateData {
 
     @Override
     public int hashCode() {
-
+        throw new UnsupportedOperationException("Why are we even calling this?!");
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        throw new UnsupportedOperationException("Why are we even calling this?!");
     }
     
     @Override
     public String toString() {
+        final int width = this.layout.getWidth();
+        final int height = this.layout.getHeight();
+        final Grid map = GridStandard.newInstance(width, height);
+        for(int x=0; x<width; x++) {
+            for(int y=0; y<height; y++) {
+                final Grid food = this.food;
+                final Grid walls = this.layout.getWalls();
+                // TODO this next line tries to set grid cells to characters, rather than booleans,
+                // which ain't how Grid works!
+                //map.set(x, y, foodWallString(food.get(x, y), walls.get(x, y)));
+            }
+        for(AgentState agentState in self.agentStates) {
+            if(agentState == null) {
+                continue;
+            }
+            if(agentState.getConfiguration() == null) {
+                continue;
+            }
+            PositionGrid nearestPoint = Position.nearestPoint(agentState.getConfiguration().getPosition());
+            final int ix = nearestPoint.getX();
+            final int iy = nearestPoint.getY();
+            
+            final Direction agent_dir = agentState.getConfiguration().getDirection();
+            if(agentState.isPacman) {
+                map[ix][iy] = self._pacStr( agent_dir );
+            } else {
+                map[ix][iy] = self._ghostStr( agent_dir );
+            }
 
+        for x, y in self.capsules:
+            map[x][y] = 'o';
+
+        return str(map) + ("\nScore: %d\n" % self.score);
     }
     
     
-    private char foodWallString(final boolean hasFood, final boolean hasWall) {
+    private static char foodWallString(final boolean hasFood, final boolean hasWall) {
         if(hasFood) {
             return '.';
         } else if(hasWall) {

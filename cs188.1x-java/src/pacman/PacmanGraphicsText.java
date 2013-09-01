@@ -8,16 +8,14 @@ import java.util.List;
  *
  * @author archie
  */
-public class PacmanGraphicsText implements PacmanGraphics {
+public class PacmanGraphicsText extends TextDisplay {
     
-    private final int SLEEP_TIME;
     private int agentCounter;
     private int turn;
+    private final int sleepTime;
     
     public PacmanGraphicsText(final Integer speed) {
-        if(speed != null) {
-            SLEEP_TIME = speed;
-        }
+        sleepTime = speed == null ? getSleepTime() : speed;
     }
 
     @Override
@@ -36,7 +34,7 @@ public class PacmanGraphicsText implements PacmanGraphics {
         this.agentCounter = (this.agentCounter + 1) % numAgents;
         if(this.agentCounter == 0) {
             this.turn += 1;
-            if(DISPLAY_MOVES) {
+            if(movesAreDisplayed()) {
                 List<Object> ghosts = new ArrayList<>();
                 for(int i=1; i<numAgents; i++) {
                     final Position pos = state.getGhostPosition(i);
@@ -45,7 +43,7 @@ public class PacmanGraphicsText implements PacmanGraphics {
                 print "%4d) P: %-8s" % (self.turn, str(pacman.nearestPoint(state.getPacmanPosition())));
                 print '| Score: %-5d' % state.score,'| Ghosts:', ghosts;
             }
-            if(this.turn % DRAW_EVERY == 0) {
+            if(this.turn % getDrawEvery() == 0) {
                 this.draw(state);
                 this.pause();
             }
@@ -56,7 +54,7 @@ public class PacmanGraphicsText implements PacmanGraphics {
     }
 
     private void pause() {
-        time.sleep(SLEEP_TIME);
+        time.sleep(sleepTime);
     }
 
     private void draw(final GameState1 state) {

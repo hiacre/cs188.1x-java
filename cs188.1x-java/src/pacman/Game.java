@@ -17,7 +17,7 @@ import util.Util;
 public class Game {
     private boolean agentCrashed;
     private final List<Agent> agents;
-    private final PacmanGraphics display;
+    private final PacmanDisplay display;
     private final ClassicGameRules rules;
     private final int startingIndex;
     private boolean gameOver;
@@ -35,7 +35,7 @@ public class Game {
 
     public Game(
             final List agents,
-            final PacmanGraphics display,
+            final PacmanDisplay display,
             final ClassicGameRules rules,
             final Integer startingIndex,
             final Boolean muteAgents,

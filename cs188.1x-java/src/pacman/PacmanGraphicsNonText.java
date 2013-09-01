@@ -18,13 +18,13 @@ import static graphics.utils.GraphicsUtils.circle;
 import static pacman.GraphicsDisplay.GHOST_SIZE;
 import static pacman.GraphicsDisplay.WALL_RADIUS;
 import java.util.Arrays;
-import util.PositionGrid;
+import common.PositionGrid;
 
 /**
  *
  * @author archie
  */
-public class PacmanGraphicsNonText implements PacmanGraphics {
+public class PacmanGraphicsNonText implements PacmanDisplay {
     
     private final int have_window;
     private final HashMap<Object, Object> currentGhostImages;

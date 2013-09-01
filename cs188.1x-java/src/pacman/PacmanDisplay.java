@@ -4,7 +4,7 @@ package pacman;
  *
  * @author archie
  */
-public interface PacmanGraphics {
+public interface PacmanDisplay {
     
     public void initialize(final GameState1 state, Boolean isBlue);
 

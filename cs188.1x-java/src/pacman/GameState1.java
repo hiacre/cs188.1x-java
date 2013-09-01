@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import util.PositionGrid;
+import common.PositionGrid;
 import util.Util;
 
 /**
@@ -245,22 +245,12 @@ public class GameState1 {
 
     @Override
     public int hashCode() {
-        return data.hashCode();
+        throw new UnsupportedOperationException("Why are we even calling this?!");
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final GameState1 other = (GameState1) obj;
-        if (!Objects.equals(this.data, other.data)) {
-            return false;
-        }
-        return true;
+        throw new UnsupportedOperationException("Why are we even calling this?!");
     }
 
     @Override

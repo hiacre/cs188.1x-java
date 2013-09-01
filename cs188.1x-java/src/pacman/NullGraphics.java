@@ -4,7 +4,7 @@ package pacman;
  *
  * @author archie
  */
-public class NullGraphics implements PacmanGraphics {
+public class NullGraphics extends TextDisplay {
     
     public NullGraphics(final GameState1 state, Boolean isBlue) {
         // if isBlue is null, then it should default to false
@@ -17,7 +17,7 @@ public class NullGraphics implements PacmanGraphics {
     }
 
     private void pause() {
-        time.sleep(SLEEP_TIME);
+        time.sleep(getSleepTime());
     }
 
     private void draw(final GameState1 state) {

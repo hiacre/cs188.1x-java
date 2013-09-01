@@ -73,6 +73,10 @@ public class GridStandard implements Grid {
         return new GridStandard(width, height, initialValue, null);
     }
     
+    public static Grid newInstance(final int width, final int height) {
+        return new GridStandard(width, height, false, null);
+    }
+    
     @Override
     /** This returns a deep copy */
     public Grid copy() {
@@ -197,8 +201,7 @@ public class GridStandard implements Grid {
     }
     
     
-    @Override
-    public Grid reconstituteGrid(final List<Integer> bitRep) {
+    public static Grid reconstituteGrid(final List<Integer> bitRep) {
         final int w = bitRep.get(0);
         final int h = bitRep.get(1);
         return new GridStandard(w, h, null, bitRep.subList(2, bitRep.size()));

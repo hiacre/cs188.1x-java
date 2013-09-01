@@ -152,7 +152,7 @@ public class Pacman {
             textDisplay.setSleepTime(options.get("frameTime"));
             args.setDisplay(new PacmanGraphicsText(null));
         } else {
-            args.set("display", new PacmanGraphicsNonText(options.getZoom(), options.getFrameTime()));
+            args.set("display", new PacmanGraphicsNonText(options.get("zoom"), options.get("frameTime")));
         }
         args.setNumGames(Integer.parseInt(options.get("numGames")));
         args.setRecord(options.get("record"));
@@ -201,7 +201,7 @@ public class Pacman {
         return agentName.getFactory();
     }
     
-    private void replayGame(final Layout layout, final List<Direction> actions, final PacmanGraphics display) {
+    private void replayGame(final Layout layout, final List<Direction> actions, final PacmanDisplay display) {
         final ClassicGameRules rules = new ClassicGameRules();
         final List<Agent> agents = new ArrayList();
         agents.add(new GreedyAgent());
@@ -228,7 +228,7 @@ public class Pacman {
             final Layout layout,
             final Agent pacman,
             final List<GhostAgent> ghosts,
-            final PacmanGraphics display,
+            final PacmanDisplay display,
             final int numGames,
             final boolean record,
             Integer numTraining,
@@ -253,7 +253,7 @@ public class Pacman {
 
         for(int i=0; i<numGames; i++) {
             final boolean beQuiet = i < numTraining;
-            final PacmanGraphics gameDisplay;
+            final PacmanDisplay gameDisplay;
             if(beQuiet) {
                 // Suppress output and graphics
                 //import textDisplay
