@@ -363,8 +363,9 @@ public class GraphicsUtils {
         }
     }
 
-//def changeColor(id, newColor):
-//    _canvas.itemconfigure(id, fill=newColor)
+    public static void changeColor(final Object id, final Object newColor) {
+        _canvas.itemconfigure(id, fill=newColor);
+    }
 
     public static Object line(final Position here, final Position there, String color, Integer width) {
         color = color == null ? formatColor(0,0,0) : color;
@@ -446,12 +447,12 @@ public class GraphicsUtils {
 //        sleep(0.05)
 //    return keys
 
-    public static void remove_from_screen(final Object x, Object d_o_e, Object d_w) {
-        d_o_e = d_o_e == null ? Tkinter.tkinter.dooneevent : d_o_e;
-        d_w = d_w == null ? Tkinter.tkinter.DONT_WAIT : d_w;
+    public static void remove_from_screen(final Object x, Object doOnEvent, Object doNotWait) {
+        doOnEvent = doOnEvent == null ? Tkinter.tkinter.dooneevent : doOnEvent;
+        doNotWait = doNotWait == null ? Tkinter.tkinter.DONT_WAIT : doNotWait;
 
         _canvas.delete(x);
-        d_o_e(d_w);
+        doOnEvent(doNotWait);
     }
 
 //def _adjust_coords(coord_list, x, y):
