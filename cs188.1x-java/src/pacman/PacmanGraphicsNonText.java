@@ -41,6 +41,9 @@ public class PacmanGraphicsNonText {
     private List<List> distributionImages;
     private final Object pacmanImage;
     private List<Pair<AgentState, List<Object>>> agentImages;
+    private ArrayList expandedCells;
+    private List food;
+    private Map<Position, Object> capsules;
 
     PacmanGraphicsNonText(Double zoom, Double frameTime, Boolean capture) {
         zoom = zoom == null ? 1.0 : zoom;
@@ -101,14 +104,15 @@ public class PacmanGraphicsNonText {
                 final Object block = square(screen_x, screen_y, 0.5 * gridSize, GraphicsDisplay.BACKGROUND_COLOR, 1, 2);
                 distx.add(block);
             }
+        }
         this.distributionImages = dist;
     }
 
-    protected void drawStaticObjects(final GameState1 state) {
+    private void drawStaticObjects(final GameState1 state) {
         final Layout l = layout;
         this.drawWalls(l.getWalls());
         this.food = this.drawFood(l.getFood());
-        this.capsules = this.drawCapsules(l.getCapsules());
+        this.capsules = this.drawCapsules(l.getCapsules().asList());
         GraphicsUtils.refresh();
     }
 
@@ -119,11 +123,10 @@ public class PacmanGraphicsNonText {
             final List<Object> image;
             if(agent.isPacman()) {
                 image = this.drawPacman(agent, index);
-                this.agentImages.add(new Pair<>(agent, image));
             } else {
                 image = this.drawGhost(agent, index);
-                this.agentImages.add(new Pair<>(agent, image));
             }
+            this.agentImages.add(new Pair<>(agent, image));
         }
         GraphicsUtils.refresh();
     }
@@ -527,47 +530,115 @@ public class PacmanGraphicsNonText {
                                 new Endpoints(270,361),
                                 "arc",
                                 null);
-                        GraphicsUtils.line(add(screen, (gridSize*(-2)*WALL_RADIUS+1, gridSize*(-1)*WALL_RADIUS)), add(screen, (gridSize*(-0.5), gridSize*(-1)*WALL_RADIUS)), wallColor);
-                        GraphicsUtils.line(add(screen, (gridSize*(-1)*WALL_RADIUS, gridSize*(-2)*WALL_RADIUS+1)), add(screen, (gridSize*(-1)*WALL_RADIUS, gridSize*(-0.5))), wallColor);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*(-2)*WALL_RADIUS+1, gridSize*(-1)*WALL_RADIUS)),
+                                add(screen, Position.newInstance(gridSize*(-0.5), gridSize*(-1)*WALL_RADIUS)),
+                                wallColor,
+                                null);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*(-1)*WALL_RADIUS, gridSize*(-2)*WALL_RADIUS+1)),
+                                add(screen, Position.newInstance(gridSize*(-1)*WALL_RADIUS, gridSize*(-0.5))),
+                                wallColor,
+                                null);
                     }
 
                     // SE quadrant
                     if(!sIsWall && !eIsWall) {
                         // inner circle
-                        GraphicsUtils.circle(screen2, WALL_RADIUS * gridSize, wallColor, wallColor, (270,361), 'arc');
+                        GraphicsUtils.circle(
+                                screen2,
+                                WALL_RADIUS * gridSize,
+                                wallColor,
+                                wallColor,
+                                new Endpoints(270,361),
+                                "arc",
+                                null);
                     }
                     if(sIsWall && !eIsWall) {
                         // vertical line
-                        GraphicsUtils.line(add(screen, (gridSize*WALL_RADIUS, 0)), add(screen, (gridSize*WALL_RADIUS, gridSize*(0.5)+1)), wallColor);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*WALL_RADIUS, 0)),
+                                add(screen, Position.newInstance(gridSize*WALL_RADIUS, gridSize*(0.5)+1)),
+                                wallColor,
+                                null);
                     }
                     if(!sIsWall && eIsWall) {
                         // horizontal line
-                        GraphicsUtils.line(add(screen, (0, gridSize*(1)*WALL_RADIUS)), add(screen, (gridSize*0.5+1, gridSize*(1)*WALL_RADIUS)), wallColor);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(0, gridSize*(1)*WALL_RADIUS)),
+                                add(screen, Position.newInstance(gridSize*0.5+1, gridSize*(1)*WALL_RADIUS)),
+                                wallColor,
+                                null);
                     }
                     if(sIsWall && eIsWall && !seIsWall) {
                         // outer circle
-                        GraphicsUtils.circle(add(screen2, (gridSize*2*WALL_RADIUS, gridSize*(2)*WALL_RADIUS)), WALL_RADIUS * gridSize-1, wallColor, wallColor, (90,181), 'arc');
-                        GraphicsUtils.line(add(screen, (gridSize*2*WALL_RADIUS-1, gridSize*(1)*WALL_RADIUS)), add(screen, (gridSize*0.5, gridSize*(1)*WALL_RADIUS)), wallColor);
-                        GraphicsUtils.line(add(screen, (gridSize*WALL_RADIUS, gridSize*(2)*WALL_RADIUS-1)), add(screen, (gridSize*WALL_RADIUS, gridSize*(0.5))), wallColor);
+                        GraphicsUtils.circle(
+                                add(screen2, Position.newInstance(gridSize*2*WALL_RADIUS, gridSize*(2)*WALL_RADIUS)),
+                                WALL_RADIUS * gridSize-1,
+                                wallColor,
+                                wallColor,
+                                new Endpoints(90,181),
+                                "arc",
+                                null);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*2*WALL_RADIUS-1, gridSize*(1)*WALL_RADIUS)),
+                                add(screen, Position.newInstance(gridSize*0.5, gridSize*(1)*WALL_RADIUS)),
+                                wallColor,
+                                null);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*WALL_RADIUS, gridSize*(2)*WALL_RADIUS-1)),
+                                add(screen, Position.newInstance(gridSize*WALL_RADIUS, gridSize*(0.5))),
+                                wallColor,
+                                null);
                     }
                     // SW quadrant
                     if(!sIsWall && !wIsWall) {
                         // inner circle
-                        GraphicsUtils.circle(screen2, WALL_RADIUS * gridSize, wallColor, wallColor, (180,271), 'arc');
+                        GraphicsUtils.circle(
+                                screen2,
+                                WALL_RADIUS * gridSize,
+                                wallColor,
+                                wallColor,
+                                new Endpoints(180,271),
+                                "arc",
+                                null);
                     }
                     if(sIsWall && !wIsWall) {
                         // vertical line
-                        GraphicsUtils.line(add(screen, (gridSize*(-1)*WALL_RADIUS, 0)), add(screen, (gridSize*(-1)*WALL_RADIUS, gridSize*(0.5)+1)), wallColor);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*(-1)*WALL_RADIUS, 0)),
+                                add(screen, Position.newInstance(gridSize*(-1)*WALL_RADIUS, gridSize*(0.5)+1)),
+                                wallColor,
+                                null);
                     }
                     if(!sIsWall && wIsWall) {
                         // horizontal line
-                        GraphicsUtils.line(add(screen, (0, gridSize*(1)*WALL_RADIUS)), add(screen, (gridSize*(-0.5)-1, gridSize*(1)*WALL_RADIUS)), wallColor);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(0, gridSize*(1)*WALL_RADIUS)),
+                                add(screen, Position.newInstance(gridSize*(-0.5)-1, gridSize*(1)*WALL_RADIUS)),
+                                wallColor,
+                                null);
                     }
                     if(sIsWall && wIsWall && !swIsWall) {
                         // outer circle
-                        GraphicsUtils.circle(add(screen2, (gridSize*(-2)*WALL_RADIUS, gridSize*(2)*WALL_RADIUS)), WALL_RADIUS * gridSize-1, wallColor, wallColor, (0,91), 'arc');
-                        GraphicsUtils.line(add(screen, (gridSize*(-2)*WALL_RADIUS+1, gridSize*(1)*WALL_RADIUS)), add(screen, (gridSize*(-0.5), gridSize*(1)*WALL_RADIUS)), wallColor);
-                        GraphicsUtils.line(add(screen, (gridSize*(-1)*WALL_RADIUS, gridSize*(2)*WALL_RADIUS-1)), add(screen, (gridSize*(-1)*WALL_RADIUS, gridSize*(0.5))), wallColor);
+                        GraphicsUtils.circle(
+                                add(screen2, Position.newInstance(gridSize*(-2)*WALL_RADIUS, gridSize*(2)*WALL_RADIUS)),
+                                WALL_RADIUS * gridSize-1,
+                                wallColor,
+                                wallColor,
+                                new Endpoints(0,91),
+                                "arc",
+                                null);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*(-2)*WALL_RADIUS+1, gridSize*(1)*WALL_RADIUS)),
+                                add(screen, Position.newInstance(gridSize*(-0.5), gridSize*(1)*WALL_RADIUS)),
+                                wallColor,
+                                null);
+                        GraphicsUtils.line(
+                                add(screen, Position.newInstance(gridSize*(-1)*WALL_RADIUS, gridSize*(2)*WALL_RADIUS-1)),
+                                add(screen, Position.newInstance(gridSize*(-1)*WALL_RADIUS, gridSize*(0.5))),
+                                wallColor,
+                                null);
                     }
                 }
             }
@@ -643,72 +714,83 @@ public class PacmanGraphicsNonText {
         return capsuleImages;
     }
 
-    private void removeFood(final Position cell, final List<List>> foodImages) {
-        final double x = cell.getX();
-        final double y = cell.getY();
-        remove_from_screen(foodImages.get(x).get(y));
+    private void removeFood(final int x, final int y, final List<List> foodImages) {
+        GraphicsUtils.remove_from_screen(foodImages.get(x).get(y), null, null);
     }
 
-    private void removeCapsule(final Object cell, final Object capsuleImages) {
-        x, y = cell;
-        remove_from_screen(capsuleImages[(x, y)]);
+    private void removeCapsule(final Position cell, final Map<Position, Object> capsuleImages) {
+        GraphicsUtils.remove_from_screen(capsuleImages.get(cell), null, null);
     }
 
     /** Draws an overlay of expanded grid positions for search agents */
-    private void drawExpandedCells(final Object cells) {
-        n = float(len(cells));
-        baseColor = [1.0, 0.0, 0.0];
+    private void drawExpandedCells(final List<Position> cells) {
+        final float n = cells.size();
+        List<Double> baseColor = Arrays.asList(1.0, 0.0, 0.0);
         this.clearExpandedCells();
         this.expandedCells = new ArrayList();
-        for(k, cell in enumerate(cells)) {
-            screenPos = this.to_screen( cell);
-            cellColor = formatColor(*[(n-k) * c * .5 / n + .25 for c in baseColor]);
-            block = square(screenPos,
+        for(int k=0; k<cells.size(); k++) {
+            final Position cell = cells.get(k);
+            final Position screenPos = this.to_screen(cell);
+            List<Double> newColor = new ArrayList<>();
+            for(Double c : baseColor) {
+                newColor.add(0.25 + ((n-k*c*0.5/n)));
+            }
+            final String cellColor = GraphicsUtils.formatColor(newColor.get(0), newColor.get(1), newColor.get(2));
+            final Object block = square(screenPos.getX(), screenPos.getY(),
                      0.5 * gridSize,
-                     color = cellColor,
-                     filled = 1, behind=2);
-            this.expandedCells.append(block);
+                     cellColor,
+                     1,
+                     2);
+            this.expandedCells.add(block);
             if(this.frameTime < 0) {
-                refresh();
+                GraphicsUtils.refresh();
             }
         }
     }
 
     private void clearExpandedCells() {
-        if('expandedCells' in dir(self) and len(this.expandedCells) > 0) {
-            for(cell in this.expandedCells) {
-                remove_from_screen(cell);
+        if(!this.expandedCells.isEmpty()) {
+            for(Object cell : this.expandedCells) {
+                GraphicsUtils.remove_from_screen(cell, null, null);
             }
         }
     }
 
 
     /** Draws an agent's belief distributions */
-    private void updateDistributions(final Object distributions) {
-        if(this.distributionImages == None) {
+    private void updateDistributions(final List<Map<Position,Double>> distributions) {
+        if(this.distributionImages == null) {
             this.drawDistributions(this.previousState);
         }
-        for(x in range(len(this.distributionImages))) {
-            for(y in range(len(this.distributionImages[0]))) {
-                image = this.distributionImages[x][y];
-                weights = [dist[ (x,y) ] for dist in distributions];
-
-                if(sum(weights) != 0) {
-                    pass;
+        for(int x=0; x<this.distributionImages.size(); x++) {
+            for(int y=0; y<this.distributionImages.get(0).size(); y++) {
+                final Object image = this.distributionImages.get(x).get(y);
+                final List<Double> weights = new ArrayList<>();
+                for(Map<Position,Double> dist : distributions) {
+                    weights.add(dist.get(Position.newInstance(x, y)));
                 }
                 // Fog of war
-                color = [0.0,0.0,0.0];
-                colors = GHOST_VEC_COLORS[1:]; // With Pacman
+                List<Double> color = Arrays.asList(0.0,0.0,0.0);
+                List<List<Double>> colors = GraphicsDisplay.GHOST_VEC_COLORS.subList(1, GraphicsDisplay.GHOST_VEC_COLORS.size());  // With Pacman
                 if(this.capture) {
-                    colors = GHOST_VEC_COLORS;
+                    colors = GraphicsDisplay.GHOST_VEC_COLORS;
                 }
-                for(weight, gcolor in zip(weights, colors)) {
-                    color = [min(1.0, c + 0.95 * g * weight ** .3) for c,g in zip(color, gcolor)];
+                for(int i=0; i<weights.size(); i++) {
+                    final Double weight = weights.get(i);
+                    final List<Double> gcolor = colors.get(i);
+                    final List<Double> foo = new ArrayList();
+                    for(int j=0; j<color.size(); j++) {
+                        final double c = color.get(j);
+                        final double g = gcolor.get(j);
+                        final double f = Math.min(1.0, c + 0.95 * g * Math.pow(weight, 0.3));
+                        foo.add(f);
+                    }
+                    color = Arrays.asList(foo.get(0), foo.get(1), foo.get(2));
                 }
-                changeColor(image, formatColor(*color));
+                GraphicsUtils.changeColor(image, GraphicsUtils.formatColor(color.get(0), color.get(1), color.get(2)));
             }
         }
-        refresh();
+        GraphicsUtils.refresh();
     }
     
     protected void setCurrentGhostImages(final int index, final Object o) {

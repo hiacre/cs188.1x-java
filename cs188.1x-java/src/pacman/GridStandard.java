@@ -111,7 +111,11 @@ public class GridStandard implements Grid {
     }
 
     @Override
-    public List<Position> asList(Boolean key) {
+    public List<Position> asList() {
+        return asList(true);
+    }
+    
+    private List<Position> asList(Boolean key) {
         if(key == null) {
             key = true;
         }

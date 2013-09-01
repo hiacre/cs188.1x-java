@@ -13,7 +13,7 @@ public interface Grid {
     public Grid deepCopy();
     public Grid shallowCopy();
     public int getCount(Boolean item);
-    public List<Position> asList(Boolean key);
+    public List<Position> asList();
     public List<Integer> packBits();
     public Grid reconstituteGrid(List<Integer> bitRep);
     public boolean get(int x, int y);
