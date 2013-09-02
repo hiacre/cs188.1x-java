@@ -124,7 +124,7 @@ public class Game {
             final Direction action;
             if(catchExceptions) {
                 try {
-                    Object start_time = time.time();
+                    long start_time = System.currentTimeMillis();
                     try {
                         if(skip_action) {
                             throw new ExceptionTimeout();
@@ -137,7 +137,7 @@ public class Game {
                         return;
                     }
                     
-                    move_time += time.time() - start_time;
+                    move_time += System.currentTimeMillis() - start_time;
 
                     if(move_time > rules.getMoveWarningTime(agentIndex)) {
                         totalAgentTimeWarnings.add(totalAgentTimeWarnings.get(agentIndex) + 1);

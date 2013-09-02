@@ -78,6 +78,7 @@ public class GameStateData {
                 // which ain't how Grid works!
                 //map.set(x, y, foodWallString(food.get(x, y), walls.get(x, y)));
             }
+        }
         for(AgentState agentState in self.agentStates) {
             if(agentState == null) {
                 continue;
@@ -95,9 +96,11 @@ public class GameStateData {
             } else {
                 map[ix][iy] = self._ghostStr( agent_dir );
             }
+        }
 
-        for x, y in self.capsules:
+        for(x, y in self.capsules) {
             map[x][y] = 'o';
+        }
 
         return str(map) + ("\nScore: %d\n" % self.score);
     }
