@@ -44,7 +44,7 @@ public class PacmanGraphicsNonText implements PacmanDisplay {
     private List<Pair<AgentState, List<Object>>> agentImages;
     private ArrayList expandedCells;
     private List food;
-    private Map<Position, Object> capsules;
+    private Map<PositionGrid, Object> capsules;
 
     PacmanGraphicsNonText(Double zoom, Double frameTime, Boolean capture) {
         zoom = zoom == null ? 1.0 : zoom;
@@ -406,6 +406,10 @@ public class PacmanGraphicsNonText implements PacmanDisplay {
         return to_screen(point.getX(), point.getY());
     }
     
+    private Position to_screen(final PositionGrid point) {
+        return to_screen(point.getX(), point.getY());
+    }
+    
     private Position to_screen(final double x, final double y) {
         final double newX = (x + 1)*gridSize;
         final double newY = (height - y)*gridSize;
@@ -691,9 +695,9 @@ public class PacmanGraphicsNonText implements PacmanDisplay {
         return foodImages;
     }
 
-    private Map<Position, Object> drawCapsules(final List<Position> capsules) {
-        final Map<Position, Object> capsuleImages = new HashMap<>();
-        for(Position capsule : capsules) {
+    private Map<PositionGrid, Object> drawCapsules(final List<PositionGrid> capsules) {
+        final Map<PositionGrid, Object> capsuleImages = new HashMap<>();
+        for(PositionGrid capsule : capsules) {
             final Position pos = this.to_screen(capsule);
             final double screen_x = pos.getX();
             final double screen_y = pos.getY();
@@ -713,7 +717,7 @@ public class PacmanGraphicsNonText implements PacmanDisplay {
         GraphicsUtils.remove_from_screen(foodImages.get(x).get(y), null, null);
     }
 
-    private void removeCapsule(final Position cell, final Map<Position, Object> capsuleImages) {
+    private void removeCapsule(final PositionGrid cell, final Map<PositionGrid, Object> capsuleImages) {
         GraphicsUtils.remove_from_screen(capsuleImages.get(cell), null, null);
     }
 

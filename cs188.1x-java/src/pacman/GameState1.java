@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import common.PositionGrid;
 import util.Util;
@@ -292,7 +291,7 @@ public class GameState1 {
         return data.getFoodEaten();
     }
 
-    Position getCapsuleEaten() {
+    PositionGrid getCapsuleEaten() {
         return data.getCapsuleEaten();
     }
 }

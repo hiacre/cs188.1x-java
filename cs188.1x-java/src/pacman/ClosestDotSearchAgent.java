@@ -18,7 +18,8 @@ public class ClosestDotSearchAgent extends SearchAgent {
     }
             
     @Override
-    public void registerInitialState(final GameState1 state) {
+    public void registerInitialState(final GameState1 state, final Timeout timeout) {
+        // TODO make use of Timeout?
         this.actions = new ArrayList<>();
         GameState1 currentState = state;
         while(currentState.getFood().getCount() > 0) {

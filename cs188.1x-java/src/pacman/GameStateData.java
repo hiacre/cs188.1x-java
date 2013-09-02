@@ -16,7 +16,7 @@ public class GameStateData {
     private boolean lose;
     private boolean win;
     private Integer agentMoved;
-    private Position capsuleEaten;
+    private PositionGrid capsuleEaten;
     private PositionGrid foodEaten;
     private List<AgentState> agentStates;
     private GridCapsules capsules;
@@ -255,10 +255,10 @@ public class GameStateData {
     }
 
     void setCapsuleEaten(final int x, final int y) {
-        this.capsuleEaten = Position.newInstance(x, y);
+        this.capsuleEaten = new PositionGrid(x, y);
     }
     
-    Position getCapsuleEaten() {
+    PositionGrid getCapsuleEaten() {
         return capsuleEaten;
     }
 }
