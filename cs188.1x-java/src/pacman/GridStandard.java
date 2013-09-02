@@ -1,6 +1,6 @@
 package pacman;
 
-import common.Position;
+import common.PositionGrid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,7 +30,7 @@ public class GridStandard implements Grid {
 
         this.width = width;
         this.height = height;
-        this.data = new ArrayList();
+        this.data = new ArrayList<>();
         for(int x=0; x<width; x++) {
             final List<Boolean> column = Util.makeList(height, initialValue);
             this.data.add(column);
@@ -115,19 +115,19 @@ public class GridStandard implements Grid {
     }
 
     @Override
-    public List<Position> asList() {
+    public List<PositionGrid> asList() {
         return asList(true);
     }
     
-    private List<Position> asList(Boolean key) {
+    private List<PositionGrid> asList(Boolean key) {
         if(key == null) {
             key = true;
         }
-        final List list = new ArrayList();
+        final List<PositionGrid> list = new ArrayList<>();
         for(int x=0; x<width; x++) {
             for(int y=0; y<height; y++) {
                 if(key.equals(get(x,y))) {
-                    list.add(Position.newInstance(x, y));
+                    list.add(new PositionGrid(x, y));
                 }
             }
         }
@@ -184,7 +184,7 @@ public class GridStandard implements Grid {
     
     
     private List<Boolean> unpackInt(int packed, final int size) {
-        final List<Boolean> bools = new ArrayList();
+        final List<Boolean> bools = new ArrayList<>();
         if(packed < 0) {
             throw new RuntimeException("Must be a positive integer");
         }

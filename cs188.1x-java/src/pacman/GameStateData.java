@@ -17,11 +17,11 @@ public class GameStateData {
     private Integer agentMoved;
     private Position capsuleEaten;
     private PositionGrid foodEaten;
-    private List agentStates;
+    private List<AgentState> agentStates;
     private GridCapsules capsules;
     private Grid food;
     private Layout layout;
-    private List eaten;
+    private List<Boolean> eaten;
     private int score;
     
     public GameStateData() {
@@ -79,7 +79,7 @@ public class GameStateData {
                 //map.set(x, y, foodWallString(food.get(x, y), walls.get(x, y)));
             }
         }
-        for(AgentState agentState in self.agentStates) {
+        for(AgentState agentState : this.agentStates) {
             if(agentState == null) {
                 continue;
             }
@@ -91,18 +91,21 @@ public class GameStateData {
             final int iy = nearestPoint.getY();
             
             final Direction agent_dir = agentState.getConfiguration().getDirection();
-            if(agentState.isPacman) {
-                map[ix][iy] = self._pacStr( agent_dir );
+            if(agentState.isPacman()) {
+                //TODO tries to set a character in a Grid
+                //map.set(ix, iy, this._pacStr( agent_dir ));
             } else {
-                map[ix][iy] = self._ghostStr( agent_dir );
+                // TODO tries to set a character in a Grid
+                //map.set(ix, iy, this._ghostStr( agent_dir ));
             }
         }
 
-        for(x, y in self.capsules) {
-            map[x][y] = 'o';
+        for(PositionGrid capsule : this.getCapsules().asList()) {
+            // TODO tries to set a character in a Grid
+            //map.set(capsule.getX(), capsule.getY(), 'o');
         }
 
-        return str(map) + ("\nScore: %d\n" % self.score);
+        return map.toString() + "\nScore: " + this.score + "\n";
     }
     
     
@@ -179,7 +182,7 @@ public class GameStateData {
         return layout;
     }
 
-    public List getEaten() {
+    public List<Boolean> getEaten() {
         return eaten;
     }
     

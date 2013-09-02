@@ -1,6 +1,6 @@
 package pacman;
 
-import common.Position;
+import common.PositionGrid;
 import java.util.List;
 
 /**
@@ -13,7 +13,7 @@ public interface Grid {
     public Grid deepCopy();
     public Grid shallowCopy();
     public int getCount(Boolean item);
-    public List<Position> asList();
+    public List<PositionGrid> asList();
     public List<Integer> packBits();
     public boolean get(int x, int y);
     public void set(int x, int y, boolean bool);
