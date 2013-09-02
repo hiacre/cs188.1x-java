@@ -46,10 +46,10 @@ public class Pacman {
 
     private static Map<String, String> parseAgentArgs(final String str) {
         if(str == null) {
-            return new HashMap();
+            return new HashMap<>();
         }
         final String[] pieces = str.split(",");
-        final Map<String, String> opts = new HashMap();
+        final Map<String, String> opts = new HashMap<>();
         for(String p : pieces) {
             final String key;
             final String val;
