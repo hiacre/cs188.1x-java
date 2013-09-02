@@ -169,7 +169,7 @@ public class PacmanGraphicsNonText implements PacmanDisplay {
         }
         infoPane.updateScore(newState.getScore());
         // TODO we only do the following if newState supports the getGhostDistances() method
-        infoPane.updateGhostDistances(newState.getGhostDistances());
+        //infoPane.updateGhostDistances(newState.getGhostDistances());
     }
     
 
