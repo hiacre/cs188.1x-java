@@ -17,7 +17,10 @@ public class NullGraphics extends TextDisplay {
     }
 
     private void pause() {
-        time.sleep(getSleepTime());
+        try {
+            Thread.sleep(getSleepTime());
+        } catch (InterruptedException ex) {
+        }
     }
 
     private void draw(final GameState1 state) {
