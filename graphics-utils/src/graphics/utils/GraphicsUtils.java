@@ -121,7 +121,7 @@ public class GraphicsUtils {
 
         // Create the canvas object
         try {
-            _canvas = Tkinter.Canvas(_root_window, width=width, height=height);
+            _canvas = Tkinter.Canvas(_root_window, width, height);
             _canvas.pack();
             draw_background();
             _canvas.update();
@@ -176,11 +176,16 @@ public class GraphicsUtils {
 //            _ctrl_leftclick_loc = None
 //            return val, 'ctrl_left'
 //        sleep(0.05)
-//
-//def draw_background():
-//    corners = [(0,0), (0, _canvas_ys), (_canvas_xs, _canvas_ys), (_canvas_xs, 0)]
-//    polygon(corners, _bg_color, fillColor=_bg_color, filled=True, smoothed=False)
-//
+
+    private static draw_background() {
+        final List<Position> corners = Arrays.asList(
+                Position.newInstance(0,0),
+                Position.newInstance(0, _canvas_ys),
+                Position.newInstance(_canvas_xs, _canvas_ys),
+                Position.newInstance(_canvas_xs, 0));
+        polygon(corners, _bg_color, _bg_color, filled=True, smoothed=False);
+    }
+
 //def _destroy_window(event=None):
 //    sys.exit(0)
 //#    global _root_window

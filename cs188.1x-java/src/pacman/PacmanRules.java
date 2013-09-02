@@ -1,6 +1,7 @@
 package pacman;
 
 import common.Position;
+import common.PositionGrid;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class PacmanRules {
 
         // Eat
         final Position next = pacmanState.getConfiguration().getPosition();
-        final Position nearest = Position.nearestPoint( next.getX(), next.getY() );
+        final PositionGrid nearest = Position.nearestPoint( next.getX(), next.getY() );
         if(next.manhattanDistance(nearest) <= 0.5) {
             // Remove food
             consume((int)nearest.getX(), (int)nearest.getY(), state);

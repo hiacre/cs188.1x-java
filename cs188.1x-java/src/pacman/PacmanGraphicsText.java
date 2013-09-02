@@ -3,6 +3,8 @@ package pacman;
 import common.Position;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -40,8 +42,11 @@ public class PacmanGraphicsText extends TextDisplay {
                     final Position pos = state.getGhostPosition(i);
                     ghosts.add(Position.nearestPoint(pos.getX(), pos.getY()));
                 }
-                print "%4d) P: %-8s" % (self.turn, str(pacman.nearestPoint(state.getPacmanPosition())));
-                print '| Score: %-5d' % state.score,'| Ghosts:', ghosts;
+                final StringBuilder sb = new StringBuilder();
+                sb.append(String.format("%4d) P: %-8s", this.turn, Position.nearestPoint(state.getPacmanPosition())));
+                sb.append(String.format("| Score: %-5d", state.getScore()));
+                sb.append("| Ghosts:").append(ghosts);
+                System.out.println(sb.toString());
             }
             if(this.turn % getDrawEvery() == 0) {
                 this.draw(state);
@@ -54,7 +59,11 @@ public class PacmanGraphicsText extends TextDisplay {
     }
 
     private void pause() {
-        time.sleep(sleepTime);
+        try {
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PacmanGraphicsText.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void draw(final GameState1 state) {

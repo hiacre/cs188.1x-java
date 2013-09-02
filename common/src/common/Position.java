@@ -41,6 +41,10 @@ public class Position {
     public double manhattanDistance(final Position point) {
         return Math.abs(getX()-point.getX()) + Math.abs(getY()-point.getY());
     }
+    
+    public double manhattanDistance(final PositionGrid point) {
+        return Math.abs(getX()-point.getX()) + Math.abs(getY()-point.getY());
+    }
 
     public int getRoundedX() {
         return (int)(x+0.5);

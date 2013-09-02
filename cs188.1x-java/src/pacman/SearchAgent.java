@@ -68,8 +68,8 @@ public class SearchAgent extends AgentAbstract {
      * @param state 
      */
     @Override
-    public void registerInitialState(final GameState1 state) {
-
+    public void registerInitialState(final GameState1 state, final Timeout timeout) {
+        // TODO do something with timeout?
         if(this.searchFunction == null) {
             throw new RuntimeException("No search function provided for SearchAgent");
         }
@@ -92,8 +92,8 @@ public class SearchAgent extends AgentAbstract {
      * @return 
      */
     @Override
-    public Direction getAction(final GameState1 state) {
-        
+    public Direction getAction(final GameState1 state, final Timeout timeout) {
+        // TODO do something with timeout?
         final int i = actionIndex;
         this.actionIndex += 1;
         if(i < this.actions.size()) {
