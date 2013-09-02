@@ -1,12 +1,10 @@
 package graphics.utils;
 
-import common.Pair;
 import common.Position;
 import common.Endpoints;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -424,19 +422,23 @@ public class GraphicsUtils {
 //    _keysdown = {}
 //    _keyswaiting = {}
 //    _got_release = None
-//
-//def keys_pressed(d_o_e=Tkinter.tkinter.dooneevent,
-//                 d_w=Tkinter.tkinter.DONT_WAIT):
-//    d_o_e(d_w)
-//    if _got_release:
-//        d_o_e(d_w)
-//    return _keysdown.keys()
-//
-//def keys_waiting():
-//    global _keyswaiting
-//    keys = _keyswaiting.keys()
-//    _keyswaiting = {}
-//    return keys
+
+    public static List<String> keys_pressed(Object d_o_e, Object d_w) {
+        d_o_e = d_o_e == null ? Tkinter.tkinter.dooneevent : d_o_e;
+        d_w = d_w == null ? Tkinter.tkinter.DONT_WAIT : d_w;
+        d_o_e(d_w);
+        if(_got_release) {
+            d_o_e(d_w);
+        }
+        return _keysdown.keys();
+    }
+
+    public static List<String> keys_waiting() {
+        global _keyswaiting
+        keys = _keyswaiting.keys()
+        _keyswaiting = {}
+        return new ArrayList<>();
+    }
 
     // Block for a list of keys...
 

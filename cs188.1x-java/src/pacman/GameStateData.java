@@ -4,6 +4,7 @@ import common.Position;
 import java.util.ArrayList;
 import java.util.List;
 import common.PositionGrid;
+import java.util.Collections;
 
 /**
  *
@@ -36,8 +37,8 @@ public class GameStateData {
     public GameStateData(final GameStateData prevState) {
         food = prevState.getFood().copy();
         capsules = prevState.getCapsules().copy();
-        agentStates = prevState.getAgentStates().copy();
-        layout = prevState.getLayout().copy();
+        agentStates = new ArrayList<>(prevState.getAgentStates());
+        layout = prevState.getLayout().deepCopy();
         eaten = prevState.getEaten();
         score = prevState.getScore();
     }
@@ -93,10 +94,10 @@ public class GameStateData {
             final Direction agent_dir = agentState.getConfiguration().getDirection();
             if(agentState.isPacman()) {
                 //TODO tries to set a character in a Grid
-                //map.set(ix, iy, this._pacStr( agent_dir ));
+                //map.set(ix, iy, pacString( agent_dir ));
             } else {
                 // TODO tries to set a character in a Grid
-                //map.set(ix, iy, this._ghostStr( agent_dir ));
+                //map.set(ix, iy, ghostString( agent_dir ));
             }
         }
 
@@ -119,7 +120,7 @@ public class GameStateData {
         }
     }
 
-    private char pacString(final Direction dir) {
+    private static char pacString(final Direction dir) {
         switch(dir) {
             case North: return 'v';
             case South: return '^';
@@ -129,7 +130,7 @@ public class GameStateData {
         }
     }
     
-    private char ghostString(final Direction dir) {
+    private static char ghostString(final Direction dir) {
         switch(dir) {
             case North: return 'M';
             case South: return 'W';
@@ -149,7 +150,7 @@ public class GameStateData {
         this.score = 0;
         scoreChange = 0;
 
-        agentStates = new ArrayList<>();
+        final List<AgentState> agentStatesNew = new ArrayList<>();
         int numGhosts = 0;
         for(AgentTypeAndPosition pos : layout.getAgentPositions()) {
             if(pos.isPacman()) {
@@ -158,12 +159,15 @@ public class GameStateData {
                 }
                 numGhosts++;
             }
-            agentStates.add( new AgentStateSimple( new ConfigurationStandard(pos.getPosition(), Direction.Stop), pos.isPacman()) );
+            agentStatesNew.add( new AgentStateSimple( new ConfigurationStandard(pos.getPosition(), Direction.Stop), pos.isPacman()) );
         }
-        eaten = new ArrayList<>();
-        for(Object o : agentStates) {
-            eaten.add(false);
+        final List<Boolean> eatenNew = new ArrayList<>();
+        for(Object o : agentStatesNew) {
+            eatenNew.add(false);
         }
+        
+        agentStates = Collections.unmodifiableList(agentStatesNew);
+        eaten = eatenNew;
     }
     
     public Grid getFood() {

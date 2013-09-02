@@ -13,13 +13,13 @@ import util.Util;
 public class KeyboardAgent extends AgentAbstract {
 
     // NOTE: Arrow keys also work.
-    private final static char WEST_KEY  = 'a';
-    private final static char EAST_KEY  = 'd';
-    private final static char NORTH_KEY = 'w';
-    private final static char SOUTH_KEY = 's';
-    private final static char STOP_KEY = 'q';
+    private final static String WEST_KEY  = "a";
+    private final static String EAST_KEY  = "d";
+    private final static String NORTH_KEY = "w";
+    private final static String SOUTH_KEY = "s";
+    private final static String STOP_KEY = "q";
     private Direction lastMove;
-    private List<Character> keys;
+    private List<String> keys;
 
     public KeyboardAgent() {
         this(0);
@@ -32,9 +32,9 @@ public class KeyboardAgent extends AgentAbstract {
 
     @Override
     public Direction getAction(final GameState1 state, final Timeout timeout) {
-        final List<Character> keys2 = new ArrayList<>();
+        final List<String> keys2 = new ArrayList<>();
         keys2.addAll(GraphicsUtils.keys_waiting());
-        keys2.addAll(GraphicsUtils.keys_pressed());
+        keys2.addAll(GraphicsUtils.keys_pressed(null, null));
         if(!keys2.isEmpty()) {
             this.keys = keys2;
         }
@@ -79,7 +79,7 @@ public class KeyboardAgent extends AgentAbstract {
         return null;
     }
     
-    protected List<Character> getKeys() {
+    protected List<String> getKeys() {
         return keys;
     }
 }
