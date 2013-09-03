@@ -32,8 +32,9 @@ public class EightPuzzle {
             System.out.println(message2.toString());
             System.out.println(curr);
 
-            raw_input("Press return for the next state...");   // wait for key stroke
-            i += 1;
+            throw new UnsupportedOperationException("Need to put code here to wait for keystroke");
+            // TODO raw_input("Press return for the next state...");   // wait for key stroke
+            // TODO i += 1;
         }
     }
 }

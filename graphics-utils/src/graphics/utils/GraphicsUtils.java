@@ -2,7 +2,6 @@ package graphics.utils;
 
 import common.Position;
 import common.Endpoints;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,11 +70,12 @@ public class GraphicsUtils {
     
     /** Writes the current canvas to a postscript file. */
     public static void writePostscript(final String filename) {
-        psfile = file(filename, 'w');
-        psfile.write(_canvas.postscript(pageanchor='sw',
-                         y='0.c',
-                         x='0.c'));
-        psfile.close();
+//        psfile = file(filename, 'w');
+//        psfile.write(_canvas.postscript(pageanchor='sw',
+//                         y='0.c',
+//                         x='0.c'));
+//        psfile.close();
+        throw new UnsupportedOperationException();
     }
 
 ////if _Windows:
@@ -85,61 +85,63 @@ public class GraphicsUtils {
 ////    pass # XXX need defaults here
 
     public static void sleep(final int secs) {
-        if(this._root_window == null) {
-            time.sleep(secs);
-        } else {
-            this._root_window.update_idletasks();
-            this._root_window.after(int(1000 * secs), _root_window.quit);
-            this._root_window.mainloop();
-        }
+//        if(this._root_window == null) {
+//            time.sleep(secs);
+//        } else {
+//            this._root_window.update_idletasks();
+//            this._root_window.after(int(1000 * secs), _root_window.quit);
+//            this._root_window.mainloop();
+//        }
+        throw new UnsupportedOperationException();
     }
 
     public static void begin_graphics(Double width, Double height, String color, final String title) {
-        width = width == null ? 640 : width;
-        height = height == null ? 480 : height;
-        color = color == null ? formatColor(0,0,0) : color;
-        //global _root_window, _canvas, _canvas_x, _canvas_y, _canvas_xs, _canvas_ys, _bg_color
-
-        // Check for duplicate call
-        if(_root_window != null) {
-            // Lose the window.
-            _root_window.destroy();
-        }
-
-        // Save the canvas size parameters
-        _canvas_xs = width - 1;
-        _canvas_ys = height - 1;
-        _canvas_x = 0;
-        _canvas_y = _canvas_ys;
-        _bg_color = color
-
-        // Create the root window
-        _root_window = Tkinter.Tk();
-        _root_window.protocol('WM_DELETE_WINDOW', _destroy_window);
-        _root_window.title(title or 'Graphics Window');
-        _root_window.resizable(0, 0);
-
-        // Create the canvas object
-        try {
-            _canvas = Tkinter.Canvas(_root_window, width, height);
-            _canvas.pack();
-            draw_background();
-            _canvas.update();
-        } catch(Exception ex) {
-            _root_window = None;
-            throw new RuntimeException();
-        }
-
-        // Bind to key-down and key-up events
-        _root_window.bind( "<KeyPress>", _keypress );
-        _root_window.bind( "<KeyRelease>", _keyrelease );
-        _root_window.bind( "<FocusIn>", _clear_keys );
-        _root_window.bind( "<FocusOut>", _clear_keys );
-        _root_window.bind( "<Button-1>", _leftclick );
-        _root_window.bind( "<Button-2>", _rightclick );
-        _root_window.bind( "<Button-3>", _rightclick );
-        _root_window.bind( "<Control-Button-1>", _ctrl_leftclick);
-        _clear_keys();
+//        width = width == null ? 640 : width;
+//        height = height == null ? 480 : height;
+//        color = color == null ? formatColor(0,0,0) : color;
+//        //global _root_window, _canvas, _canvas_x, _canvas_y, _canvas_xs, _canvas_ys, _bg_color
+//
+//        // Check for duplicate call
+//        if(_root_window != null) {
+//            // Lose the window.
+//            _root_window.destroy();
+//        }
+//
+//        // Save the canvas size parameters
+//        _canvas_xs = width - 1;
+//        _canvas_ys = height - 1;
+//        _canvas_x = 0;
+//        _canvas_y = _canvas_ys;
+//        _bg_color = color
+//
+//        // Create the root window
+//        _root_window = Tkinter.Tk();
+//        _root_window.protocol('WM_DELETE_WINDOW', _destroy_window);
+//        _root_window.title(title or 'Graphics Window');
+//        _root_window.resizable(0, 0);
+//
+//        // Create the canvas object
+//        try {
+//            _canvas = Tkinter.Canvas(_root_window, width, height);
+//            _canvas.pack();
+//            draw_background();
+//            _canvas.update();
+//        } catch(Exception ex) {
+//            _root_window = None;
+//            throw new RuntimeException();
+//        }
+//
+//        // Bind to key-down and key-up events
+//        _root_window.bind( "<KeyPress>", _keypress );
+//        _root_window.bind( "<KeyRelease>", _keyrelease );
+//        _root_window.bind( "<FocusIn>", _clear_keys );
+//        _root_window.bind( "<FocusOut>", _clear_keys );
+//        _root_window.bind( "<Button-1>", _leftclick );
+//        _root_window.bind( "<Button-2>", _rightclick );
+//        _root_window.bind( "<Button-3>", _rightclick );
+//        _root_window.bind( "<Control-Button-1>", _ctrl_leftclick);
+//        _clear_keys();
+        throw new UnsupportedOperationException();
     }
 
 //_leftclick_loc = None
@@ -177,13 +179,14 @@ public class GraphicsUtils {
 //            return val, 'ctrl_left'
 //        sleep(0.05)
 
-    private static draw_background() {
-        final List<Position> corners = Arrays.asList(
-                Position.newInstance(0,0),
-                Position.newInstance(0, _canvas_ys),
-                Position.newInstance(_canvas_xs, _canvas_ys),
-                Position.newInstance(_canvas_xs, 0));
-        polygon(corners, _bg_color, _bg_color, filled=True, smoothed=False);
+    private static void draw_background() {
+//        final List<Position> corners = Arrays.asList(
+//                Position.newInstance(0,0),
+//                Position.newInstance(0, _canvas_ys),
+//                Position.newInstance(_canvas_xs, _canvas_ys),
+//                Position.newInstance(_canvas_xs, 0));
+//        polygon(corners, _bg_color, _bg_color, filled=True, smoothed=False);
+        throw new UnsupportedOperationException();
     }
 
 //def _destroy_window(event=None):
@@ -195,21 +198,22 @@ public class GraphicsUtils {
 
     public static void end_graphics() {
         //global _root_window, _canvas, _mouse_enabled
-        try {
-            try {
-                sleep(1);
-                if(_root_window != null) {
-                    _root_window.destroy();
-                }
-            } catch (Excetion e) {
-                System.out.println("Ending graphics raised an exception:", e);
-            }
-        } finally {
-            _root_window = null;
-            _canvas = null;
-            _mouse_enabled = 0;
-            _clear_keys();
-        }
+//        try {
+//            try {
+//                sleep(1);
+//                if(_root_window != null) {
+//                    _root_window.destroy();
+//                }
+//            } catch (Excetion e) {
+//                System.out.println("Ending graphics raised an exception:", e);
+//            }
+//        } finally {
+//            _root_window = null;
+//            _canvas = null;
+//            _mouse_enabled = 0;
+//            _clear_keys();
+//        }
+        throw new UnsupportedOperationException();
     }
 
 //def clear_screen(background=None):
@@ -226,37 +230,39 @@ public class GraphicsUtils {
             Integer smoothed,
             Integer behind,
             Integer width) {
-        filled = filled == null ? 1 : filled;
-        smoothed = smoothed == null ? 1 : smoothed;
-        behind = behind == null ? 0 : behind;
-        width = width == null ? 1 : width;
-        final List c = new ArrayList();
-        for(Position coord : coords) {
-            c.add(coord.getX());
-            c.add(coord.getY());
-        }
-        if(fillColor == null) {
-            fillColor = outlineColor;
-        }
-        if(filled == 0) {
-            fillColor = "";
-        }
-        final Object poly = _canvas.create_polygon(c, outline=outlineColor, fill=fillColor, smooth=smoothed, width=width);
-        if(behind > 0) {
-            _canvas.tag_lower(poly, behind);  // Higher should be more visible
-        }
-        return poly;
+//        filled = filled == null ? 1 : filled;
+//        smoothed = smoothed == null ? 1 : smoothed;
+//        behind = behind == null ? 0 : behind;
+//        width = width == null ? 1 : width;
+//        final List<Double> c = new ArrayList<>();
+//        for(Position coord : coords) {
+//            c.add(coord.getX());
+//            c.add(coord.getY());
+//        }
+//        if(fillColor == null) {
+//            fillColor = outlineColor;
+//        }
+//        if(filled == 0) {
+//            fillColor = "";
+//        }
+//        final Object poly = _canvas.create_polygon(c, outline=outlineColor, fill=fillColor, smooth=smoothed, width=width);
+//        if(behind > 0) {
+//            _canvas.tag_lower(poly, behind);  // Higher should be more visible
+//        }
+//        return poly;
+        throw new UnsupportedOperationException();
     }
 
     public static Object square(final double x, final double y, final double r, final String color, Integer filled, Integer behind) {
-        filled = filled == null ? 1 : filled;
-        behind = behind == null ? 0 : behind;
-        List coords = Arrays.asList(
-                Arrays.asList(x - r, y - r),
-                Arrays.asList(x + r, y - r),
-                Arrays.asList(x + r, y + r),
-                Arrays.asList(x - r, y + r));
-        return polygon(coords, color, color, filled, 0, behind);
+//        filled = filled == null ? 1 : filled;
+//        behind = behind == null ? 0 : behind;
+//        List<List<Double>> coords = Arrays.asList(
+//                Arrays.asList(x - r, y - r),
+//                Arrays.asList(x + r, y - r),
+//                Arrays.asList(x + r, y + r),
+//                Arrays.asList(x - r, y + r));
+//        return polygon(coords, color, color, filled, 0, behind);
+        throw new UnsupportedOperationException();
     }
 
     public static Object circle(
@@ -268,25 +274,26 @@ public class GraphicsUtils {
             final Endpoints endpoints,
             String style,
             Integer width) {
-        style = style == null ? "pieslice" : style;
-        width = width == null ? 2 : width;
-        final double x0 = x-r-1;
-        final double x1 = x+r;
-        final double y0 = y-r-1;
-        final double y1 = y+r;
-        Endpoints e;
-        if(endpoints == null) {
-            e = new Endpoints(0, 359);
-        } else {
-            e = endpoints;
-        }
-        
-        while(e.getClass() > e.getSecond()) {
-            e = new Endpoints(e.getFirst(), e.getSecond() + 360);
-        }
-
-        return _canvas.create_arc(x0, y0, x1, y1, outlineColor, fillColor,
-                                  e[1] - e[0], e[0], style, width);
+//        style = style == null ? "pieslice" : style;
+//        width = width == null ? 2 : width;
+//        final double x0 = x-r-1;
+//        final double x1 = x+r;
+//        final double y0 = y-r-1;
+//        final double y1 = y+r;
+//        Endpoints e;
+//        if(endpoints == null) {
+//            e = new Endpoints(0, 359);
+//        } else {
+//            e = endpoints;
+//        }
+//        
+//        while(e.getClass() > e.getSecond()) {
+//            e = new Endpoints(e.getFirst(), e.getSecond() + 360);
+//        }
+//
+//        return _canvas.create_arc(x0, y0, x1, y1, outlineColor, fillColor,
+//                                  e[1] - e[0], e[0], style, width);
+        throw new UnsupportedOperationException();
     }
     
     public static Object circle(
@@ -307,37 +314,40 @@ public class GraphicsUtils {
 
 
     public static void refresh() {
-        _canvas.update_idletasks();
+        //_canvas.update_idletasks();
+        throw new UnsupportedOperationException();
     }
 
     public static void moveCircle(final Object id, final Position pos, final double r, final Endpoints endpoints) {
-        final double x = pos.getX();
-        final double y = pos.getY();
-        //    x0, x1 = x - r, x + r + 1
-        //    y0, y1 = y - r, y + r + 1
-        final double x0 = x - r - 1;
-        final double x1 = x + r;
-        final double y0 = y - r - 1;
-        final double y1 = y + r;
-        Endpoints e;
-        if(endpoints == null) {
-            e = new Endpoints(0, 359);
-        } else {
-            e = endpoints;
-        }
-        while(e.getFirst() > e.getSecond()) {
-            e = new Endpoints(e.getFirst(), e.getSecond() + 360);
-        }
-
-        edit(
-            id,
-            ('start', e.getFirst()),
-            ('extent', e.getSecond() - e.getFirst()));
-        move_to(id, x0, y0);
+//        final double x = pos.getX();
+//        final double y = pos.getY();
+//        //    x0, x1 = x - r, x + r + 1
+//        //    y0, y1 = y - r, y + r + 1
+//        final double x0 = x - r - 1;
+//        final double x1 = x + r;
+//        final double y0 = y - r - 1;
+//        final double y1 = y + r;
+//        Endpoints e;
+//        if(endpoints == null) {
+//            e = new Endpoints(0, 359);
+//        } else {
+//            e = endpoints;
+//        }
+//        while(e.getFirst() > e.getSecond()) {
+//            e = new Endpoints(e.getFirst(), e.getSecond() + 360);
+//        }
+//
+//        edit(
+//            id,
+//            ('start', e.getFirst()),
+//            ('extent', e.getSecond() - e.getFirst()));
+//        move_to(id, x0, y0);
+        throw new UnsupportedOperationException();
     }
 
     public static void edit(final Object id, final String fillColor, final String outlineColor) {
-        _canvas.itemconfigure(id, fillColor, outlineColor);  // (itemConfigure settings 'fill' and 'color')
+        //_canvas.itemconfigure(id, fillColor, outlineColor);  // (itemConfigure settings 'fill' and 'color')
+        throw new UnsupportedOperationException();
     }
 
     public static Object text(
@@ -349,35 +359,39 @@ public class GraphicsUtils {
             Integer size,
             String style,
             String anchor) {
-        font = font == null ? "Helvetica" : font;
-        size = size == null ? 12 : size;
-        style = style == null ? "normal" : style;
-        anchor = anchor == null ? "nw" : anchor;
-        font = (font, str(size), style);
-        return _canvas.create_text(x, y, fill=color, text=contents, font=font, anchor=anchor);
+//        font = font == null ? "Helvetica" : font;
+//        size = size == null ? 12 : size;
+//        style = style == null ? "normal" : style;
+//        anchor = anchor == null ? "nw" : anchor;
+//        font = (font, str(size), style);
+//        return _canvas.create_text(x, y, fill=color, text=contents, font=font, anchor=anchor);
+        throw new UnsupportedOperationException();
     }
 
     public static void changeText(final Object id, final String newText, String font, Integer size, String style) {
-        size = size == null ? 12 : size;
-        style = style == null ? "normal" : style;
-        _canvas.itemconfigure(id, text=newText);
-        if(font != null) {
-            _canvas.itemconfigure(id, font=(font, '-%d' % size, style));
-        }
+//        size = size == null ? 12 : size;
+//        style = style == null ? "normal" : style;
+//        _canvas.itemconfigure(id, text=newText);
+//        if(font != null) {
+//            _canvas.itemconfigure(id, font=(font, '-%d' % size, style));
+//        }
+        throw new UnsupportedOperationException();
     }
 
     public static void changeColor(final Object id, final Object newColor) {
-        _canvas.itemconfigure(id, fill=newColor);
+        //_canvas.itemconfigure(id, fill=newColor);
+        throw new UnsupportedOperationException();
     }
 
     public static Object line(final Position here, final Position there, String color, Integer width) {
-        color = color == null ? formatColor(0,0,0) : color;
-        width = width == null ? 2 : width;
-        final double x0 = here.getX();
-        final double y0 = here.getY();
-        final double x1 = there.getX();
-        final double y1 = there.getY();
-        return _canvas.create_line(x0, y0, x1, y1, fill=color, width=width);
+//        color = color == null ? formatColor(0,0,0) : color;
+//        width = width == null ? 2 : width;
+//        final double x0 = here.getX();
+//        final double y0 = here.getY();
+//        final double x1 = there.getX();
+//        final double y1 = there.getY();
+//        return _canvas.create_line(x0, y0, x1, y1, fill=color, width=width);
+        throw new UnsupportedOperationException();
     }
 
 //##############################################################################
@@ -429,39 +443,43 @@ public class GraphicsUtils {
 //    _got_release = None
 
     public static List<String> keys_pressed(Object d_o_e, Object d_w) {
-        d_o_e = d_o_e == null ? Tkinter.tkinter.dooneevent : d_o_e;
-        d_w = d_w == null ? Tkinter.tkinter.DONT_WAIT : d_w;
-        d_o_e(d_w);
-        if(_got_release) {
-            d_o_e(d_w);
-        }
-        return _keysdown.keys();
+//        d_o_e = d_o_e == null ? Tkinter.tkinter.dooneevent : d_o_e;
+//        d_w = d_w == null ? Tkinter.tkinter.DONT_WAIT : d_w;
+//        d_o_e(d_w);
+//        if(_got_release) {
+//            d_o_e(d_w);
+//        }
+//        return _keysdown.keys();
+        throw new UnsupportedOperationException();
     }
 
     public static List<String> keys_waiting() {
-        global _keyswaiting
-        keys = _keyswaiting.keys()
-        _keyswaiting = {}
-        return new ArrayList<>();
+//        global _keyswaiting
+//        keys = _keyswaiting.keys()
+//        _keyswaiting = {}
+//        return new ArrayList<>();
+        throw new UnsupportedOperationException();
     }
 
     // Block for a list of keys...
 
     public static List<Character> wait_for_keys() {
-        final List<Character> keys = new ArrayList<>();
-        while(keys.isEmpty()) {
-            keys = keys_pressed();
-            sleep(0.05);
-        }
-        return keys;
+//        final List<Character> keys = new ArrayList<>();
+//        while(keys.isEmpty()) {
+//            keys = keys_pressed();
+//            sleep(0.05);
+//        }
+//        return keys;
+        throw new UnsupportedOperationException();
     }
 
     public static void remove_from_screen(final Object x, Object doOnEvent, Object doNotWait) {
-        doOnEvent = doOnEvent == null ? Tkinter.tkinter.dooneevent : doOnEvent;
-        doNotWait = doNotWait == null ? Tkinter.tkinter.DONT_WAIT : doNotWait;
-
-        _canvas.delete(x);
-        doOnEvent(doNotWait);
+//        doOnEvent = doOnEvent == null ? Tkinter.tkinter.dooneevent : doOnEvent;
+//        doNotWait = doNotWait == null ? Tkinter.tkinter.DONT_WAIT : doNotWait;
+//
+//        _canvas.delete(x);
+//        doOnEvent(doNotWait);
+        throw new UnsupportedOperationException();
     }
 
 //def _adjust_coords(coord_list, x, y):
@@ -499,29 +517,30 @@ public class GraphicsUtils {
             final Object d_o_e,
             final Object d_w,
             Boolean lift) {
-        d_o_e = d_o_e == null ? Tkinter.tkinter.dooneevent : d_o_e;
-        d_w = d_w == null ? Tkinter.tkinter.DONT_WAIT : d_w;
-        lift = lift == null ? false : lift;
-
-        boolean horiz = true;
-        final List newCoords = new ArrayList();
-        for(int coord : _canvas.coords(object)) {
-            final double inc;
-            if(horiz) {
-                inc = x;
-            } else {
-                inc = y;
-            }
-            horiz = !horiz;
-
-            newCoords.add(coord + inc);
-        }
-        
-        _canvas.coords(object, *newCoords);
-        d_o_e(d_w);
-        if(lift) {
-            _canvas.tag_raise(object);
-        }
+//        d_o_e = d_o_e == null ? Tkinter.tkinter.dooneevent : d_o_e;
+//        d_w = d_w == null ? Tkinter.tkinter.DONT_WAIT : d_w;
+//        lift = lift == null ? false : lift;
+//
+//        boolean horiz = true;
+//        final List newCoords = new ArrayList();
+//        for(int coord : _canvas.coords(object)) {
+//            final double inc;
+//            if(horiz) {
+//                inc = x;
+//            } else {
+//                inc = y;
+//            }
+//            horiz = !horiz;
+//
+//            newCoords.add(coord + inc);
+//        }
+//        
+//        _canvas.coords(object, *newCoords);
+//        d_o_e(d_w);
+//        if(lift) {
+//            _canvas.tag_raise(object);
+//        }
+        throw new UnsupportedOperationException();
     }
 
 //ghost_shape = [

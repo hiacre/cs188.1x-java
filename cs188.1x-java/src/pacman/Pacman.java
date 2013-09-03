@@ -67,7 +67,7 @@ public class Pacman {
     }
 
     /** Processes the command used to run pacman from the command line. */
-    private static Command readCommand(final List<String> argv) {
+    protected static Command readCommand(final List<String> argv) {
         List<String> usageStr = new ArrayList<>();
         try {
             usageStr = Util.readSmallTextFile("usage.txt");
@@ -133,8 +133,8 @@ public class Pacman {
 
         // Don't display training games
         if(agentOpts.containsKey("numTrain")) {
-            options.setNumQuiet((int)agentOpts.get("numTrain"));
-            options.setNumIgnore((int)agentOpts.get("numTrain"));
+            // TODO options.setNumQuiet((int)agentOpts.get("numTrain"));
+            // TODO options.setNumIgnore((int)agentOpts.get("numTrain"));
         }
 
         // Choose a ghost agent
@@ -149,15 +149,15 @@ public class Pacman {
         if(options.contains("quietGraphics")) {
             args.setDisplay(new NullGraphics(null, null));
         } else if(options.contains("textGraphics")) {
-            textDisplay.setSleepTime(options.get("frameTime"));
+            // TODO textDisplay.setSleepTime(options.get("frameTime"));
             args.setDisplay(new PacmanGraphicsText(null));
         } else {
-            args.set("display", new PacmanGraphicsNonText(options.get("zoom"), options.get("frameTime")));
+            // TODO args.set("display", new PacmanGraphicsNonText(options.get("zoom"), options.get("frameTime")));
         }
         args.setNumGames(Integer.parseInt(options.get("numGames")));
-        args.setRecord(options.get("record"));
-        args.setCatchExceptions(options.get("catchExceptions"));
-        args.setTimeout(options.get("timeout"));
+        // TODO args.setRecord(options.get("record"));
+        // TODO args.setCatchExceptions(options.get("catchExceptions"));
+        // TODO args.setTimeout(options.get("timeout"));
 
         // Special case: recorded games don't use the runGames method or args structure
         if(options.get("gameToReplay") != null) {
@@ -202,26 +202,26 @@ public class Pacman {
     }
     
     private void replayGame(final Layout layout, final List<Direction> actions, final PacmanDisplay display) {
-        final ClassicGameRules rules = new ClassicGameRules();
-        final List<Agent> agents = new ArrayList();
-        agents.add(new GreedyAgent());
-        for(int i=0; i<layout.getNumGhosts(); i++) {
-            agents.add(new RandomGhost(i+1));
-        }
-        final Game game = rules.newGame(layout, agents.get(0), agents.subList(1, agents.size()), display);
-        GameState1 state = game.getState();
-        display.initialize(state, null);
-
-        for(Direction action : actions) {
-            // Execute the action
-            state = state.generateSuccessor(null, action);
-            // Change the display
-            display.update(state);
-            // Allow for game specific conditions (winning, losing, etc.)
-            rules.process(state, game);
-        }
-
-        display.finish();
+//        final ClassicGameRules rules = new ClassicGameRules();
+//        final List<GhostAgent> agents = new ArrayList<>();
+//        for(int i=0; i<layout.getNumGhosts(); i++) {
+//            agents.add(new RandomGhost(i+1));
+//        }
+//        final Game game = rules.newGame(layout, new GreedyAgent(), agents.subList(1, agents.size()), display);
+//        GameState1 state = game.getState();
+//        display.initialize(state, null);
+//
+//        for(Direction action : actions) {
+//            // Execute the action
+//            state = state.generateSuccessor(null, action);
+//            // Change the display
+//            display.update(state);
+//            // Allow for game specific conditions (winning, losing, etc.)
+//            rules.process(state, game);
+//        }
+//
+//        display.finish();
+        throw new UnsupportedOperationException();
     }
 
     private static List<Game> runGames(
@@ -249,7 +249,7 @@ public class Pacman {
         final Object mainDisplay = display;
 
         final ClassicGameRules rules = new ClassicGameRules(timeout);
-        final List<Game> games = new ArrayList();
+        final List<Game> games = new ArrayList<>();
 
         for(int i=0; i<numGames; i++) {
             final boolean beQuiet = i < numTraining;

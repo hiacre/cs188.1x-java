@@ -11,7 +11,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import pacman.PositionSearchProblem;
 
@@ -68,7 +67,7 @@ public class Util {
      * Return the key associated with the value that caused the total to exceed
      * the limit.
      */
-    public static <E extends Comparable> E sample(final Counter<E> c, final double choice) {
+    public static <E extends Comparable<E>> E sample(final Counter<E> c, final double choice) {
         
         final Counter<E> dist = c.getNormalized();
         
@@ -87,11 +86,11 @@ public class Util {
     /**
      * Gets a sample from a Counter, based upon a randomly chosen limit.
      */
-    public static <E extends Comparable> E sample(final Counter<E> c) {
+    public static <E extends Comparable<E>> E sample(final Counter<E> c) {
         return sample(c, new Random().nextDouble());
     }
     
-    public static <E extends Comparable> E chooseFromDistribution(final Counter<E> c) {
+    public static <E extends Comparable<E>> E chooseFromDistribution(final Counter<E> c) {
         return sample(c);
     }
 
@@ -141,7 +140,7 @@ public class Util {
     }
     
     /** The Manhattan distance heuristic for a PositionSearchProblem */
-    public double manhattanHeuristic(final Position position, final PositionSearchProblem problem, Map info) {
+    public double manhattanHeuristic(final Position position, final PositionSearchProblem problem) {
         final Position xy1 = position;
         final int x2 = problem.getGoalX();
         final int y2 = problem.getGoalY();
@@ -149,7 +148,7 @@ public class Util {
     }
 
     /** The Euclidean distance heuristic for a PositionSearchProblem */
-    public double euclideanHeuristic(final Position position, final PositionSearchProblem problem, Map info) {
+    public double euclideanHeuristic(final Position position, final PositionSearchProblem problem) {
         final Position xy1 = position;
         final int x2 = problem.getGoalX();
         final int y2 = problem.getGoalY();
