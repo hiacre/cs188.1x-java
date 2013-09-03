@@ -54,7 +54,16 @@ public class PositionGridTest {
     public void testEquals() {
         final PositionGrid pos1 = new PositionGrid(3,3);
         final PositionGrid pos2 = new PositionGrid(3,3);
+        final PositionGrid pos3 = null;
+        final Position pos4 = Position.newInstance(3, 3);
+        final PositionGrid pos5 = new PositionGrid(2, 3);
+        final PositionGrid pos6 = new PositionGrid(3, 2);
+        
         assertEquals(pos1, pos2);
+        assertFalse(pos1.equals(pos3));
+        assertFalse(pos1.equals(pos4));
+        assertFalse(pos1.equals(pos5));
+        assertFalse(pos1.equals(pos6));
     }
 
     /**
@@ -71,5 +80,10 @@ public class PositionGridTest {
         final PositionGrid pos1 = new PositionGrid(3,3);
         final PositionGrid pos2 = new PositionGrid(3,3);
         assertTrue(pos1.hashCode() == pos2.hashCode());
+    }
+    @Test
+    public void testToString() {
+        final PositionGrid pos = new PositionGrid(4,5);
+        assertEquals("(4,5)", pos.toString());
     }
 }
