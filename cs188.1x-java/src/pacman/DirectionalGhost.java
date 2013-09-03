@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import util.Counter;
-import util.CounterStandard;
+import util.Counter;
 
 /**
  * A ghost that prefers to rush Pacman, or flee when scared.
@@ -71,7 +71,7 @@ public class DirectionalGhost extends GhostAgent {
         }
 
         // Construct distribution
-        final Counter<Direction> dist = CounterStandard.newInstance();
+        final Counter<Direction> dist = Counter.newInstance();
         for(Direction a : bestActions) {
             dist.put(a, bestProb / bestActions.size());
         }

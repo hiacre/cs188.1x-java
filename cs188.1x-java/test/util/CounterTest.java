@@ -1,7 +1,6 @@
 package util;
 
 import java.util.Arrays;
-import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -14,6 +13,8 @@ import static org.junit.Assert.*;
  * @author archie
  */
 public class CounterTest {
+    
+    private static final double delta = 0.0001;
     
     public CounterTest() {
     }
@@ -36,47 +37,47 @@ public class CounterTest {
 
     @Test
     public void testGet() {
-        final Counter<String> c = CounterStandard.newInstance();
-        int value = c.get("test");
-        assertEquals(0, value);
+        final Counter<String> c = new Counter<>();
+        double value = c.get("test");
+        assertEquals(0, value, delta);
     }
     
     @Test
     public void testPut() {
-        final Counter<String> c = CounterStandard.newInstance();
+        final Counter<String> c = new Counter<>();
         final String key = "key";
         c.put(key, c.get(key) + 1);
-        assertEquals(1, c.get(key));
+        assertEquals(1, c.get(key), delta);
     }
     
     @Test
     public void testPut2() {
-        final Counter<String> c = CounterStandard.newInstance();
+        final Counter<String> c = new Counter<>();
         final String key = "key";
         final int firstPutValue = 3;
-        final Integer prevResult1 = c.put(key, firstPutValue);
-        final Integer prevResult2 = c.put(key, 7);
+        final Double prevResult1 = c.put(key, firstPutValue);
+        final Double prevResult2 = c.put(key, 7);
         
         assertNotNull(prevResult1);
-        assertEquals(CounterStandard.getDefaultValue(), prevResult1.intValue());
+        assertEquals(Counter.getDefaultValue(), prevResult1, delta);
         assertNotNull(prevResult2);
-        assertEquals(firstPutValue, prevResult2.intValue());
+        assertEquals(firstPutValue, prevResult2, delta);
     }
     
     @Test
     public void testIncrement() {
-        final Counter<String> c = CounterStandard.newInstance();
+        final Counter<String> c = new Counter<>();
         final int count = 3;
-        final int result = c.increment("key", count);
+        final double result = c.increment("key", count);
         
         assertNotNull(result);
-        assertEquals(count, result);
+        assertEquals((double)count, result, delta);
     }
     
     @Test
     public void testSubtract() {
-        final Counter<String> c1 = CounterStandard.newInstance();
-        final Counter<String> c2 = CounterStandard.newInstance();
+        final Counter<String> c1 = new Counter<>();
+        final Counter<String> c2 = new Counter<>();
         
         c1.put("1", 1);
         c1.put("2", 2);
@@ -84,15 +85,15 @@ public class CounterTest {
         c2.put("3", 3);
         final Counter<String> result = c1.subtract(c2);
         
-        assertEquals( 1, result.get("1"));
-        assertEquals(-2, result.get("2"));
-        assertEquals(-3, result.get("3"));
+        assertEquals( 1, result.get("1"), delta);
+        assertEquals(-2, result.get("2"), delta);
+        assertEquals(-3, result.get("3"), delta);
     }
     
     @Test
     public void testAdd() {
-        final Counter<String> c1 = CounterStandard.newInstance();
-        final Counter<String> c2 = CounterStandard.newInstance();
+        final Counter<String> c1 = new Counter<>();
+        final Counter<String> c2 = new Counter<>();
         
         c1.put("1", 1);
         c1.put("2", 2);
@@ -100,16 +101,15 @@ public class CounterTest {
         c2.put("3", 3);
         final Counter<String> result = c1.add(c2);
         
-        assertEquals(1, result.get("1"));
-        assertEquals(6, result.get("2"));
-        assertEquals(3, result.get("3"));
+        assertEquals(1, result.get("1"), delta);
+        assertEquals(6, result.get("2"), delta);
+        assertEquals(3, result.get("3"), delta);
     }
     
     @Test
     public void testDotProduct() {
-        final Counter<String> c1 = CounterStandard.newInstance();
-        final Counter<String> c2 = CounterStandard.newInstance();
-        
+        final Counter<String> c1 = new Counter<>();
+        final Counter<String> c2 = new Counter<>();
         
         c1.put("1", 1);
         c1.put("2", 2);
@@ -120,28 +120,28 @@ public class CounterTest {
         c2.put("5", 5);
         c2.put("6", 6);
         c2.put("7", 7);
-        final int result1 = c1.dotProduct(c2);
-        final int result2 = c2.dotProduct(c1);
+        final double result1 = c1.dotProduct(c2);
+        final double result2 = c2.dotProduct(c1);
         
-        assertEquals(25, result1);
-        assertEquals(25, result2);
+        assertEquals(25, result1, delta);
+        assertEquals(25, result2, delta);
     }
     
     @Test
     public void testTotalCount() {
-        final Counter<String> c = CounterStandard.newInstance();
+        final Counter<String> c = new Counter<>();
         
         c.put("1", 1);
         c.put("2", 2);
         c.put("3", 3);
         c.put("4", 4);
         
-        assertEquals(10, c.getTotalCount());
+        assertEquals(10, c.getTotalCount(), delta);
     }
     
     @Test
     public void testIncrementAll() {
-        final Counter<String> c = CounterStandard.newInstance();
+        final Counter<String> c = new Counter<>();
         
         c.put("1", 1);
         c.put("2", 2);
@@ -149,32 +149,32 @@ public class CounterTest {
         c.put("4", 4);
         
         c.incrementAll(Arrays.asList("3","4"), 3);
-        assertEquals(1, c.get("1"));
-        assertEquals(2, c.get("2"));
-        assertEquals(6, c.get("3"));
-        assertEquals(7, c.get("4"));
+        assertEquals(1, c.get("1"), delta);
+        assertEquals(2, c.get("2"), delta);
+        assertEquals(6, c.get("3"), delta);
+        assertEquals(7, c.get("4"), delta);
     }
     
     @Test
     public void testNormalized() {
-        final Counter<String> c = CounterStandard.newInstance();
+        final Counter<String> c = new Counter<>();
         
         c.put("1", 1);
         c.put("2", 2);
         c.put("3", 3);
         c.put("4", 4);
         
-        final Map<String, Float> n = c.getNormalized();
+        final Counter<String> n = c.getNormalized();
         
-        assertEquals((float)0.1, (float)n.get("1"), 0.001);
-        assertEquals((float)0.2, (float)n.get("2"), 0.001);
-        assertEquals((float)0.3, (float)n.get("3"), 0.001);
-        assertEquals((float)0.4, (float)n.get("4"), 0.001);
+        assertEquals((float)0.1, (float)n.get("1"), delta);
+        assertEquals((float)0.2, (float)n.get("2"), delta);
+        assertEquals((float)0.3, (float)n.get("3"), delta);
+        assertEquals((float)0.4, (float)n.get("4"), delta);
     }
     
     @Test
     public void testArgMax() {
-        final Counter<String> c = CounterStandard.newInstance();
+        final Counter<String> c = new Counter<>();
         
         c.put("1", 1);
         c.put("2", 2);
@@ -188,7 +188,7 @@ public class CounterTest {
     
     @Test
     public void testArgMaxEmptyCounter() {
-        final Counter<String> c = CounterStandard.newInstance();
+        final Counter<String> c = new Counter<>();
         
         boolean success = false;
         try {

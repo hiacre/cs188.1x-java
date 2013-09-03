@@ -34,7 +34,7 @@ public class UtilTest {
 
     @Test
     public void testSample1() {
-        final Counter<String> c = CounterStandard.newInstance();
+        final Counter<String> c = Counter.newInstance();
         
         c.put("1", 2);
         c.put("2", 2);
@@ -47,7 +47,7 @@ public class UtilTest {
     
     @Test
     public void testSample2() {
-        final Counter<String> c = CounterStandard.newInstance();
+        final Counter<String> c = Counter.newInstance();
         
         c.put("1", 2);
         c.put("2", 2);

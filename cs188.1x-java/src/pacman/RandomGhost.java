@@ -1,7 +1,7 @@
 package pacman;
 
 import util.Counter;
-import util.CounterStandard;
+import util.Counter;
 
 /**
  * A ghost that chooses a legal action uniformly at random.
@@ -14,7 +14,7 @@ public class RandomGhost extends GhostAgent {
     }
     
     public Object getDistribution(final GameState1 state) {
-        final Counter<Direction> dist = CounterStandard.newInstance();
+        final Counter<Direction> dist = Counter.newInstance();
         for(Direction a : state.getLegalActions(this.getIndex())) {
             dist.put(a, 1);
         }
