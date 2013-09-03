@@ -43,13 +43,13 @@ public class PacmanTest {
      */
     @Test
     public void testMain() {
-        System.out.println("main");
-        String[] args = null;
-        Pacman.main(args);
+//        System.out.println("main");
+//        String[] args = new String[] {};
+//        Pacman.main(args);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-    
+    @Test
     public void testReadCommand() {
         final List<String> argv = Arrays.asList();
         

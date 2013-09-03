@@ -124,8 +124,8 @@ public class Util {
             result = new ArrayList<>();
             String line = br.readLine();
             while(line != null) {
-                line = br.readLine();
                 result.add(line.trim());
+                line = br.readLine();
             }
         }
         return result;

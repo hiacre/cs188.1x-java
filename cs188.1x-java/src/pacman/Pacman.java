@@ -10,9 +10,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pacman.OptionParser.Args;
-import pacman.OptionParser.Options;
-import pacman.OptionParser.ParsedArgs;
+import util.Args;
+import util.Options;
 import util.Util;
 
 /**
@@ -27,7 +26,7 @@ public class Pacman {
     public static void main(String[] args) {
         
         final List<String> argList = Arrays.asList(args);
-        final Command mapArgs = readCommand(argList.subList(1, argList.size()) ); // Get game components based on input
+        final Command mapArgs = readCommand(argList); // Get game components based on input
         runGames(
                 mapArgs.getLayout(),
                 mapArgs.getPacman(),
@@ -65,9 +64,8 @@ public class Pacman {
         }
         return opts;
     }
-
-    /** Processes the command used to run pacman from the command line. */
-    protected static Command readCommand(final List<String> argv) {
+    
+    protected static OptionParser makeParser() {
         List<String> usageStr = new ArrayList<>();
         try {
             usageStr = Util.readSmallTextFile("usage.txt");
@@ -76,7 +74,8 @@ public class Pacman {
             logger2.log(Level.SEVERE, "Failed to open usage.txt file", ex);
         }
         //        from optparse import OptionParser
-        final OptionParser parser = new OptionParser(Util.concatStringList(usageStr, "\n"));
+        final String usage = Util.concatStringList(usageStr, "\n");
+        final OptionParser parser = new OptionParser(usage);
 
         parser.add_option("-n", "--numGames", "numGames", "int", "the number of GAMES to play", "GAMES", 1, null);
         parser.add_option("-l", "--layout", "layout", null, "the LAYOUT_FILE from which to load the map layout", "LAYOUT_FILE", "mediumClassic", null);
@@ -94,7 +93,13 @@ public class Pacman {
         parser.add_option(null, "--frameTime", "frameTime", "float", "Time to delay between frames; <0 means keyboard", null, 0.1, null);
         parser.add_option("-c", "--catchExceptions", "catchExceptions", null, "Turns on exception handling and timeouts during games", null, false, "store_true");
         parser.add_option(null, "--timeout", "timeout", "int", "Maximum length of time an agent can spend computing in a single game", null, 30, null);
+        
+        return parser;
+    }
 
+    /** Processes the command used to run pacman from the command line. */
+    protected static Command readCommand(final List<String> argv) {
+        OptionParser parser = makeParser();
         final ParsedArgs parsedArgs = parser.parse_args(argv);
         final Options options = parsedArgs.getOptions();
         final Args otherjunk = parsedArgs.getArgs();
