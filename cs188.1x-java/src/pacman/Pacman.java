@@ -121,7 +121,7 @@ public class Pacman {
         final boolean noKeyboard =
                 options.get("gameToReplay") == null && (options.contains("textGraphics") || options.contains("quietGraphics"));
         final AgentFactoryPacman pacmanType = loadAgentPacman(AgentDirectoryPacman.valueOf(options.get("pacman")), noKeyboard);
-        final Map agentOpts = parseAgentArgs(options.get("agentArgs"));
+        final Map<String,String> agentOpts = parseAgentArgs(options.get("agentArgs"));
         if(Integer.parseInt(options.get("numTraining")) > 0) {
             args.setNumTraining(Integer.parseInt(options.get("numTraining")));
             if(!agentOpts.containsKey("numTraining")) {

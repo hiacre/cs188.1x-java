@@ -8,11 +8,10 @@ import java.util.Map;
  *
  * @author archie
  */
-class OptionParser {
+public class OptionParser {
     
     private final String usage;
-    private final String optionShort;
-    private final String optionLong;
+    private final List<Option> options = new ArrayList<>();
 
     public OptionParser(final String usage) {
         this.usage = usage;
@@ -23,13 +22,12 @@ class OptionParser {
             final String optionLong,
             final String dest,
             final String type,
-            String help,
+            final String helpText,
             final String metavar,
             final Object aDefault,
             final String action) {
-        this.optionShort = optionShort;
-        this.optionLong = optionLong;
-        help = getDefault(help, aDefault);
+        Option option = new Option(optionShort, optionLong, dest, type, getDefault(helpText, aDefault), metavar, aDefault, action);
+        this.options.add(option);
     }
     
     private String getDefault(final String str, final Object defaultValue) {
@@ -38,6 +36,38 @@ class OptionParser {
 
     ParsedArgs parse_args(final List<String> argv) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static class Option {
+
+        private final String optionShort;
+        private final String optionLong;
+        private final String dest;
+        private final String type;
+        private final String help;
+        private final String metavar;
+        private final Object aDefault;
+        private final String action;
+                        
+        private Option(
+                final String optionShort,
+                final String optionLong,
+                final String dest,
+                final String type,
+                final String help,
+                final String metavar,
+                final Object aDefault,
+                final String action) {
+            this.optionShort = optionShort;
+            this.optionLong = optionLong;
+            this.dest = dest;
+            this.type = type;
+            this.help = help;
+            this.metavar = metavar;
+            this.aDefault = aDefault;
+            this.action = action;
+        }
+
     }
     
     public class ParsedArgs {
