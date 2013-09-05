@@ -1,5 +1,6 @@
 package pacman;
 
+import common.Pair;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +11,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.Args;
-import util.Options;
 import util.Util;
 
 /**
@@ -100,9 +99,9 @@ public class Pacman {
     /** Processes the command used to run pacman from the command line. */
     protected static Command readCommand(final List<String> argv) {
         OptionParser parser = makeParser();
-        final ParsedArgs parsedArgs = parser.parse_args(argv);
-        final Options options = parsedArgs.getOptions();
-        final Args otherjunk = parsedArgs.getArgs();
+        final Pair<Map<String,String>,List<String>> parsedArgs = parser.parse_args(argv);
+        final Map<String,String> options = parsedArgs.getFirst();
+        final List<String> otherjunk = parsedArgs.getSecond();
         
         if(!otherjunk.isEmpty()) {
             throw new RuntimeException("Command line input not understood: " + otherjunk.toString());
@@ -111,7 +110,7 @@ public class Pacman {
 
         // Fix the random seed
         final Random random = new Random();
-        if(options.contains("fixRandomSeed")) {
+        if(options.containsKey("fixRandomSeed")) {
             random.setSeed(188);
         }
 
@@ -124,7 +123,7 @@ public class Pacman {
 
         // Choose a Pacman agent
         final boolean noKeyboard =
-                options.get("gameToReplay") == null && (options.contains("textGraphics") || options.contains("quietGraphics"));
+                options.get("gameToReplay") == null && (options.containsKey("textGraphics") || options.containsKey("quietGraphics"));
         final AgentFactoryPacman pacmanType = loadAgentPacman(AgentDirectoryPacman.valueOf(options.get("pacman")), noKeyboard);
         final Map<String,String> agentOpts = parseAgentArgs(options.get("agentArgs"));
         if(Integer.parseInt(options.get("numTraining")) > 0) {
@@ -151,9 +150,9 @@ public class Pacman {
         args.setGhosts(ghostTypes);
 
         // Choose a display format
-        if(options.contains("quietGraphics")) {
+        if(options.containsKey("quietGraphics")) {
             args.setDisplay(new NullGraphics(null, null));
-        } else if(options.contains("textGraphics")) {
+        } else if(options.containsKey("textGraphics")) {
             // TODO textDisplay.setSleepTime(options.get("frameTime"));
             args.setDisplay(new PacmanGraphicsText(null));
         } else {

@@ -1,15 +1,15 @@
 package pacman;
 
+import common.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import util.Args;
-import util.Options;
 import static org.junit.Assert.*;
 
 /**
@@ -41,21 +41,47 @@ public class OptionParserTest {
     /**
      * Test of parse_args method, of class OptionParser.
      */
+    /** Does it parse no arguments correctly? */
     @Test
     public void testParseArgs() {
-        final OptionParser parser = Pacman.makeParser();
+        final OptionParser parser = new OptionParser("usage");
+        parser.add_option("-s", "--long_option", "dest", "type", "helpText", "metavar", "aDefault", "action");
         final List<String> argv = new ArrayList<>();
-        final ParsedArgs parsedArgs = parser.parse_args(argv);
+        final Pair<Map<String,String>,List<String>> parsedArgs = parser.parse_args(argv);
+        assertTrue(parsedArgs.getFirst().containsKey("-s"));
     }
     @Test
     public void testParseArgs2() {
         final OptionParser parser = new OptionParser("usage");
         parser.add_option("-s", "--long_option", "dest", "type", "helpText", "metavar", "aDefault", "action");
-        final List<String> argv = Arrays.asList("-s", "--long_option=foo", "-x");
-        final ParsedArgs parsedArgs = parser.parse_args(argv);
-        Args args = parsedArgs.getArgs();
-        Options options = parsedArgs.getOptions();
-        assertEquals(2, args.size());
+        final List<String> argv = Arrays.asList("-s");
+        final Pair<Map<String,String>,List<String>> parsedArgs = parser.parse_args(argv);
+        final Map<String,String> options = parsedArgs.getFirst();
+        final List<String> junk = parsedArgs.getSecond();
         assertEquals(1, options.size());
+        assertEquals(0, junk.size());
     }
+    @Test
+    public void testParseArgs3() {
+        final OptionParser parser = new OptionParser("usage");
+        parser.add_option("-s", "--long_option", "dest", "type", "helpText", "metavar", "aDefault", "action");
+        final List<String> argv = Arrays.asList("--long_option");
+        final Pair<Map<String,String>,List<String>> parsedArgs = parser.parse_args(argv);
+        final Map<String,String> options = parsedArgs.getFirst();
+        final List<String> junk = parsedArgs.getSecond();
+        assertEquals(1, options.size());
+        assertEquals(0, junk.size());
+    }
+    @Test
+    public void testParseArgs4() {
+        final OptionParser parser = new OptionParser("usage");
+        parser.add_option("-s", "--long_option", "dest", "type", "helpText", "metavar", "aDefault", "action");
+        final List<String> argv = Arrays.asList("-x");
+        final Pair<Map<String,String>,List<String>> parsedArgs = parser.parse_args(argv);
+        final Map<String,String> options = parsedArgs.getFirst();
+        final List<String> junk = parsedArgs.getSecond();
+        assertEquals(0, options.size());
+        assertEquals(1, junk.size());
+    }
+    
 }
