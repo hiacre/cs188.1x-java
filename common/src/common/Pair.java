@@ -1,9 +1,5 @@
 package common;
 
-/**
- *
- * @author archie
- */
 public class Pair<K,V> {
     
     private final K first;

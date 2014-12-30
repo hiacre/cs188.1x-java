@@ -1,9 +1,5 @@
 package common;
 
-/**
- *
- * @author archie
- */
 public class Endpoints {
 
     final double first;

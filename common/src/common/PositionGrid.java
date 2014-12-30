@@ -1,9 +1,5 @@
 package common;
 
-/**
- *
- * @author archie
- */
 public class PositionGrid {
     private final int x;
     private final int y;
