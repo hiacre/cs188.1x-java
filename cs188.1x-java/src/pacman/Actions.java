@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 
 /**
  * A collection of static methods for manipulating move actions.
- * @author archie
  */
 public class Actions {
     // Directions

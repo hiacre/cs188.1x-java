@@ -8,10 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- *
- * @author archie
- */
 public class GridVisibility {
     // TODO maybe this class can implement Grid in some way?
     private final List<List<Map<Direction,Set<Position>>>> data;

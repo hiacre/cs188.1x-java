@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 public interface PacmanDisplay {
     
     public void initialize(final GameState1 state, Boolean isBlue);

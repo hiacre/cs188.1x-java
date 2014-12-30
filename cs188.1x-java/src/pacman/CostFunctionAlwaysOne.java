@@ -2,10 +2,6 @@ package pacman;
 
 import common.Position;
 
-/**
- *
- * @author archie
- */
 public class CostFunctionAlwaysOne implements CostFunction {
 
     public CostFunctionAlwaysOne() {

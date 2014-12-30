@@ -14,7 +14,6 @@ import util.Util;
     y vertical and the origin (0,0) in the bottom left corner.
 
     The toString() method constructs an output that is oriented like a pacman board.
- * @author archie
  */
 public class GridStandard implements Grid {
     

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package common;
 
 import org.junit.After;
@@ -11,10 +7,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author archiem
- */
 public class PositionGridTest {
     
     public PositionGridTest() {
@@ -36,9 +28,6 @@ public class PositionGridTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of getX method, of class PositionGrid.
-     */
     @Test
     public void testGetXY() {
         final PositionGrid instance = new PositionGrid(1,2);
@@ -47,9 +36,6 @@ public class PositionGridTest {
     }
 
 
-    /**
-     * Test of equals method, of class PositionGrid.
-     */
     @Test
     public void testEquals() {
         final PositionGrid pos1 = new PositionGrid(3,3);
@@ -66,9 +52,6 @@ public class PositionGridTest {
         assertFalse(pos1.equals(pos6));
     }
 
-    /**
-     * Test of hashCode method, of class PositionGrid.
-     */
     @Test
     public void testHashCodeSame() {
         final PositionGrid pos1 = new PositionGrid(3,3);

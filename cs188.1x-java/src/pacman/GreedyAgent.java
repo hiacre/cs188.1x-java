@@ -5,10 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import util.Util;
 
-/**
- *
- * @author archie
- */
 public class GreedyAgent extends AgentAbstract {
     
     private final Evaluator evaluator;
@@ -58,10 +54,6 @@ public class GreedyAgent extends AgentAbstract {
         return Util.randomChoice(bestActions);
     }
 
-    /**
-     *
-     * @author archie
-     */
     private static interface GameState1Scored {
 
         public int getScore();

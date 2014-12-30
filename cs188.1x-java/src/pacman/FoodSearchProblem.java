@@ -14,7 +14,6 @@ import util.Util;
     A search state in this problem is a tuple ( pacmanPosition, foodGrid ) where
       pacmanPosition: a tuple (x,y) of integers specifying Pacman's position
       foodGrid:       a Grid (see game.py) of either True or False, specifying remaining food
- * @author archie
  */
 public class FoodSearchProblem implements SearchProblem<GameStateFoodSearchProblem, GameStateSuccessorFoodSearchProblem> {
     

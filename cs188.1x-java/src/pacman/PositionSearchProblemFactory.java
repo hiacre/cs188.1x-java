@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 class PositionSearchProblemFactory implements ProblemFactory {
     
     private final CostFunction costFunction;

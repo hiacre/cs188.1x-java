@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 class GameStateSuccessorFoodSearchProblem implements GameStateSuccessor {
     
     private final GameStateFoodSearchProblem gameState;

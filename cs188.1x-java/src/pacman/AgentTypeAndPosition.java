@@ -2,10 +2,6 @@ package pacman;
 
 import common.Position;
 
-/**
- *
- * @author archie
- */
 public class AgentTypeAndPosition implements Comparable<AgentTypeAndPosition> {
 
     private final boolean isPacman;

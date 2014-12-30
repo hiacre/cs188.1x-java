@@ -2,10 +2,6 @@ package pacman;
 
 import common.Position;
 
-/**
- *
- * @author archie
- */
 public class AgentStateSimple implements AgentState {
     private Configuration configuration;
     private final boolean isPacman;
@@ -19,7 +15,7 @@ public class AgentStateSimple implements AgentState {
 
     @Override
     public AgentState copy() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

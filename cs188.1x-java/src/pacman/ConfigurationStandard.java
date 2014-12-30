@@ -3,10 +3,6 @@ package pacman;
 import common.Position;
 import java.util.Objects;
 
-/**
- *
- * @author archie
- */
 public class ConfigurationStandard implements Configuration {
     
     private final Position position;

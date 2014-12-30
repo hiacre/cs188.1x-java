@@ -6,10 +6,6 @@ import java.util.List;
 import common.PositionGrid;
 import java.util.Collections;
 
-/**
- *
- * @author archie
- */
 public class GameStateData {
     
     private int scoreChange;
@@ -143,7 +139,7 @@ public class GameStateData {
     /**
      * Creates an initial game state from a layout array (see layout.py).
      */
-    public void initialize(final Layout layout, final Object numGhostAgents) {
+    public void initialize(final Layout layout, final int numGhostAgents) {
         this.food = layout.getFood().copy();
         capsules = layout.getCapsules().copy();
         this.layout = layout;

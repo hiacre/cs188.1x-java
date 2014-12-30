@@ -14,7 +14,6 @@ import java.util.List;
 
 
     Note: You should NOT change any code in SearchAgent
- * @author archie
  */
 public class SearchAgent extends AgentAbstract {
     

@@ -18,7 +18,6 @@ import util.Util;
     The state space consists of (x,y) positions in a pacman game.
 
     Note: this search problem is fully specified; you should NOT change it.
- * @author archie
  */
 public class PositionSearchProblem implements SearchProblem<GameStatePositionSearchProblem, GameStateSuccessorPositionSearchProblem> {
     

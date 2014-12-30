@@ -20,10 +20,6 @@ import static pacman.GraphicsDisplay.WALL_RADIUS;
 import java.util.Arrays;
 import common.PositionGrid;
 
-/**
- *
- * @author archie
- */
 public class PacmanGraphicsNonText implements PacmanDisplay {
     
     private final int have_window;

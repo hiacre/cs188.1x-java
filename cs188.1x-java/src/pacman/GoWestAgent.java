@@ -2,7 +2,6 @@ package pacman;
 
 /**
  * An agent that goes West until it can't.
- * @author archie
  */
 public class GoWestAgent extends AgentAbstract {
     

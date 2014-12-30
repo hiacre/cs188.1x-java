@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 /**
  * These game rules manage the control flow of a game, deciding when
     and how the game starts and ends.
- * @author archie
  */
 public class ClassicGameRules {
     

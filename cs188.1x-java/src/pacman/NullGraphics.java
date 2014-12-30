@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 public class NullGraphics extends TextDisplay {
     
     public NullGraphics(final GameState1 state, Boolean isBlue) {

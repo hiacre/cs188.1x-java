@@ -14,8 +14,6 @@ import java.util.List;
     print "Start:", problem.getStartState()
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    
- * @author archie
  */
 public class SearchDepthFirst implements Search {
 

@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * These functions govern how pacman interacts with his environment under
     the classic game rules.
- * @author archie
  */
 public class PacmanRules {
     

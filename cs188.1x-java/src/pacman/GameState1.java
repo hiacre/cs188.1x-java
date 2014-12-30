@@ -21,7 +21,6 @@ import util.Util;
     than referring to the GameStateData object directly.
 
     Note that in classic Pacman, Pacman is always agent 0.
- * @author archie
  */
 public class GameState1 {
     // TODO rename GameState to something else, and GameState1 to GameState

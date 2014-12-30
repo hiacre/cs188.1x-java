@@ -2,10 +2,6 @@ package pacman;
 
 import common.Position;
 
-/**
- *
- * @author archie
- */
 public class GameStatePositionSearchProblem implements GameState {
     
     private final Position pacmanPosition;

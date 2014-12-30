@@ -12,7 +12,6 @@ import util.Util;
 
 /**
  * The Game manages the control flow, soliciting actions from agents.
- * @author archie
  */
 public class Game {
     private boolean agentCrashed;

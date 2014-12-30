@@ -4,7 +4,6 @@ import java.util.List;
 
 /**
  * Search the shallowest nodes in the search tree first.
- * @author archie
  */
 public class SearchBreadthFirst implements Search {
     

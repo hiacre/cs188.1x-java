@@ -7,7 +7,6 @@ import common.Position;
  * Mini-contest 1 *
  ******************
  * Implement your contest entry here.  Change anything but the class name.
- * @author archie
  */
 public class ApproximateSearchAgent extends AgentAbstract {
 

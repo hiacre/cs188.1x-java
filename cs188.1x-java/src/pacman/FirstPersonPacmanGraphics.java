@@ -4,10 +4,6 @@ import common.Position;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author archie
- */
 public class FirstPersonPacmanGraphics extends PacmanGraphicsNonText {
     private boolean showGhosts;
 

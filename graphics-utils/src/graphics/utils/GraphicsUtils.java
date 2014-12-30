@@ -5,10 +5,6 @@ import common.Endpoints;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- * @author archie
- */
 public class GraphicsUtils {
 //_Windows = sys.platform == 'win32'  # True if on Win95/98/NT
 //

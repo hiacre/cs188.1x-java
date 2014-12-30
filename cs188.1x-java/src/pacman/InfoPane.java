@@ -6,11 +6,6 @@ import java.util.List;
 import static graphics.utils.GraphicsUtils.text;
 import static graphics.utils.GraphicsUtils.changeText;
 
-
-/**
- *
- * @author archie
- */
 public class InfoPane {
     private final double gridSize;
     private final double base;

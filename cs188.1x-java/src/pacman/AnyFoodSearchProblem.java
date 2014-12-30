@@ -14,7 +14,6 @@ import common.Position;
 
       You can use this search problem to help you fill in
       the findPathToClosestDot method.
- * @author archie
  */
 public class AnyFoodSearchProblem extends PositionSearchProblem {
     

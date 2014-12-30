@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 class GameStateSuccessor1Standard implements GameStateSuccessor1 {
     private final GameState1 gameState;
     private final Direction action;

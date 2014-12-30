@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 class GameStateSuccessorCornersProblemStandard implements GameStateSuccessorCornersProblem {
     
     private final GameStateCornersProblem gameState;

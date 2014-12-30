@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package common;
 
 import org.junit.After;
@@ -11,10 +7,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author archiem
- */
 public class PairTest {
     
     public PairTest() {
@@ -36,9 +28,6 @@ public class PairTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of getFirst method, of class Pair.
-     */
     @Test
     public void testGetFirstAndSecond() {
         final Pair<Integer,Integer> instance = new Pair<>(2,3);

@@ -4,7 +4,6 @@ import java.util.List;
 
 /**
  * A second agent controlled by the keyboard.
- * @author archie
  */
 public class KeyboardAgent2 extends KeyboardAgent {
 

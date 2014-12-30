@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
 import java.util.Arrays;
@@ -13,10 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author archiem
- */
 public class PacmanTest {
     
     public PacmanTest() {
@@ -38,9 +30,6 @@ public class PacmanTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of main method, of class Pacman.
-     */
     @Test
     public void testMain() {
 //        System.out.println("main");

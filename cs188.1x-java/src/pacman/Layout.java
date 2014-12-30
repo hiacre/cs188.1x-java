@@ -16,7 +16,6 @@ import util.Util;
 
 /**
  * A Layout manages the static information about the game board.
- * @author archie
  */
 public class Layout {
 

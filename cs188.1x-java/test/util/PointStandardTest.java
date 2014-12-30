@@ -9,10 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author archie
- */
 public class PointStandardTest {
     
     private static final double delta = 0.001;

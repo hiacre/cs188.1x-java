@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 public abstract class AgentAbstract implements Agent {
     
     private final int index;

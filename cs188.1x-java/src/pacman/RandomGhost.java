@@ -4,7 +4,6 @@ import util.Counter;
 
 /**
  * A ghost that chooses a legal action uniformly at random.
- * @author archie
  */
 public class RandomGhost extends GhostAgent {
     

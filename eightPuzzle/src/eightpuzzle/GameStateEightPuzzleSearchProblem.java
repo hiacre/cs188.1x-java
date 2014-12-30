@@ -16,8 +16,6 @@ import util.Util;
     This class defines the mechanics of the puzzle itself.  The
     task of recasting this puzzle as a search problem is left to
     the EightPuzzleSearchProblem class.
- *
- * @author archie
  */
 public class GameStateEightPuzzleSearchProblem implements GameState {
     

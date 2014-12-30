@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 public class CornersProblemFactory implements ProblemFactory {
 
     public CornersProblemFactory() {

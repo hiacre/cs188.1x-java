@@ -2,10 +2,6 @@ package pacman;
 
 import java.util.List;
 
-/**
- *
- * @author archie
- */
 public class BreadthFirstSearch implements Search {
 
     @Override

@@ -10,10 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-/**
- *
- * @author archie
- */
 public class Counter<K extends Comparable<K>> {
     
     final Map<K, Double> map;

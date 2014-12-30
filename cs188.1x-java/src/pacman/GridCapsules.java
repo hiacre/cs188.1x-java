@@ -2,10 +2,6 @@ package pacman;
 
 import java.util.List;
 
-/**
- *
- * @author archie
- */
 public class GridCapsules extends GridStandard {
 
     public GridCapsules(final int width, final int height, Boolean initialValue, final List<Integer> bitRepresentation) {

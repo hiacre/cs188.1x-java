@@ -3,10 +3,6 @@ package pacman;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- * @author archie
- */
 public class TinyMazeSearch implements Search {
 
     @Override

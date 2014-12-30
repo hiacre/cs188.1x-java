@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 public abstract class TextDisplay implements PacmanDisplay {
     
     private final static int DRAW_EVERY = 1;

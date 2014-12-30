@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 public enum AgentDirectoryGhost implements AgentDirectory {
 
     // Ghost Agents

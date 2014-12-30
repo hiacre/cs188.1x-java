@@ -4,7 +4,6 @@ import java.util.Collection;
 
 /**
  * An agent that turns left at every opportunity
- * @author archie
  */
 public class LeftTurnAgent extends AgentAbstract {
 

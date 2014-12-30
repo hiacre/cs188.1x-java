@@ -2,10 +2,6 @@ package pacman;
 
 import java.util.List;
 
-/**
- *
- * @author archie
- */
 public interface SearchProblem<GS extends GameState, GSS extends GameStateSuccessor> {
     
     /** Returns the start state for the search problem */

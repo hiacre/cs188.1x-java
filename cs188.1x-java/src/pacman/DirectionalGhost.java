@@ -8,7 +8,6 @@ import util.Counter;
 
 /**
  * A ghost that prefers to rush Pacman, or flee when scared.
- * @author archie
  */
 public class DirectionalGhost extends GhostAgent {
     

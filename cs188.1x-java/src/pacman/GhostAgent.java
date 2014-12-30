@@ -3,10 +3,6 @@ package pacman;
 import util.Counter;
 import util.Util;
 
-/**
- *
- * @author archie
- */
 public abstract class GhostAgent extends AgentAbstract {
     
     public GhostAgent(final int index) {

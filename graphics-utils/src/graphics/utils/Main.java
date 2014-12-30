@@ -1,9 +1,5 @@
 package graphics.utils;
 
-/**
- *
- * @author archie
- */
 public class Main {
 
     /**

@@ -3,7 +3,6 @@ package pacman;
 /**
  *     A heuristic function estimates the cost from the current state to the nearest
     goal in the provided SearchProblem.  This heuristic is trivial.
- * @author archie
  */
 public class NullHeuristic implements Heuristic {
 

@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 class FoodSearchProblemFactory implements ProblemFactory {
 
     public FoodSearchProblemFactory() {

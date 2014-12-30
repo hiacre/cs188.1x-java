@@ -11,7 +11,6 @@ import util.Util;
  * Implementation of a SearchProblem for the  Eight Puzzle domain
 
       Each state is represented by an instance of an eightPuzzle.
- * @author archie
  */
 public class EightPuzzleSearchProblem implements SearchProblem<GameStateEightPuzzleSearchProblem, GameStateSuccessorEightPuzzleSearchProblem> {
     

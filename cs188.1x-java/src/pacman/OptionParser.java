@@ -6,10 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author archie
- */
 public class OptionParser {
     
     private final String usage;

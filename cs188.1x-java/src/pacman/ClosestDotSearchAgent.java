@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * Search for all food using a sequence of searches
- * @author archie
  */
 public class ClosestDotSearchAgent extends SearchAgent {
     

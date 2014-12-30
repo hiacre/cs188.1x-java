@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 public enum AgentDirectoryPacman implements AgentDirectory {
 
     KeyboardAgent(new AgentFactoryPacman() {

@@ -3,10 +3,6 @@ package pacman;
 import common.PositionGrid;
 import java.util.List;
 
-/**
- *
- * @author archie
- */
 public interface Grid {
     
     public Grid copy();

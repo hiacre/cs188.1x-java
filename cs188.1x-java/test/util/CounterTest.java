@@ -8,10 +8,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author archie
- */
 public class CounterTest {
     
     private static final double delta = 0.0001;

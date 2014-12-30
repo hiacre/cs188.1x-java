@@ -1,9 +1,5 @@
 package pacman;
 
-/**
- *
- * @author archie
- */
 public class GhostState extends AgentStateSimple {
     
     public GhostState(final Configuration configuration) {

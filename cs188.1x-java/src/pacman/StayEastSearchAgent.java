@@ -7,7 +7,6 @@ import common.Position;
     positions on the West side of the board.
 
     The cost function for stepping into a position (x,y) is 1/2^x.
- * @author archie
  */
 public class StayEastSearchAgent extends SearchAgent {
 

@@ -12,7 +12,6 @@ import util.Util;
  * This search problem finds paths through all four corners of a layout.
 
     You must select a suitable state space and successor function
- * @author archie
  */
 public class CornersProblem implements SearchProblem<GameStateCornersProblem, GameStateSuccessorCornersProblem> {
     

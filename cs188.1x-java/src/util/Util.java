@@ -14,10 +14,6 @@ import java.util.List;
 import java.util.Random;
 import pacman.PositionSearchProblem;
 
-/**
- *
- * @author archie
- */
 public class Util {
 
     public static int getMaximumCost() {

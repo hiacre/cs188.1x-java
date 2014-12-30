@@ -8,7 +8,6 @@ import util.Util;
 
 /**
  * An agent controlled by the keyboard.
- * @author archie
  */
 public class KeyboardAgent extends AgentAbstract {
 

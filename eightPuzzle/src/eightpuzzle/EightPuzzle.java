@@ -4,15 +4,8 @@ import java.util.List;
 import pacman.BreadthFirstSearch;
 import pacman.Direction;
 
-/**
- *
- * @author archie
- */
 public class EightPuzzle {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         final GameStateEightPuzzleSearchProblem puzzle = EightPuzzleSearchProblem.createRandomEightPuzzle(25);
         System.out.println("A random puzzle: ");

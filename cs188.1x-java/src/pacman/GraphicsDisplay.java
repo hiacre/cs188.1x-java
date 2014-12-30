@@ -11,10 +11,6 @@ import static graphics.utils.GraphicsUtils.formatColor;
 import static graphics.utils.GraphicsUtils.colorToVector;
 import static graphics.utils.GraphicsUtils.writePostscript;
 
-/**
- *
- * @author archie
- */
 public class GraphicsDisplay {
 
     final static double DEFAULT_GRID_SIZE = 30.0;

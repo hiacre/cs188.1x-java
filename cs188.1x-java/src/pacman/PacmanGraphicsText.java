@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author archie
- */
 public class PacmanGraphicsText extends TextDisplay {
     
     private int agentCounter;

@@ -5,7 +5,6 @@ import java.util.List;
 
 /**
  * These functions dictate how ghosts interact with their environment.
- * @author archie
  */
 public class GhostRules {
 
